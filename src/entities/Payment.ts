@@ -1,0 +1,51 @@
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Order } from "./Order";
+import { RefundStatus } from "./RefundStatus";
+
+
+export enum PaymentMethod {
+  CARD = "card",
+  UPI = "upi",
+  NET_BANKING = "net_banking",
+  WALLET = "wallet",
+}
+
+export enum PaymentStatus {
+  PENDING = "pending",
+  COMPLETED = "completed",
+  FAILED = "failed",
+  REFUNDED = "refunded",
+}
+
+@Entity("payments")
+export class Payment {
+    @PrimaryGeneratedColumn("increment")
+    id: number;
+
+    @Column({type:"decimal", precision:10, scale:2  })
+    transaction_id: number;
+    
+    @Column({type:"decimal", precision:10, scale:2  })
+    amount: number;
+
+    @Column({type:"enum",
+        enum:PaymentStatus,
+        default:PaymentStatus.PENDING})
+    status: PaymentStatus;
+
+
+    @Column({type:"enum",
+        enum:PaymentMethod,
+        nullable: true
+    })
+    method: PaymentMethod;
+
+
+    @ManyToOne(()=>Order,(order)=>order.payments)
+    @JoinColumn({name:"order_id"})
+    order: Order;
+
+    @ManyToOne(() => RefundStatus, (status) => status.payments, { nullable: true, onDelete: 'SET NULL' })
+    @JoinColumn({ name: "refund_status_id" })
+    refundStatus: RefundStatus;
+}
