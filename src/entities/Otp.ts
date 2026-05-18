@@ -21,9 +21,10 @@ export class Otp {
 
   @Column({ type: "varchar" })
   purpose: string;
+
   
-  @ManyToOne(() => User, (user) => user.otps, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.otps, { onDelete: 'CASCADE' , nullable:true})
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user: User|null;
   
 }       

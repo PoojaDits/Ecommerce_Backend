@@ -6,6 +6,6 @@ export declare class Otp {
     isUsed: boolean;
     userEmail: string;
     purpose: string;
-    user: User;
+    user: User | null;
 }
 //# sourceMappingURL=Otp.d.ts.map

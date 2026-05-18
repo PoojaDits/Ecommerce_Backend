@@ -2,14 +2,16 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { AppDataSource } from "./config/dataSource";
- 
+ import authRoutes from "./routes/authRoutes";
  
  
 dotenv.config();
  
 const app = express();
+
  
 app.use(express.json());
+app.use("/api/auth", authRoutes);
 app.use(express.urlencoded({ extended: true }));
  
 app.get("/back", (_req: Request, res: Response) => {

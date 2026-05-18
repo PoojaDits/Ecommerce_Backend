@@ -8,7 +8,7 @@ import { OneToOne } from 'typeorm';
 export enum UserRole {
   ADMIN = "admin",
   CUSTOMER = "customer",
-  GUEST = "guest"
+  GUEST = "vendor"
 }
 
 @Entity("users")
@@ -40,6 +40,10 @@ password:string;
 })
   role: UserRole;
 
+  @Column({ type: "boolean", default: false })
+  isActive: boolean;
+
+  
 @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
 

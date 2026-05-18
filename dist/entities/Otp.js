@@ -40,9 +40,9 @@ __decorate([
     __metadata("design:type", String)
 ], Otp.prototype, "purpose", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => User_1.User, (user) => user.otps, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.ManyToOne)(() => User_1.User, (user) => user.otps, { onDelete: 'CASCADE', nullable: true }),
     (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
-    __metadata("design:type", User_1.User)
+    __metadata("design:type", Object)
 ], Otp.prototype, "user", void 0);
 exports.Otp = Otp = __decorate([
     (0, typeorm_1.Entity)("otps")

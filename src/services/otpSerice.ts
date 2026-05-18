@@ -1,0 +1,68 @@
+import { AppDataSource } from "../config/dataSource";
+import { Otp } from "../entities/Otp";
+import { sendOtpEmail } from "./mailService";
+import crypto from "crypto";
+import { MESSAGES } from "../constants/messages";
+const otpRepo=AppDataSource.getRepository(Otp);
+
+const generateOtpCode=():string=>{
+    return crypto.randomInt(100000,999999).toString();
+}
+
+export const createAndSendOtp=async(userEmail:string,purpose:string):Promise<void> =>{
+
+    await otpRepo.update(
+        {
+            userEmail:userEmail,purpose,isUsed:false
+        },
+        {
+            isUsed:true
+        }
+    );
+
+    const code=generateOtpCode();
+    const expiresAt=new Date(Date.now()+10*60*1000);
+    
+    const otp=otpRepo.create({
+        code,
+        expiresAt,
+        isUsed:false,
+        userEmail:userEmail,
+        purpose,
+        user:null,
+    });
+
+    await otpRepo.save(otp);
+    
+    try {
+        await sendOtpEmail(userEmail,code);
+    } catch (error) {
+        await otpRepo.delete({ id: otp.id });
+        throw error;
+    }
+};
+ export const verifyOtp=async(userEmail:string,purpose:string,code:string):Promise<boolean> =>{
+
+    const otp=await otpRepo.findOne({
+        where:{userEmail:userEmail,purpose,code,isUsed:false},
+    });
+
+    if(!otp){
+        throw new Error(MESSAGES.OTP.INVALID);
+
+    }
+    if(new Date()>new Date(otp.expiresAt)){
+        throw new Error(MESSAGES.OTP.EXPIRED);
+    }
+    return true;
+}
+export const consumeOtp=async(
+    userEmail:string,
+    purpose:string,
+    code:string
+):Promise<void> =>{
+    const otp=await otpRepo.update(
+        {userEmail:userEmail,purpose,code,isUsed:false},
+        {isUsed:true}
+    );
+        };
