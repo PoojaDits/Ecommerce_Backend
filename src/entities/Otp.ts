@@ -13,8 +13,8 @@ export class Otp {
   @Column({ type: "varchar" })
   expiresAt: Date;
 
-  @Column({ type: "boolean" })
-  isUsed: boolean;
+  @Column({ name: "is_used", type: "boolean" })
+  is_used: boolean;
 
   @Column({ type: "varchar" })
   userEmail: string;

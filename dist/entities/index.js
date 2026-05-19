@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegistrationSession = exports.Category = exports.Product = exports.User = exports.Store = exports.ShipmentTracking = exports.Shipment = exports.ReturnStatus = exports.RefundStatus = exports.Payment = exports.Otp = exports.OrderItem = exports.Order = exports.Cart = exports.Address = void 0;
+exports.Category = exports.Product = exports.User = exports.Store = exports.ShipmentTracking = exports.Shipment = exports.ReturnStatus = exports.RefundStatus = exports.Payment = exports.Otp = exports.OrderItem = exports.Order = exports.Cart = exports.Address = void 0;
 var Address_1 = require("./Address");
 Object.defineProperty(exports, "Address", { enumerable: true, get: function () { return Address_1.Address; } });
 var Cart_1 = require("./Cart");
@@ -32,6 +32,4 @@ var Product_1 = require("./Product");
 Object.defineProperty(exports, "Product", { enumerable: true, get: function () { return __importDefault(Product_1).default; } });
 var Category_1 = require("./Category");
 Object.defineProperty(exports, "Category", { enumerable: true, get: function () { return __importDefault(Category_1).default; } });
-var RegistrationSession_1 = require("./RegistrationSession");
-Object.defineProperty(exports, "RegistrationSession", { enumerable: true, get: function () { return RegistrationSession_1.RegistrationSession; } });
 //# sourceMappingURL=index.js.map

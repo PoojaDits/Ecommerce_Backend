@@ -6,7 +6,7 @@ import { Otp } from './Otp';
 export declare enum UserRole {
     ADMIN = "admin",
     CUSTOMER = "customer",
-    GUEST = "guest"
+    GUEST = "vendor"
 }
 export declare class User {
     id: number;
@@ -16,6 +16,7 @@ export declare class User {
     email: string;
     password: string;
     role: UserRole;
+    isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
     store: Store[];

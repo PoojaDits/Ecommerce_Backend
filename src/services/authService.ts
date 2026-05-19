@@ -15,19 +15,17 @@ export const initiateRegistration = async (
   role:UserRole
 ): Promise<IAuthResponse> => {
 
-  const existingUser = await userRepo.findOne({
-    where: { email, isActive: true }
-  });
-  if (existingUser) {
-    throw new Error(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED);
-  }
+const checkUser = await userRepo.findOne({
+  where: { email }
+});
 
-  const incompleteUser = await userRepo.findOne({
-    where: { email, isActive: false }
-  });
-  if (incompleteUser) {
-    await userRepo.delete({ email });
-  }
+if (checkUser?.isActive) {
+  throw new Error(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED);
+}
+
+if (checkUser && !checkUser.isActive) {
+  await userRepo.delete({ email });
+}
 
   const hashedPassword = await bcrypt.hash(password, 10);
 

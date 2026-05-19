@@ -28,9 +28,9 @@ __decorate([
     __metadata("design:type", Date)
 ], Otp.prototype, "expiresAt", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "boolean" }),
+    (0, typeorm_1.Column)({ name: "is_used", type: "boolean" }),
     __metadata("design:type", Boolean)
-], Otp.prototype, "isUsed", void 0);
+], Otp.prototype, "is_used", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar" }),
     __metadata("design:type", String)

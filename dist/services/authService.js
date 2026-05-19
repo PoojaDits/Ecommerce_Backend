@@ -3,52 +3,91 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.completeRegistration = exports.initiateRegistration = void 0;
+exports.resendRegistrationOtp = exports.completeRegistration = exports.initiateRegistration = void 0;
 const dataSource_1 = require("../config/dataSource");
 const User_1 = require("../entities/User");
-const RegistrationSession_1 = require("../entities/RegistrationSession");
 const otpSerice_1 = require("./otpSerice");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const messages_1 = require("../constants/messages");
 const userRepo = dataSource_1.AppDataSource.getRepository(User_1.User);
-const sessionRepo = dataSource_1.AppDataSource.getRepository(RegistrationSession_1.RegistrationSession);
-const initiateRegistration = async (firstName, lastName, email, password) => {
-    const existingUser = await userRepo.findOneBy({ email });
-    if (existingUser) {
-        throw new Error("Email is already registered.");
+const initiateRegistration = async (firstName, lastName, email, password, role) => {
+    const checkUser = await userRepo.findOne({
+        where: { email }
+    });
+    if (checkUser?.isActive) {
+        throw new Error(messages_1.MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED);
     }
-    const hashPassword = await bcrypt_1.default.hash(password, 10);
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
-    // remove any previous session for this email
-    await sessionRepo.delete({ email });
-    const session = sessionRepo.create({ firstName, lastName, email, hashPassword, expiresAt });
-    await sessionRepo.save(session);
-    await (0, otpSerice_1.createAndSendOtp)(email, "registration");
-    return { message: "OTP sent to email. Please verify to complete registration." };
+    if (checkUser && !checkUser.isActive) {
+        await userRepo.delete({ email });
+    }
+    const hashedPassword = await bcrypt_1.default.hash(password, 10);
+    const user = userRepo.create({
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword,
+        role: role || User_1.UserRole.CUSTOMER,
+        isActive: false,
+    });
+    await userRepo.save(user);
+    try {
+        await (0, otpSerice_1.createAndSendOtp)(email, "registration");
+    }
+    catch (error) {
+        await userRepo.delete({ id: user.id });
+        throw error;
+    }
+    const authUser = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        isActive: user.isActive,
+        createdAt: user.createdAt,
+    };
+    return { message: messages_1.MESSAGES.AUTH.OTP_SENT, user: authUser };
 };
 exports.initiateRegistration = initiateRegistration;
 const completeRegistration = async (email, otp) => {
     await (0, otpSerice_1.verifyOtp)(email, "registration", otp);
-    const session = await sessionRepo.findOne({ where: { email } });
-    if (!session) {
-        throw new Error("Registration session expired. Please start again.");
-    }
-    if (new Date() > new Date(session.expiresAt)) {
-        // cleanup expired session
-        await sessionRepo.delete({ email });
-        throw new Error("Registration session expired. Please start again.");
-    }
-    const user = userRepo.create({
-        firstName: session.firstName,
-        lastName: session.lastName,
-        email: session.email,
-        password: session.hashPassword,
-        role: User_1.UserRole.CUSTOMER,
-        isActive: true,
+    const user = await userRepo.findOne({
+        where: { email, isActive: false }
     });
+    if (!user) {
+        throw new Error(messages_1.MESSAGES.AUTH.REGISTRATION_SESSION_NOT_FOUND);
+    }
+    user.isActive = true;
     await userRepo.save(user);
-    await (0, otpSerice_1.consumeOtp)(email, "registration", otp);
-    await sessionRepo.delete({ email });
-    return { message: "Registration successful. You can now log in." };
+    try {
+        await (0, otpSerice_1.consumeOtp)(email, "registration", otp);
+    }
+    catch (error) {
+        user.isActive = false;
+        await userRepo.save(user);
+        throw error;
+    }
+    const authUser = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        isActive: user.isActive,
+        createdAt: user.createdAt,
+    };
+    return { message: messages_1.MESSAGES.AUTH.REGISTRATION_SUCCESS, user: authUser };
 };
 exports.completeRegistration = completeRegistration;
+const resendRegistrationOtp = async (email) => {
+    const user = await userRepo.findOne({
+        where: { email, isActive: false }
+    });
+    if (!user) {
+        throw new Error(messages_1.MESSAGES.AUTH.NO_PENDING_REGISTRATION);
+    }
+    await (0, otpSerice_1.createAndSendOtp)(email, "registration");
+    return { message: messages_1.MESSAGES.AUTH.OTP_RESENT };
+};
+exports.resendRegistrationOtp = resendRegistrationOtp;
 //# sourceMappingURL=authService.js.map

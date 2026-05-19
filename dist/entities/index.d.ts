@@ -12,5 +12,4 @@ export { Store } from './Store';
 export { User } from './User';
 export { default as Product } from './Product';
 export { default as Category } from './Category';
-export { RegistrationSession } from './RegistrationSession';
 //# sourceMappingURL=index.d.ts.map

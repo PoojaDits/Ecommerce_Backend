@@ -27,18 +27,19 @@ app.get("/back", (_req: Request, res: Response) => {
 const startServer = async () => {
   try {
     await AppDataSource.initialize();
-    console.log(" Database Connected");
- 
+    console.log("Database Connected");
+
     const PORT = process.env.PORT || 3001;
+
     app.listen(PORT, () => {
-      console.log(` Server running on port ${PORT}`);
-    
+      console.log(`Server running on port ${PORT}`);
     });
+
   } catch (error) {
-    console.error(" Server startup failed:", error);
-    process.exit(1);
+    console.error("Server startup failed:", error);
+
+    throw error;
   }
 };
- 
+
 startServer();
- 

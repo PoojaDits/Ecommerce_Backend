@@ -21,7 +21,7 @@ var UserRole;
 (function (UserRole) {
     UserRole["ADMIN"] = "admin";
     UserRole["CUSTOMER"] = "customer";
-    UserRole["GUEST"] = "guest";
+    UserRole["GUEST"] = "vendor";
 })(UserRole || (exports.UserRole = UserRole = {}));
 let User = class User {
 };
@@ -59,6 +59,10 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "boolean", default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "isActive", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ type: "timestamp" }),
     __metadata("design:type", Date)

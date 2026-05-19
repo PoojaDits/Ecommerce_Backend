@@ -3,7 +3,7 @@ export declare class Otp {
     id: number;
     code: string;
     expiresAt: Date;
-    isUsed: boolean;
+    is_used: boolean;
     userEmail: string;
     purpose: string;
     user: User | null;

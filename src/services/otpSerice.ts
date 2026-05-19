@@ -10,13 +10,14 @@ const generateOtpCode=():string=>{
 }
 
 export const createAndSendOtp=async(userEmail:string,purpose:string):Promise<void> =>{
+//to clear old values
 
     await otpRepo.update(
         {
-            userEmail:userEmail,purpose,isUsed:false
+            userEmail:userEmail,purpose,is_used:false
         },
         {
-            isUsed:true
+            is_used:true
         }
     );
 
@@ -26,7 +27,7 @@ export const createAndSendOtp=async(userEmail:string,purpose:string):Promise<voi
     const otp=otpRepo.create({
         code,
         expiresAt,
-        isUsed:false,
+        is_used:false,
         userEmail:userEmail,
         purpose,
         user:null,
@@ -44,7 +45,7 @@ export const createAndSendOtp=async(userEmail:string,purpose:string):Promise<voi
  export const verifyOtp=async(userEmail:string,purpose:string,code:string):Promise<boolean> =>{
 
     const otp=await otpRepo.findOne({
-        where:{userEmail:userEmail,purpose,code,isUsed:false},
+        where:{userEmail:userEmail,purpose,code,is_used:false},
     });
 
     if(!otp){
@@ -62,7 +63,7 @@ export const consumeOtp=async(
     code:string
 ):Promise<void> =>{
     const otp=await otpRepo.update(
-        {userEmail:userEmail,purpose,code,isUsed:false},
-        {isUsed:true}
+        {userEmail:userEmail,purpose,code,is_used:false},
+        {is_used:true}
     );
         };
