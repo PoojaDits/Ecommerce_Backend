@@ -1,7 +1,7 @@
-import {Entity, JoinColumn} from "typeorm";
+import { Entity, JoinColumn } from "typeorm";
 import { Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Order } from "./Order";
-import { ShipmentTracking } from "./shipmentTracking";
+import { ShipmentTracking } from "./ShipmentTracking";
 
 @Entity("shipments")
 export class Shipment {
@@ -12,15 +12,15 @@ export class Shipment {
   carrier: string;
 
   @Column({ type: "varchar" })
-  trackingNumber: string;                   
+  trackingNumber: string;
 
-    @ManyToOne(() => Order, (order) => order.shipments)
-    @JoinColumn({ name: "order_id" })
-    order: Order;
+  @ManyToOne(() => Order, (order) => order.shipments)
+  @JoinColumn({ name: "order_id" })
+  order: Order;
 
-     @OneToMany(
-        () => ShipmentTracking, 
-        (tracking) => tracking.shipment // points to the 'shipment' property in ShipmentTracking
-    )
-    shipment_trackings: ShipmentTracking[];
+  @OneToMany(
+    () => ShipmentTracking,
+    (tracking) => tracking.shipment // points to the 'shipment' property in ShipmentTracking
+  )
+  shipment_trackings: ShipmentTracking[];
 }

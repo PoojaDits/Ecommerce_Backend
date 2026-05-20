@@ -7,7 +7,7 @@ export { Payment } from './Payment';
 export { RefundStatus } from './RefundStatus';
 export { ReturnStatus } from './ReturnStatus';
 export { Shipment } from './Shipment';
-export { ShipmentTracking } from './shipmentTracking';
+export { ShipmentTracking } from './ShipmentTracking';
 export { Store } from './Store';
 export { User } from './User';
 export { default as Product } from './Product';

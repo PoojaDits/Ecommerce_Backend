@@ -27,15 +27,15 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar" }),
     __metadata("design:type", String)
-], Store.prototype, "StoreName", void 0);
+], Store.prototype, "storeName", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "text", nullable: true }),
     __metadata("design:type", String)
-], Store.prototype, "StoreDescription", void 0);
+], Store.prototype, "storeDescription", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar" }),
     __metadata("design:type", String)
-], Store.prototype, "StoreLocation", void 0);
+], Store.prototype, "storeLocation", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar", length: 20, nullable: true }),
     __metadata("design:type", String)
@@ -43,7 +43,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar" }),
     __metadata("design:type", String)
-], Store.prototype, "StoreEmail", void 0);
+], Store.prototype, "storeEmail", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ type: "timestamp" }),
     __metadata("design:type", Date)

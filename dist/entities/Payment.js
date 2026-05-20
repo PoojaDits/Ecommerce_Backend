@@ -22,21 +22,24 @@ __decorate([
     __metadata("design:type", Number)
 ], Payment.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "decimal", precision: 10, scale: 2 }),
-    __metadata("design:type", Number)
+    (0, typeorm_1.Column)({ type: "varchar", unique: true }),
+    __metadata("design:type", String)
 ], Payment.prototype, "transaction_id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "decimal", precision: 10, scale: 2 }),
     __metadata("design:type", Number)
 ], Payment.prototype, "amount", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "enum",
+    (0, typeorm_1.Column)({
+        type: "enum",
         enum: enums_1.PaymentStatus,
-        default: enums_1.PaymentStatus.PENDING }),
+        default: enums_1.PaymentStatus.PENDING
+    }),
     __metadata("design:type", String)
 ], Payment.prototype, "status", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "enum",
+    (0, typeorm_1.Column)({
+        type: "enum",
         enum: enums_1.PaymentMethod,
         nullable: true
     }),

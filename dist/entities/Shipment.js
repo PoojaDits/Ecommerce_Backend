@@ -13,7 +13,7 @@ exports.Shipment = void 0;
 const typeorm_1 = require("typeorm");
 const typeorm_2 = require("typeorm");
 const Order_1 = require("./Order");
-const shipmentTracking_1 = require("./shipmentTracking");
+const ShipmentTracking_1 = require("./ShipmentTracking");
 let Shipment = class Shipment {
 };
 exports.Shipment = Shipment;
@@ -35,7 +35,7 @@ __decorate([
     __metadata("design:type", Order_1.Order)
 ], Shipment.prototype, "order", void 0);
 __decorate([
-    (0, typeorm_2.OneToMany)(() => shipmentTracking_1.ShipmentTracking, (tracking) => tracking.shipment // points to the 'shipment' property in ShipmentTracking
+    (0, typeorm_2.OneToMany)(() => ShipmentTracking_1.ShipmentTracking, (tracking) => tracking.shipment // points to the 'shipment' property in ShipmentTracking
     ),
     __metadata("design:type", Array)
 ], Shipment.prototype, "shipment_trackings", void 0);

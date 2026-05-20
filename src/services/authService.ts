@@ -1,7 +1,7 @@
 import { AppDataSource } from "../config/dataSource";
 import { User } from "../entities/User";
 import { UserRole, OtpPurpose } from "../enums";
-import { createAndSendOtp, verifyOtp, consumeOtp } from "./otpSerice";
+import { createAndSendOtp, verifyOtp, consumeOtp } from "./otpService";
 import bcrypt from "bcrypt";
 import { MESSAGES } from "../constants/messages";
 import { IAuthResponse, IAuthUser } from "../interfaces/authInterface";

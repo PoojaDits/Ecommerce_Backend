@@ -8,27 +8,30 @@ export class Payment {
     @PrimaryGeneratedColumn("increment")
     id: number;
 
-    @Column({type:"decimal", precision:10, scale:2  })
-    transaction_id: number;
-    
-    @Column({type:"decimal", precision:10, scale:2  })
+    @Column({ type: "varchar", unique: true })
+    transaction_id: string;
+
+    @Column({ type: "decimal", precision: 10, scale: 2 })
     amount: number;
 
-    @Column({type:"enum",
-        enum:PaymentStatus,
-        default:PaymentStatus.PENDING})
+    @Column({
+        type: "enum",
+        enum: PaymentStatus,
+        default: PaymentStatus.PENDING
+    })
     status: PaymentStatus;
 
 
-    @Column({type:"enum",
-        enum:PaymentMethod,
+    @Column({
+        type: "enum",
+        enum: PaymentMethod,
         nullable: true
     })
     method: PaymentMethod;
 
 
-    @ManyToOne(()=>Order,(order)=>order.payments)
-    @JoinColumn({name:"order_id"})
+    @ManyToOne(() => Order, (order) => order.payments)
+    @JoinColumn({ name: "order_id" })
     order: Order;
 
     @ManyToOne(() => RefundStatus, (status) => status.payments, { nullable: true, onDelete: 'SET NULL' })

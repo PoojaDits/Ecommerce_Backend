@@ -7,7 +7,7 @@ export const MESSAGES = {
     OTP_REQUIRED: "OTP is required.",
     FAILED: "Validation failed",
     ALL_FIELDS_REQUIRED: "All fields are required.",
-    INVALID_ROLE: (roles: string) => `Invalid role. Must be one of: ${roles}`,
+    INVALID_ROLE: (roles: string) => "Invalid role",
   },
   AUTH: {
     EMAIL_ALREADY_REGISTERED: "Email is already registered.",

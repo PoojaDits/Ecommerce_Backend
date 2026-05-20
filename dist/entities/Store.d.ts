@@ -2,11 +2,11 @@ import { User } from "./User";
 import Product from "./Product";
 export declare class Store {
     id: number;
-    StoreName: string;
-    StoreDescription: string;
-    StoreLocation: string;
+    storeName: string;
+    storeDescription: string;
+    storeLocation: string;
     storeContact: string;
-    StoreEmail: string;
+    storeEmail: string;
     created_at: Date;
     updated_at: Date;
     user: User;

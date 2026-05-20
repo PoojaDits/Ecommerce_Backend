@@ -7,7 +7,7 @@ exports.resendRegistrationOtp = exports.completeRegistration = exports.initiateR
 const dataSource_1 = require("../config/dataSource");
 const User_1 = require("../entities/User");
 const enums_1 = require("../enums");
-const otpSerice_1 = require("./otpSerice");
+const otpService_1 = require("./otpService");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const messages_1 = require("../constants/messages");
 const userRepo = dataSource_1.AppDataSource.getRepository(User_1.User);
@@ -32,7 +32,7 @@ const initiateRegistration = async (firstName, lastName, email, password, role) 
     });
     await userRepo.save(user);
     try {
-        await (0, otpSerice_1.createAndSendOtp)(email, enums_1.OtpPurpose.REGISTRATION);
+        await (0, otpService_1.createAndSendOtp)(email, enums_1.OtpPurpose.REGISTRATION);
     }
     catch (error) {
         await userRepo.delete({ id: user.id });
@@ -51,7 +51,7 @@ const initiateRegistration = async (firstName, lastName, email, password, role) 
 };
 exports.initiateRegistration = initiateRegistration;
 const completeRegistration = async (email, otp) => {
-    await (0, otpSerice_1.verifyOtp)(email, enums_1.OtpPurpose.REGISTRATION, otp);
+    await (0, otpService_1.verifyOtp)(email, enums_1.OtpPurpose.REGISTRATION, otp);
     const user = await userRepo.findOne({
         where: { email, isActive: false }
     });
@@ -61,7 +61,7 @@ const completeRegistration = async (email, otp) => {
     user.isActive = true;
     await userRepo.save(user);
     try {
-        await (0, otpSerice_1.consumeOtp)(email, enums_1.OtpPurpose.REGISTRATION, otp);
+        await (0, otpService_1.consumeOtp)(email, enums_1.OtpPurpose.REGISTRATION, otp);
     }
     catch (error) {
         user.isActive = false;
@@ -87,7 +87,7 @@ const resendRegistrationOtp = async (email) => {
     if (!user) {
         throw new Error(messages_1.MESSAGES.AUTH.NO_PENDING_REGISTRATION);
     }
-    await (0, otpSerice_1.createAndSendOtp)(email, enums_1.OtpPurpose.REGISTRATION);
+    await (0, otpService_1.createAndSendOtp)(email, enums_1.OtpPurpose.REGISTRATION);
     return { message: messages_1.MESSAGES.AUTH.OTP_RESENT };
 };
 exports.resendRegistrationOtp = resendRegistrationOtp;

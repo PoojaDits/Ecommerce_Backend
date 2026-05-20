@@ -1,5 +1,5 @@
 import { Order } from "./Order";
-import { ShipmentTracking } from "./shipmentTracking";
+import { ShipmentTracking } from "./ShipmentTracking";
 export declare class Shipment {
     id: number;
     carrier: string;

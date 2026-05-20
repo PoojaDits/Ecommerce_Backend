@@ -1,4 +1,4 @@
-import{Entity,PrimaryGeneratedColumn, Column, CreateDateColumn, Generated, UpdateDateColumn, OneToMany} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Generated, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Store } from './Store';
 import { Order } from './Order';
 import { Address } from './Address';
@@ -9,57 +9,57 @@ import { UserRole } from '../enums';
 
 @Entity("users")
 export class User {
- @PrimaryGeneratedColumn()
-  id: number; 
+  @PrimaryGeneratedColumn()
+  id: number;
 
-@Column()
-@Generated("uuid")
-uuid: string;
+  @Column()
+  @Generated("uuid")
+  uuid: string;
 
 
-@Column({type:"varchar"})
-firstName:string;
+  @Column({ type: "varchar", nullable: false })
+  firstName: string;
 
-@Column({type:"varchar"})
-lastName:string;
+  @Column({ type: "varchar" })
+  lastName: string;
 
-@Column({type:"varchar"})
-email:string;
+  @Column({ type: "varchar", unique: true, nullable: false })
+  email: string;
 
-@Column({type:"varchar"})
-password:string;
+  @Column({ type: "varchar", nullable: false })
+  password: string;
 
- @Column({ 
-    type: "enum", 
-    enum: UserRole, 
-    default: UserRole.CUSTOMER 
-})
+  @Column({
+    type: "enum",
+    enum: UserRole,
+    default: UserRole.CUSTOMER
+  })
   role: UserRole;
 
   @Column({ type: "boolean", default: false })
   isActive: boolean;
 
-  
-@CreateDateColumn({ type: "timestamp" })
+
+  @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
 
   @UpdateDateColumn({ type: "timestamp" })
   updatedAt: Date;
 
 
-  @OneToMany(()=>Store,(store)=>store.user)
+  @OneToMany(() => Store, (store) => store.user)
   store: Store[];
 
-  @OneToMany(()=>Order,(order)=>order.user)
+  @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
 
-  @OneToMany(()=>Address,(address)=>address.user)
+  @OneToMany(() => Address, (address) => address.user)
   address: Address[];
 
   @OneToMany(() => Otp, (otp) => otp.user)
   otps: Otp[];
 
-  @OneToOne(()=>Cart,(cart)=>cart.user)
+  @OneToOne(() => Cart, (cart) => cart.user)
   cart: Cart;
 
 

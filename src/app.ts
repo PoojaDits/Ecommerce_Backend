@@ -1,29 +1,31 @@
- 
+
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { AppDataSource } from "./config/dataSource";
- import authRoutes from "./routes/authRoutes";
- 
- 
+import authRoutes from "./routes/authRoutes";
+import { setupSwagger } from "./config/swagger";
+
 dotenv.config();
- 
+
 const app = express();
 
- 
+
 app.use(express.json());
-app.use("/api/auth", authRoutes);
 app.use(express.urlencoded({ extended: true }));
- 
+
+setupSwagger(app);
+app.use("/api/auth", authRoutes);
+
 app.get("/back", (_req: Request, res: Response) => {
   res.json({
     success: true,
     message: " Server is running",
-    
+
   });
 });
- 
- 
- 
+
+
+
 const startServer = async () => {
   try {
     await AppDataSource.initialize();

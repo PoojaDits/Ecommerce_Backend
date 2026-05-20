@@ -7,11 +7,13 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const dataSource_1 = require("./config/dataSource");
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const swagger_1 = require("./config/swagger");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use("/api/auth", authRoutes_1.default);
 app.use(express_1.default.urlencoded({ extended: true }));
+(0, swagger_1.setupSwagger)(app);
+app.use("/api/auth", authRoutes_1.default);
 app.get("/back", (_req, res) => {
     res.json({
         success: true,

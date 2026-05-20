@@ -31,7 +31,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "uuid", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar" }),
+    (0, typeorm_1.Column)({ type: "varchar", nullable: false }),
     __metadata("design:type", String)
 ], User.prototype, "firstName", void 0);
 __decorate([
@@ -39,11 +39,11 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "lastName", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar" }),
+    (0, typeorm_1.Column)({ type: "varchar", unique: true, nullable: false }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar" }),
+    (0, typeorm_1.Column)({ type: "varchar", nullable: false }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
