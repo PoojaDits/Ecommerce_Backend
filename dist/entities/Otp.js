@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Otp = void 0;
 const typeorm_1 = require("typeorm");
 const User_1 = require("./User");
+const enums_1 = require("../enums");
 let Otp = class Otp {
 };
 exports.Otp = Otp;
@@ -36,7 +37,11 @@ __decorate([
     __metadata("design:type", String)
 ], Otp.prototype, "userEmail", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar" }),
+    (0, typeorm_1.Column)({
+        type: "enum",
+        enum: enums_1.OtpPurpose,
+        default: enums_1.OtpPurpose.REGISTRATION
+    }),
     __metadata("design:type", String)
 ], Otp.prototype, "purpose", void 0);
 __decorate([

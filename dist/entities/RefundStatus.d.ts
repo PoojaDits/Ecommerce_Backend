@@ -1,11 +1,5 @@
 import { Payment } from "./Payment";
-export declare enum RefundState {
-    INITIATED = "initiated",
-    PENDING = "pending",
-    COMPLETED = "completed",
-    FAILED = "failed",
-    REVERSED = "reversed"
-}
+import { RefundState } from "../enums";
 export declare class RefundStatus {
     id: number;
     status: RefundState;

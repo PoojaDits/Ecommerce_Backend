@@ -9,17 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReturnStatus = exports.ReturnState = void 0;
+exports.ReturnStatus = void 0;
 const typeorm_1 = require("typeorm");
 const OrderItem_1 = require("./OrderItem");
-var ReturnState;
-(function (ReturnState) {
-    ReturnState["REQUESTED"] = "requested";
-    ReturnState["APPROVED"] = "approved";
-    ReturnState["REJECTED"] = "rejected";
-    ReturnState["RECEIVED"] = "received";
-    ReturnState["COMPLETED"] = "completed";
-})(ReturnState || (exports.ReturnState = ReturnState = {}));
+const enums_1 = require("../enums");
 let ReturnStatus = class ReturnStatus {
 };
 exports.ReturnStatus = ReturnStatus;
@@ -28,7 +21,7 @@ __decorate([
     __metadata("design:type", Number)
 ], ReturnStatus.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "enum", enum: ReturnState, default: ReturnState.REQUESTED }),
+    (0, typeorm_1.Column)({ type: "enum", enum: enums_1.ReturnState, default: enums_1.ReturnState.REQUESTED }),
     __metadata("design:type", String)
 ], ReturnStatus.prototype, "status", void 0);
 __decorate([

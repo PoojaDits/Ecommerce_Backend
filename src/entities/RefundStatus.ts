@@ -1,13 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { Payment } from "./Payment";
-
-export enum RefundState {
-  INITIATED = "initiated",
-  PENDING = "pending",
-  COMPLETED = "completed",
-  FAILED = "failed",
-  REVERSED = "reversed"
-}
+import { RefundState } from "../enums";
 
 @Entity("refund_statuses")
 export class RefundStatus {

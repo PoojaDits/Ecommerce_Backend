@@ -3,13 +3,14 @@ import { Otp } from "../entities/Otp";
 import { sendOtpEmail } from "./mailService";
 import crypto from "crypto";
 import { MESSAGES } from "../constants/messages";
+import { OtpPurpose } from "../enums";
 const otpRepo=AppDataSource.getRepository(Otp);
 
 const generateOtpCode=():string=>{
     return crypto.randomInt(100000,999999).toString();
 }
 
-export const createAndSendOtp=async(userEmail:string,purpose:string):Promise<void> =>{
+export const createAndSendOtp=async(userEmail:string,purpose:OtpPurpose):Promise<void> =>{
 //to clear old values
 
     await otpRepo.update(
@@ -42,7 +43,7 @@ export const createAndSendOtp=async(userEmail:string,purpose:string):Promise<voi
         throw error;
     }
 };
- export const verifyOtp=async(userEmail:string,purpose:string,code:string):Promise<boolean> =>{
+ export const verifyOtp=async(userEmail:string,purpose:OtpPurpose,code:string):Promise<boolean> =>{
 
     const otp=await otpRepo.findOne({
         where:{userEmail:userEmail,purpose,code,is_used:false},
@@ -59,7 +60,7 @@ export const createAndSendOtp=async(userEmail:string,purpose:string):Promise<voi
 }
 export const consumeOtp=async(
     userEmail:string,
-    purpose:string,
+    purpose:OtpPurpose,
     code:string
 ):Promise<void> =>{
     const otp=await otpRepo.update(

@@ -1,13 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { OrderItem } from "./OrderItem";
-
-export enum ReturnState {
-  REQUESTED = "requested",
-  APPROVED = "approved",
-  REJECTED = "rejected",
-  RECEIVED = "received",
-  COMPLETED = "completed"
-}
+import { ReturnState } from "../enums";
 
 @Entity("return_statuses")
 export class ReturnStatus {

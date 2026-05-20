@@ -9,24 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Payment = exports.PaymentStatus = exports.PaymentMethod = void 0;
+exports.Payment = void 0;
 const typeorm_1 = require("typeorm");
 const Order_1 = require("./Order");
 const RefundStatus_1 = require("./RefundStatus");
-var PaymentMethod;
-(function (PaymentMethod) {
-    PaymentMethod["CARD"] = "card";
-    PaymentMethod["UPI"] = "upi";
-    PaymentMethod["NET_BANKING"] = "net_banking";
-    PaymentMethod["WALLET"] = "wallet";
-})(PaymentMethod || (exports.PaymentMethod = PaymentMethod = {}));
-var PaymentStatus;
-(function (PaymentStatus) {
-    PaymentStatus["PENDING"] = "pending";
-    PaymentStatus["COMPLETED"] = "completed";
-    PaymentStatus["FAILED"] = "failed";
-    PaymentStatus["REFUNDED"] = "refunded";
-})(PaymentStatus || (exports.PaymentStatus = PaymentStatus = {}));
+const enums_1 = require("../enums");
 let Payment = class Payment {
 };
 exports.Payment = Payment;
@@ -44,13 +31,13 @@ __decorate([
 ], Payment.prototype, "amount", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "enum",
-        enum: PaymentStatus,
-        default: PaymentStatus.PENDING }),
+        enum: enums_1.PaymentStatus,
+        default: enums_1.PaymentStatus.PENDING }),
     __metadata("design:type", String)
 ], Payment.prototype, "status", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "enum",
-        enum: PaymentMethod,
+        enum: enums_1.PaymentMethod,
         nullable: true
     }),
     __metadata("design:type", String)

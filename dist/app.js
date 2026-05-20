@@ -21,15 +21,15 @@ app.get("/back", (_req, res) => {
 const startServer = async () => {
     try {
         await dataSource_1.AppDataSource.initialize();
-        console.log(" Database Connected");
+        console.log("Database Connected");
         const PORT = process.env.PORT || 3001;
         app.listen(PORT, () => {
-            console.log(` Server running on port ${PORT}`);
+            console.log(`Server running on port ${PORT}`);
         });
     }
     catch (error) {
-        console.error(" Server startup failed:", error);
-        process.exit(1);
+        console.error("Server startup failed:", error);
+        throw error;
     }
 };
 startServer();

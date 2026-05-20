@@ -1,11 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { User } from "./User";
+import { OtpPurpose } from "../enums";
 
 @Entity("otps")
 export class Otp {
 
     @PrimaryGeneratedColumn("increment")
-  id: number;
+    id: number;
 
   @Column({ type: "varchar" })
   code: string;
@@ -19,10 +20,13 @@ export class Otp {
   @Column({ type: "varchar" })
   userEmail: string;
 
-  @Column({ type: "varchar" })
-  purpose: string;
+  @Column({
+    type: "enum",
+    enum: OtpPurpose,
+    default: OtpPurpose.REGISTRATION
+  })
+  purpose: OtpPurpose;
 
-  
   @ManyToOne(() => User, (user) => user.otps, { onDelete: 'CASCADE' , nullable:true})
   @JoinColumn({ name: 'user_id' })
   user: User|null;

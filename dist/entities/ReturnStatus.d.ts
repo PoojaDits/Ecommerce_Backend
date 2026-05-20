@@ -1,11 +1,5 @@
 import { OrderItem } from "./OrderItem";
-export declare enum ReturnState {
-    REQUESTED = "requested",
-    APPROVED = "approved",
-    REJECTED = "rejected",
-    RECEIVED = "received",
-    COMPLETED = "completed"
-}
+import { ReturnState } from "../enums";
 export declare class ReturnStatus {
     id: number;
     status: ReturnState;

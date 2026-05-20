@@ -1,21 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Order } from "./Order";
 import { RefundStatus } from "./RefundStatus";
-
-
-export enum PaymentMethod {
-  CARD = "card",
-  UPI = "upi",
-  NET_BANKING = "net_banking",
-  WALLET = "wallet",
-}
-
-export enum PaymentStatus {
-  PENDING = "pending",
-  COMPLETED = "completed",
-  FAILED = "failed",
-  REFUNDED = "refunded",
-}
+import { PaymentMethod, PaymentStatus } from "../enums";
 
 @Entity("payments")
 export class Payment {

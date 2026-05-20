@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = exports.UserRole = void 0;
+exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const Store_1 = require("./Store");
 const Order_1 = require("./Order");
@@ -17,12 +17,7 @@ const Address_1 = require("./Address");
 const Cart_1 = require("./Cart");
 const Otp_1 = require("./Otp");
 const typeorm_2 = require("typeorm");
-var UserRole;
-(function (UserRole) {
-    UserRole["ADMIN"] = "admin";
-    UserRole["CUSTOMER"] = "customer";
-    UserRole["GUEST"] = "vendor";
-})(UserRole || (exports.UserRole = UserRole = {}));
+const enums_1 = require("../enums");
 let User = class User {
 };
 exports.User = User;
@@ -54,8 +49,8 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({
         type: "enum",
-        enum: UserRole,
-        default: UserRole.CUSTOMER
+        enum: enums_1.UserRole,
+        default: enums_1.UserRole.CUSTOMER
     }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);

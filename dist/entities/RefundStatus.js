@@ -9,17 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RefundStatus = exports.RefundState = void 0;
+exports.RefundStatus = void 0;
 const typeorm_1 = require("typeorm");
 const Payment_1 = require("./Payment");
-var RefundState;
-(function (RefundState) {
-    RefundState["INITIATED"] = "initiated";
-    RefundState["PENDING"] = "pending";
-    RefundState["COMPLETED"] = "completed";
-    RefundState["FAILED"] = "failed";
-    RefundState["REVERSED"] = "reversed";
-})(RefundState || (exports.RefundState = RefundState = {}));
+const enums_1 = require("../enums");
 let RefundStatus = class RefundStatus {
 };
 exports.RefundStatus = RefundStatus;
@@ -28,7 +21,7 @@ __decorate([
     __metadata("design:type", Number)
 ], RefundStatus.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "enum", enum: RefundState, default: RefundState.INITIATED }),
+    (0, typeorm_1.Column)({ type: "enum", enum: enums_1.RefundState, default: enums_1.RefundState.INITIATED }),
     __metadata("design:type", String)
 ], RefundStatus.prototype, "status", void 0);
 __decorate([

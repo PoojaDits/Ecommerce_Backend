@@ -5,11 +5,7 @@ import { Address } from './Address';
 import { Cart } from './Cart';
 import { Otp } from './Otp';
 import { OneToOne } from 'typeorm';
-export enum UserRole {
-  ADMIN = "admin",
-  CUSTOMER = "customer",
-  GUEST = "vendor"
-}
+import { UserRole } from '../enums';
 
 @Entity("users")
 export class User {

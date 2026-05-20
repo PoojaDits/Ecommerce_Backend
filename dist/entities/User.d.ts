@@ -3,11 +3,7 @@ import { Order } from './Order';
 import { Address } from './Address';
 import { Cart } from './Cart';
 import { Otp } from './Otp';
-export declare enum UserRole {
-    ADMIN = "admin",
-    CUSTOMER = "customer",
-    GUEST = "vendor"
-}
+import { UserRole } from '../enums';
 export declare class User {
     id: number;
     uuid: string;

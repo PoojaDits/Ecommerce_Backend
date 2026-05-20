@@ -1,5 +1,6 @@
 import { AppDataSource } from "../config/dataSource";
-import { User, UserRole } from "../entities/User";
+import { User } from "../entities/User";
+import { UserRole, OtpPurpose } from "../enums";
 import { createAndSendOtp, verifyOtp, consumeOtp } from "./otpSerice";
 import bcrypt from "bcrypt";
 import { MESSAGES } from "../constants/messages";
@@ -40,7 +41,7 @@ if (checkUser && !checkUser.isActive) {
   await userRepo.save(user);
 
   try {
-    await createAndSendOtp(email, "registration");
+    await createAndSendOtp(email, OtpPurpose.REGISTRATION);
   } catch (error) {
     await userRepo.delete({ id: user.id });
     throw error;
@@ -64,7 +65,7 @@ export const completeRegistration = async (
   otp: string        
 ): Promise<IAuthResponse> => {
 
-  await verifyOtp(email, "registration", otp);
+  await verifyOtp(email, OtpPurpose.REGISTRATION, otp);
 
   const user = await userRepo.findOne({
     where: { email, isActive: false }
@@ -77,7 +78,7 @@ export const completeRegistration = async (
   await userRepo.save(user);
 
   try {
-    await consumeOtp(email, "registration", otp); 
+    await consumeOtp(email, OtpPurpose.REGISTRATION, otp); 
   } catch (error) {
     user.isActive = false;
     await userRepo.save(user);
@@ -108,6 +109,6 @@ export const resendRegistrationOtp = async (
     throw new Error(MESSAGES.AUTH.NO_PENDING_REGISTRATION);
   }
 
-  await createAndSendOtp(email, "registration");
+  await createAndSendOtp(email, OtpPurpose.REGISTRATION);
   return { message: MESSAGES.AUTH.OTP_RESENT };
 };
