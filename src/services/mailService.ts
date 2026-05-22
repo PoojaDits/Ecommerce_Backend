@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import logger from "../config/logger";
 
 dotenv.config();
 
@@ -34,8 +35,16 @@ export const sendOtpEmail = async (
           </div>
           `,
         });
-    } catch (error: any) {
-        console.error("Failed to send OTP email via SMTP:", error);
-        throw new Error("We encountered an issue sending the verification email. Please check your email configuration.");
+          logger.info(`OTP email sent to ${toEmail}`);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      logger.error(`Failed to send OTP email to ${toEmail}: ${error.message}`);
+    } else {
+      logger.error(`Failed to send OTP email to ${toEmail}`);
     }
+
+    throw new Error(
+      "We encountered an issue sending the verification email. Please check your email configuration."
+    );
+  }
 };

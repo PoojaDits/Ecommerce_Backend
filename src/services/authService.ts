@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import { MESSAGES } from "../constants/messages";
 import { IAuthResponse, IAuthUser } from "../interfaces/authInterface";
 import jwt from "jsonwebtoken";
+import logger from "../config/logger";
 
 const userRepo = AppDataSource.getRepository(User);
 
@@ -22,11 +23,13 @@ const checkUser = await userRepo.findOne({
 });
 
 if (checkUser?.isActive) {
-  throw new Error(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED);
+   logger.warn(`Registration blocked because email already exists: ${email}`);
+    throw new Error(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED);
 }
 
 if (checkUser && !checkUser.isActive) {
-  await userRepo.delete({ email });
+  logger.info(`Deleting old inactive user before new registration: ${email}`);
+    await userRepo.delete({ email });
 }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -41,10 +44,13 @@ if (checkUser && !checkUser.isActive) {
   });
   await userRepo.save(user);
 
-  try {
+  logger.info(`User created successfully: ${email}`);
+   try {
     await createAndSendOtp(email, OtpPurpose.REGISTRATION);
-  } catch (error) {
+    logger.info(`Registration OTP sent for ${email}`);
+  } catch (error: unknown) {
     await userRepo.delete({ id: user.id });
+    logger.error(`Registration failed while sending OTP for ${email}`);
     throw error;
   }
   
@@ -72,17 +78,20 @@ export const completeRegistration = async (
     where: { email, isActive: false }
   });
   if (!user) {
+    logger.warn(`Registration session not found for ${email}`);
     throw new Error(MESSAGES.AUTH.REGISTRATION_SESSION_NOT_FOUND);
   }
 
   user.isActive = true;
   await userRepo.save(user);
+  logger.info(`User activated successfully: ${email}`);
 
   try {
     await consumeOtp(email, OtpPurpose.REGISTRATION, otp); 
-  } catch (error) {
+  } catch (error: unknown) {
     user.isActive = false;
     await userRepo.save(user);
+    logger.error(`Failed to consume OTP for ${email}`);
     throw error;
   }
 
@@ -107,10 +116,12 @@ export const resendRegistrationOtp = async (
     where: { email, isActive: false }
   });
   if (!user) {
+    logger.warn(`No pending registration found for ${email}`);
     throw new Error(MESSAGES.AUTH.NO_PENDING_REGISTRATION);
   }
 
   await createAndSendOtp(email, OtpPurpose.REGISTRATION);
+  logger.info(`OTP resent for ${email}`);
   return { message: MESSAGES.AUTH.OTP_RESENT };
 };
 
@@ -124,10 +135,12 @@ export const loginUser = async (
   });
 
   if (!user) {
+    logger.warn(`Login failed for ${email}: user not found`);
     throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
   }
 
   if (!user.isActive) {
+    logger.warn(`Login failed for ${email}: account not verified`);
     throw new Error(MESSAGES.AUTH.ACCOUNT_NOT_VERIFIED);
   }
 
@@ -137,6 +150,7 @@ export const loginUser = async (
   );
 
   if (!isPasswordValid) {
+    logger.warn(`Login failed for ${email}: invalid password`);
     throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
   }
 
@@ -153,6 +167,7 @@ export const loginUser = async (
       expiresIn: "7d",
     }
   );
+  logger.info(`JWT token generated for ${email}`);
 
   const authUser: IAuthUser = {
     id: user.id,
