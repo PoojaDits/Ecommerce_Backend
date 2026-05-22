@@ -19,6 +19,9 @@ exports.MESSAGES = {
         REGISTRATION_SUCCESS: "Registration successful. You can now log in.",
         NO_PENDING_REGISTRATION: "No pending registration found. Please register first.",
         OTP_RESENT: "OTP resent successfully. Check your email.",
+        INVALID_CREDENTIALS: "Invalid Credentials",
+        ACCOUNT_NOT_VERIFIED: "Account not verified",
+        LOGIN_SUCCESS: "Login Successfu"
     },
     OTP: {
         INVALID: "Invalid OTP",

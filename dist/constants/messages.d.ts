@@ -16,6 +16,9 @@ export declare const MESSAGES: {
         REGISTRATION_SUCCESS: string;
         NO_PENDING_REGISTRATION: string;
         OTP_RESENT: string;
+        INVALID_CREDENTIALS: string;
+        ACCOUNT_NOT_VERIFIED: string;
+        LOGIN_SUCCESS: string;
     };
     OTP: {
         INVALID: string;

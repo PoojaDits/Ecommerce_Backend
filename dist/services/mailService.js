@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendOtpEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const logger_1 = __importDefault(require("../config/logger"));
 dotenv_1.default.config();
 const transporter = nodemailer_1.default.createTransport({
     host: process.env.MAIL_HOST,
@@ -33,9 +34,15 @@ const sendOtpEmail = async (toEmail, otp) => {
           </div>
           `,
         });
+        logger_1.default.info(`OTP email sent to ${toEmail}`);
     }
     catch (error) {
-        console.error("Failed to send OTP email via SMTP:", error);
+        if (error instanceof Error) {
+            logger_1.default.error(`Failed to send OTP email to ${toEmail}: ${error.message}`);
+        }
+        else {
+            logger_1.default.error(`Failed to send OTP email to ${toEmail}`);
+        }
         throw new Error("We encountered an issue sending the verification email. Please check your email configuration.");
     }
 };

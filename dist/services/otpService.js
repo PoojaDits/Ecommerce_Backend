@@ -14,7 +14,6 @@ const generateOtpCode = () => {
     return crypto_1.default.randomInt(100000, 999999).toString();
 };
 const createAndSendOtp = async (userEmail, purpose) => {
-    //to clear old values
     await otpRepo.update({
         userEmail: userEmail, purpose, is_used: false
     }, {

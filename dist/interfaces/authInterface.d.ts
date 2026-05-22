@@ -11,5 +11,6 @@ export interface IAuthUser {
 export interface IAuthResponse {
     message: string;
     user?: IAuthUser;
+    token?: string;
 }
 //# sourceMappingURL=authInterface.d.ts.map

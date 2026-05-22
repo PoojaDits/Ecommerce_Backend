@@ -7,7 +7,7 @@ const router = (0, express_1.Router)();
  * @swagger
  * /api/auth/register:
  *   post:
- *     summary: Initiate a new user and send OTP
+ *     summary: Initiate new user and send OTP
  *     tags:
  *     - Authentication
  *     requestBody:
@@ -35,7 +35,7 @@ router.post("/register", authController_1.registerInitiate);
  * @swagger
  * /api/auth/verify-otp:
  *   post:
- *     summary: Verify email OTP to complete registration
+ *     summary: Verify email otp to complete registration
  *     tags:
  *       - Authentication
  *     requestBody:
@@ -52,7 +52,7 @@ router.post("/register", authController_1.registerInitiate);
  *             schema:
  *               $ref: '#/components/schemas/AuthResponse'
  *       400:
- *         description: Invalid/expired OTP or registration session not found
+ *         description: Invalid OTP
  *         content:
  *           application/json:
  *             schema:
@@ -63,7 +63,7 @@ router.post("/verify-otp", authController_1.registerVerifyOtp);
  * @swagger
  * /api/auth/resend-otp:
  *   post:
- *     summary: Resend OTP code for pending registration
+ *     summary: Resend OTP
  *     tags:
  *       - Authentication
  *     requestBody:
@@ -87,5 +87,39 @@ router.post("/verify-otp", authController_1.registerVerifyOtp);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/resend-otp", authController_1.resendOtp);
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login User
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginRequest'
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LoginResponse'
+ *       400:
+ *         description: Invalid credentials
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Account not verified
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.post("/login", authController_1.login);
 exports.default = router;
 //# sourceMappingURL=authRoutes.js.map

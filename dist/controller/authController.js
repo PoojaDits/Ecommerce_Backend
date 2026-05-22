@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resendOtp = exports.registerVerifyOtp = exports.registerInitiate = void 0;
+exports.login = exports.resendOtp = exports.registerVerifyOtp = exports.registerInitiate = void 0;
 const authService_1 = require("../services/authService");
 const authValidator_1 = require("../validators/authValidator");
 const messages_1 = require("../constants/messages");
@@ -58,4 +58,28 @@ const resendOtp = async (req, res) => {
     }
 };
 exports.resendOtp = resendOtp;
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            res.status(400).json({
+                success: false,
+                message: messages_1.MESSAGES.VALIDATION.ALL_FIELDS_REQUIRED,
+            });
+            return;
+        }
+        const result = await (0, authService_1.loginUser)(email, password);
+        res.status(200).json({
+            success: true,
+            ...result,
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+exports.login = login;
 //# sourceMappingURL=authController.js.map
