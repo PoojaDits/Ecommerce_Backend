@@ -1,1 +1,0 @@
-{"version":3,"file":"shipmentTracking.d.ts","sourceRoot":"","sources":["../../src/entities/shipmentTracking.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,QAAQ,EAAE,MAAM,YAAY,CAAC;AAEtC,qBACa,gBAAgB;IAEzB,EAAE,EAAC,MAAM,CAAC;IAGV,MAAM,EAAC,MAAM,CAAC;IAGd,QAAQ,EAAC,MAAM,CAAC;IAGhB,UAAU,EAAC,IAAI,CAAC;IAIhB,QAAQ,EAAC,QAAQ,CAAC;CACrB"}

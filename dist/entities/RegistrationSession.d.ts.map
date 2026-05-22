@@ -1,1 +1,0 @@
-{"version":3,"file":"RegistrationSession.d.ts","sourceRoot":"","sources":["../../src/entities/RegistrationSession.ts"],"names":[],"mappings":"AAEA,qBACa,mBAAmB;IAE9B,EAAE,EAAE,MAAM,CAAC;IAGX,SAAS,EAAE,MAAM,CAAC;IAGlB,QAAQ,EAAE,MAAM,CAAC;IAGjB,KAAK,EAAE,MAAM,CAAC;IAGd,YAAY,EAAE,MAAM,CAAC;IAGrB,SAAS,EAAE,IAAI,CAAC;IAGhB,SAAS,EAAE,IAAI,CAAC;CACjB"}
