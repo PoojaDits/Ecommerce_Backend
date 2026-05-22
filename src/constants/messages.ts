@@ -7,7 +7,7 @@ export const MESSAGES = {
     OTP_REQUIRED: "OTP is required.",
     FAILED: "Validation failed",
     ALL_FIELDS_REQUIRED: "All fields are required.",
-    INVALID_ROLE: (roles: string) => "Invalid role",
+    INVALID_ROLE: (roles: string) => `Invalid role. Must be one of: ${roles}`,
   },
   AUTH: {
     EMAIL_ALREADY_REGISTERED: "Email is already registered.",
@@ -16,7 +16,9 @@ export const MESSAGES = {
     REGISTRATION_SUCCESS: "Registration successful. You can now log in.",
     NO_PENDING_REGISTRATION: "No pending registration found. Please register first.",
     OTP_RESENT: "OTP resent successfully. Check your email.",
-  },
+  INVALID_CREDENTIALS:"Invalid Credentials",
+ACCOUNT_NOT_VERIFIED:"Account not verified",
+LOGIN_SUCCESS:"Login Successfu"},
   OTP: {
     INVALID: "Invalid OTP",
     EXPIRED: "OTP expired",

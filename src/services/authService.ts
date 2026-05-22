@@ -5,6 +5,7 @@ import { createAndSendOtp, verifyOtp, consumeOtp } from "./otpService";
 import bcrypt from "bcrypt";
 import { MESSAGES } from "../constants/messages";
 import { IAuthResponse, IAuthUser } from "../interfaces/authInterface";
+import jwt from "jsonwebtoken";
 
 const userRepo = AppDataSource.getRepository(User);
 
@@ -111,4 +112,61 @@ export const resendRegistrationOtp = async (
 
   await createAndSendOtp(email, OtpPurpose.REGISTRATION);
   return { message: MESSAGES.AUTH.OTP_RESENT };
+};
+
+export const loginUser = async (
+  email: string,
+  password: string
+): Promise<IAuthResponse> => {
+
+  const user = await userRepo.findOne({
+    where: { email }
+  });
+
+  if (!user) {
+    throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
+  }
+
+  if (!user.isActive) {
+    throw new Error(MESSAGES.AUTH.ACCOUNT_NOT_VERIFIED);
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    password,
+    user.password
+  );
+
+  if (!isPasswordValid) {
+    throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
+  }
+
+  const token = jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    },
+
+    process.env.JWT_SECRET!,
+
+    {
+      expiresIn: "7d",
+    }
+  );
+
+  const authUser: IAuthUser = {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    role: user.role,
+    isActive: user.isActive,
+    createdAt: user.createdAt,
+  };
+
+  return {
+    message: MESSAGES.AUTH.LOGIN_SUCCESS,
+    user: authUser,
+    token,
+  };
 };

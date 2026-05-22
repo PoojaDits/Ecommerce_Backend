@@ -6,6 +6,7 @@ import { Cart } from './Cart';
 import { Otp } from './Otp';
 import { OneToOne } from 'typeorm';
 import { UserRole } from '../enums';
+import * as moment from 'moment';
 
 @Entity("users")
 export class User {

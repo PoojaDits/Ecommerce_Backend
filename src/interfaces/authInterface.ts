@@ -13,4 +13,5 @@ export interface IAuthUser {
 export interface IAuthResponse {
   message: string;
   user?: IAuthUser;
+  token?:string;
 }

@@ -11,7 +11,7 @@ const generateOtpCode=():string=>{
 }
 
 export const createAndSendOtp=async(userEmail:string,purpose:OtpPurpose):Promise<void> =>{
-//to clear old values
+
 
     await otpRepo.update(
         {
