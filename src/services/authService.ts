@@ -15,22 +15,18 @@ export const initiateRegistration = async (
   lastName: string,
   email: string,
   password: string,
-  role:UserRole
+  role: UserRole
 ): Promise<IAuthResponse> => {
+  const checkUser = await userRepo.findOne({ where: { email } });
 
-const checkUser = await userRepo.findOne({
-  where: { email }
-});
-
-if (checkUser?.isActive) {
-   logger.warn(`Registration blocked because email already exists: ${email}`);
+  if (checkUser?.isActive) {
+    logger.warn(`Registration blocked, email already exists: ${email}`);
     throw new Error(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED);
-}
+  }
 
-if (checkUser && !checkUser.isActive) {
-  logger.info(`Deleting old inactive user before new registration: ${email}`);
+  if (checkUser && !checkUser.isActive) {
     await userRepo.delete({ email });
-}
+  }
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -39,29 +35,27 @@ if (checkUser && !checkUser.isActive) {
     lastName,
     email,
     password: hashedPassword,
-    role:role|| UserRole.CUSTOMER,
+    role: role || UserRole.CUSTOMER,
     isActive: false,
   });
   await userRepo.save(user);
 
-  logger.info(`User created successfully: ${email}`);
-   try {
+  try {
     await createAndSendOtp(email, OtpPurpose.REGISTRATION);
-    logger.info(`Registration OTP sent for ${email}`);
   } catch (error: unknown) {
     await userRepo.delete({ id: user.id });
-    logger.error(`Registration failed while sending OTP for ${email}`);
+    logger.error(`Registration rolled back, OTP send failed for ${email}`);
     throw error;
   }
-  
+
   const authUser: IAuthUser = {
-    id:user.id,
-    firstName:user.firstName,
-    lastName:user.lastName,
-    email:user.email,
-    role:user.role,
-    isActive:user.isActive,
-    createdAt:user.createdAt,
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    role: user.role,
+    isActive: user.isActive,
+    createdAt: user.createdAt,
   };
 
   return { message: MESSAGES.AUTH.OTP_SENT, user: authUser };
@@ -69,13 +63,12 @@ if (checkUser && !checkUser.isActive) {
 
 export const completeRegistration = async (
   email: string,
-  otp: string        
+  otp: string
 ): Promise<IAuthResponse> => {
-
   await verifyOtp(email, OtpPurpose.REGISTRATION, otp);
 
   const user = await userRepo.findOne({
-    where: { email, isActive: false }
+    where: { email, isActive: false },
   });
   if (!user) {
     logger.warn(`Registration session not found for ${email}`);
@@ -84,10 +77,9 @@ export const completeRegistration = async (
 
   user.isActive = true;
   await userRepo.save(user);
-  logger.info(`User activated successfully: ${email}`);
 
   try {
-    await consumeOtp(email, OtpPurpose.REGISTRATION, otp); 
+    await consumeOtp(email, OtpPurpose.REGISTRATION, otp);
   } catch (error: unknown) {
     user.isActive = false;
     await userRepo.save(user);
@@ -96,13 +88,13 @@ export const completeRegistration = async (
   }
 
   const authUser: IAuthUser = {
-    id:user.id,
-    firstName:user.firstName,
-    lastName:user.lastName,
-    email:user.email,
-    role:user.role,
-    isActive:user.isActive,
-    createdAt:user.createdAt,
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    role: user.role,
+    isActive: user.isActive,
+    createdAt: user.createdAt,
   };
 
   return { message: MESSAGES.AUTH.REGISTRATION_SUCCESS, user: authUser };
@@ -111,9 +103,8 @@ export const completeRegistration = async (
 export const resendRegistrationOtp = async (
   email: string
 ): Promise<IAuthResponse> => {
-
   const user = await userRepo.findOne({
-    where: { email, isActive: false }
+    where: { email, isActive: false },
   });
   if (!user) {
     logger.warn(`No pending registration found for ${email}`);
@@ -121,7 +112,7 @@ export const resendRegistrationOtp = async (
   }
 
   await createAndSendOtp(email, OtpPurpose.REGISTRATION);
-  logger.info(`OTP resent for ${email}`);
+
   return { message: MESSAGES.AUTH.OTP_RESENT };
 };
 
@@ -129,10 +120,7 @@ export const loginUser = async (
   email: string,
   password: string
 ): Promise<IAuthResponse> => {
-
-  const user = await userRepo.findOne({
-    where: { email }
-  });
+  const user = await userRepo.findOne({ where: { email } });
 
   if (!user) {
     logger.warn(`Login failed for ${email}: user not found`);
@@ -144,30 +132,17 @@ export const loginUser = async (
     throw new Error(MESSAGES.AUTH.ACCOUNT_NOT_VERIFIED);
   }
 
-  const isPasswordValid = await bcrypt.compare(
-    password,
-    user.password
-  );
-
+  const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
     logger.warn(`Login failed for ${email}: invalid password`);
     throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
   }
 
   const token = jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-    },
-
+    { id: user.id, email: user.email, role: user.role },
     process.env.JWT_SECRET!,
-
-    {
-      expiresIn: "7d",
-    }
+    { expiresIn: "7d" }
   );
-  logger.info(`JWT token generated for ${email}`);
 
   const authUser: IAuthUser = {
     id: user.id,
