@@ -160,3 +160,11 @@ export const loginUser = async (
     token,
   };
 };
+
+
+
+
+
+//logout,forget password ,userapis, ..all project apis
+//prototype and impliementation on practice folder
+//

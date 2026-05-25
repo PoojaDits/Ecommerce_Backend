@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import winston from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
 
 const logDir = path.join(process.cwd(), "logs");
 
@@ -43,19 +44,38 @@ const fileFormat = winston.format.combine(
   )
 );
 
+const errorFileTransport = new DailyRotateFile({
+  dirname: logDir,
+  filename: "error-%DATE%.log",
+  datePattern: "YYYY-MM-DD",
+  level: "error",
+  maxSize: "20m",
+  maxFiles: "30d",
+  zippedArchive: true,
+  format: fileFormat,
+});
+
+
+
+
+
+const combinedFileTransport = new DailyRotateFile({
+  dirname: logDir,
+  filename: "combined-%DATE%.log",
+  datePattern: "YYYY-MM-DD",
+  maxSize: "20m",
+  maxFiles: "14d",
+  zippedArchive: true,
+  format: fileFormat,
+});
+
+
 export const logger = winston.createLogger({
-  level: "info",
+  level: process.env.LOG_LEVEL || "info",
   transports: [
     new winston.transports.Console({ format: consoleFormat }),
-    new winston.transports.File({
-      filename: path.join(logDir, "error.log"),
-      level: "error",
-      format: fileFormat,
-    }),
-    new winston.transports.File({
-      filename: path.join(logDir, "combined.log"),
-      format: fileFormat,
-    }),
+    errorFileTransport,
+    combinedFileTransport,
   ],
 });
 
