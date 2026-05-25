@@ -1,5 +1,4 @@
-
-dist/
-logs/
 node_modules/
 .env
+logs/
+dist/
