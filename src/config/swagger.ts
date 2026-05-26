@@ -181,19 +181,19 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
-        LogoutResponse: {
-          type: "object",
-          properties: {
-            success: {
-              type: "boolean",
-              example: true,
-            },
-            message: {
-              type: "string",
-              example: "Logout successful",
-            },
-          },
-        },
+   LogoutResponse: {
+  type: "object",
+  properties: {
+    success: {
+      type: "boolean",
+      example: true,
+    },
+    message: {
+      type: "string",
+      example: "Logout successful",
+    },
+  },
+},
       },
     },
   },

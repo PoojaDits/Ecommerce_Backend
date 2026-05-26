@@ -137,23 +137,16 @@ router.post("/login", login);
  * /api/auth/logout:
  *   post:
  *     summary: Logout User
+ *     description: JWT token is stored in frontend localStorage. Frontend should remove token/user from localStorage after calling this API.
  *     tags:
  *       - Authentication
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Logout successful
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AuthResponse'
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *               $ref: '#/components/schemas/LogoutResponse'
  */
 router.post("/logout", logout);
 // router.post("/forget-password",forgetPassword);
