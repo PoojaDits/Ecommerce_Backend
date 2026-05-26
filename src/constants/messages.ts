@@ -21,16 +21,18 @@ export const MESSAGES = {
   AUTH: {
     EMAIL_ALREADY_REGISTERED: "Email is already registered.",
     OTP_SENT: "OTP sent to your email. Please verify to complete registration.",
-    REGISTRATION_SESSION_NOT_FOUND: "Registration session not found. Please register again.",
+    REGISTRATION_SESSION_NOT_FOUND:
+      "Registration session not found. Please register again.",
     REGISTRATION_SUCCESS: "Registration successful. You can now log in.",
     NO_PENDING_REGISTRATION: "No pending registration found. Please register first.",
     OTP_RESENT: "OTP resent successfully. Check your email.",
     INVALID_CREDENTIALS: "Invalid Credentials",
     ACCOUNT_NOT_VERIFIED: "Account not verified",
-    LOGIN_SUCCESS: "Login Successfu"
+    LOGIN_SUCCESS: "Login successful",
+    LOGOUT_SUCCESS: "Logout successful",
   },
   OTP: {
     INVALID: "Invalid OTP",
     EXPIRED: "OTP expired",
-  }
+  },
 };

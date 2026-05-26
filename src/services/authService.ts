@@ -161,10 +161,9 @@ export const loginUser = async (
   };
 };
 
-
-
-
-
-//logout,forget password ,userapis, ..all project apis
-//prototype and impliementation on practice folder
-//
+export const logoutUser = async (): Promise<IAuthResponse> => {
+  // JWT is saved in frontend localStorage, not in database.
+  // So logout is handled by removing token/user from localStorage on frontend.
+  // No token entity/table is required.
+  return { message: MESSAGES.AUTH.LOGOUT_SUCCESS };
+};

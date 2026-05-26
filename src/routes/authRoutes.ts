@@ -3,7 +3,8 @@ import {
   registerInitiate,
   registerVerifyOtp,
   resendOtp,
-  login
+  login,
+  logout
 } from "../controller/authController";
 
 const router = Router();
@@ -128,6 +129,33 @@ router.post("/resend-otp", resendOtp);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/login",login);
+router.post("/login", login);
+
+
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Logout User
+ *     tags:
+ *       - Authentication
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.post("/logout", logout);
+// router.post("/forget-password",forgetPassword);
 
 export default router;
