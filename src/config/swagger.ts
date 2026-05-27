@@ -132,6 +132,32 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
+          ForgotPasswordRequest: {
+          type: "object",
+          required: ["email"],
+          properties: {
+            email: {
+              type: "string",
+              format: "email",
+              example: "jspuja@example.com",
+            },
+          },
+        },
+        ForgotPasswordVerifyOtpRequest: {
+          type: "object",
+          required: ["email", "otp"],
+          properties: {
+            email: {
+              type: "string",
+              format: "email",
+              example: "jspuja@example.com",
+            },
+            otp: {
+              type: "string",
+              example: "123456",
+            },
+          },
+        },
         AuthResponse: {
           type: "object",
           properties: {
@@ -194,6 +220,32 @@ const options: swaggerJSDoc.Options = {
     },
   },
 },
+ForgotPasswordResponse: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: true,
+            },
+            message: {
+              type: "string",
+              example: "OTP sent to your email for forgot password verification.",
+            },
+          },
+        },
+        ForgotPasswordVerifyOtpResponse: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: true,
+            },
+            message: {
+              type: "string",
+              example: "Forgot password OTP verified successfully.",
+            },
+          },
+        },
       },
     },
   },

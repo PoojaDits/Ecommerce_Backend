@@ -1,7 +1,6 @@
 import Joi from "joi";
 import { MESSAGES } from "../constants/messages";
-import { UserRole } from "../enums";
-
+import { UserRole, OtpPurpose } from "../enums";
 const validRoles = Object.values(UserRole);
 
 const emailSchema = Joi.string().trim().email().required().messages({

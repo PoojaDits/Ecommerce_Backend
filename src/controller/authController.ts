@@ -4,7 +4,6 @@ import {
   completeRegistration,
   resendRegistrationOtp,
   loginUser,
-  logoutUser,
 } from "../services/authService";
 import {
   loginSchema,
@@ -114,17 +113,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({ success: true, ...result });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Login failed";
-    res.status(400).json({ success: false, message });
-  }
-};
-
-export const logout = async (_req: Request, res: Response): Promise<void> => {
-  try {
-    const result: IAuthResponse = await logoutUser();
-
-    res.status(200).json({ success: true, ...result });
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Logout failed";
     res.status(400).json({ success: false, message });
   }
 };

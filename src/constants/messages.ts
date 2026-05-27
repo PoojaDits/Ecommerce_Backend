@@ -29,7 +29,8 @@ export const MESSAGES = {
     INVALID_CREDENTIALS: "Invalid Credentials",
     ACCOUNT_NOT_VERIFIED: "Account not verified",
     LOGIN_SUCCESS: "Login successful",
-    LOGOUT_SUCCESS: "Logout successful",
+    FORGOT_PASSWORD_OTP_SENT: "OTP sent to your email. Use it to reset your password.",
+    RESET_PASSWORD_SUCCESS: "Password reset successful. You can now log in with your new password.",
   },
   OTP: {
     INVALID: "Invalid OTP",

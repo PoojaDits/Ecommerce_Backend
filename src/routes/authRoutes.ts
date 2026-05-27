@@ -4,7 +4,8 @@ import {
   registerVerifyOtp,
   resendOtp,
   login,
-  logout
+  handleForgotPassword,
+  handleResetPassword,
 } from "../controller/authController";
 
 const router = Router();
@@ -131,24 +132,75 @@ router.post("/resend-otp", resendOtp);
  */
 router.post("/login", login);
 
-
 /**
  * @swagger
- * /api/auth/logout:
+ * /api/auth/forgot-password:
  *   post:
- *     summary: Logout User
- *     description: JWT token is stored in frontend localStorage. Frontend should remove token/user from localStorage after calling this API.
+ *     summary: Request OTP to reset forgotten password
  *     tags:
  *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
  *     responses:
  *       200:
- *         description: Logout successful
+ *         description: OTP sent to email for password reset
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/LogoutResponse'
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       400:
+ *         description: User not found or account not verified
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/logout", logout);
-// router.post("/forget-password",forgetPassword);
+router.post("/forgot-password", handleForgotPassword);
+
+/**
+ * @swagger
+ * /api/auth/reset-password:
+ *   post:
+ *     summary: Verify OTP and reset password
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               otp:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password reset successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       400:
+ *         description: Invalid OTP or validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.post("/reset-password", handleResetPassword);
+
 
 export default router;
