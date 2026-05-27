@@ -67,6 +67,7 @@ export const completeRegistration = async (
 ): Promise<IAuthResponse> => {
   await verifyOtp(email, OtpPurpose.REGISTRATION, otp);
 
+  
   const user = await userRepo.findOne({
     where: { email, isActive: false },
   });

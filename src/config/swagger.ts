@@ -5,18 +5,31 @@ import { Express } from "express";
 const options: swaggerJSDoc.Options = {
   definition: {
     openapi: "3.0.0",
+
     info: {
       title: "E-commerce API",
       version: "1.0.0",
       description: "API documentation",
     },
+
     servers: [
       {
         url: `http://localhost:${process.env.PORT || 3001}`,
-        description: "development server",
+        description: "Development server",
       },
     ],
+
     components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          description:
+            "JWT Authorization header using the Bearer scheme. Example: Bearer eyJhbGciOiJIUzI1NiIs...",
+        },
+      },
+
       schemas: {
         User: {
           type: "object",
@@ -28,6 +41,7 @@ const options: swaggerJSDoc.Options = {
             uuid: {
               type: "string",
               format: "uuid",
+              example: "550e8400-e29b-41d4-a716-446655440000",
             },
             firstName: {
               type: "string",
@@ -49,18 +63,21 @@ const options: swaggerJSDoc.Options = {
             },
             isActive: {
               type: "boolean",
-              example: false,
+              example: true,
             },
             createdAt: {
               type: "string",
               format: "date-time",
+              example: "2026-05-27T10:30:00Z",
             },
             updatedAt: {
               type: "string",
               format: "date-time",
+              example: "2026-05-27T10:30:00Z",
             },
           },
         },
+
         RegisterRequest: {
           type: "object",
           required: ["firstName", "lastName", "email", "password"],
@@ -87,9 +104,11 @@ const options: swaggerJSDoc.Options = {
               type: "string",
               enum: ["admin", "customer", "vendor"],
               default: "customer",
+              example: "customer",
             },
           },
         },
+
         VerifyOtpRequest: {
           type: "object",
           required: ["email", "otp"],
@@ -105,6 +124,7 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
+
         ResendOtpRequest: {
           type: "object",
           required: ["email"],
@@ -116,6 +136,7 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
+
         LoginRequest: {
           type: "object",
           required: ["email", "password"],
@@ -132,6 +153,7 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
+
         ForgotPasswordRequest: {
           type: "object",
           required: ["email"],
@@ -143,6 +165,7 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
+
         ResetPasswordRequest: {
           type: "object",
           required: ["email", "otp", "newPassword"],
@@ -163,6 +186,24 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
+
+        ChangePasswordRequest: {
+          type: "object",
+          required: ["currentPassword", "newPassword"],
+          properties: {
+            currentPassword: {
+              type: "string",
+              format: "password",
+              example: "OldPass123",
+            },
+            newPassword: {
+              type: "string",
+              format: "password",
+              example: "NewSecurePass@456",
+            },
+          },
+        },
+
         AuthResponse: {
           type: "object",
           properties: {
@@ -179,19 +220,7 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
-        ErrorResponse: {
-          type: "object",
-          properties: {
-            success: {
-              type: "boolean",
-              example: false,
-            },
-            message: {
-              type: "string",
-              example: "Error explanation message.",
-            },
-          },
-        },
+
         LoginResponse: {
           type: "object",
           properties: {
@@ -212,43 +241,58 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
-        ChangePasswordRequest: {
-  type: "object",
-  required: ["currentPassword", "newPassword"],
-  properties: {
-    currentPassword: {
-      type: "string",
-      format: "password",
-      example: "OldPass123",
-    },
-    newPassword: {
-      type: "string",
-      format: "password",
-      example: "NewSecurePass@456",
-    },
-  },
-},
-ChangePasswordResponse: {
-  type: "object",
-  properties: {
-    success: {
-      type: "boolean",
-      example: true,
-    },
-    message: {
-      type: "string",
-      example: "Password changed successfully.",
-    },
-  },
-},
+
+        ChangePasswordResponse: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: true,
+            },
+            message: {
+              type: "string",
+              example: "Password changed successfully.",
+            },
+          },
+        },
+
+        ErrorResponse: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: false,
+            },
+            message: {
+              type: "string",
+              example: "Error explanation message.",
+            },
+          },
+        },
       },
     },
+
+    
+    security: [
+      {
+        BearerAuth: [],
+      },
+    ],
   },
+
   apis: ["./src/routes/*.{ts,js}"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
 export const setupSwagger = (app: Express): void => {
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+      swaggerOptions: {
+        persistAuthorization: true,
+      },
+    })
+  );
 };

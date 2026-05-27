@@ -76,3 +76,16 @@ export const resetPasswordSchema = Joi.object({
     "any.required": MESSAGES.VALIDATION.PASSWORD_REQUIRED,
   }),
 });
+
+export const changePasswordSchema = Joi.object({
+  currentPassword: Joi.string().required().messages({
+    "string.empty": MESSAGES.VALIDATION.PASSWORD_REQUIRED,
+    "any.required": MESSAGES.VALIDATION.PASSWORD_REQUIRED,
+  }),
+  newPassword: Joi.string().min(6).max(30).required().messages({
+    "string.empty": MESSAGES.VALIDATION.PASSWORD_REQUIRED,
+    "string.min": MESSAGES.VALIDATION.PASSWORD_MIN,
+    "string.max": MESSAGES.VALIDATION.PASSWORD_MAX,
+    "any.required": MESSAGES.VALIDATION.PASSWORD_REQUIRED,
+  }),
+});

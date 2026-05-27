@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { AppDataSource } from "./config/dataSource";
-import authRoutes from "./routes/authRoutes";
 import { setupSwagger } from "./config/swagger";
 import logger from "./config/logger";
 import requestLogger from "./middleware/logger.Middleware";
+import authRoutes from "./routes/authRoutes";
 
 dotenv.config();
 

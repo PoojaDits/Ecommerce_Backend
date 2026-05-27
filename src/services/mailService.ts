@@ -22,7 +22,7 @@ const getEmailContent = (
   switch (purpose) {
     case OtpPurpose.REGISTRATION:
       return {
-        subject: "Verify Your Email - Complete Registration",
+        subject: "Complete Registration",
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">
             <h2 style="color: #333;">Welcome! 🎉</h2>

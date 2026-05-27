@@ -6,7 +6,10 @@ import {
   loginUser,
   forgotPassword,
   resetPassword,
+  changePassword,
 } from "../services/authService";
+
+
 import {
   loginSchema,
   registerSchema,
@@ -14,14 +17,16 @@ import {
   verifyOtpSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  changePasswordSchema,
 } from "../validators/authValidator";
 import { MESSAGES } from "../constants/messages";
 import { IAuthResponse } from "../interfaces/authInterface";
+import jwt from "jsonwebtoken";
 
 export const registerInitiate = async (
   req: Request,
   res: Response
-): Promise<void> => {
+): Promise<void> => { 
   try {
     const { error } = registerSchema.validate(req.body);
     if (error) {
@@ -44,8 +49,7 @@ export const registerInitiate = async (
 
     res.status(200).json({ success: true, ...result });
   } catch (error: unknown) {
-    const message =
-      error instanceof Error ? error.message : "Registration failed";
+    const message =error instanceof Error ? error.message : "Registration failed";
     res.status(400).json({ success: false, message });
   }
 };
@@ -167,6 +171,56 @@ export const handleResetPassword = async (
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Password reset failed";
+    res.status(400).json({ success: false, message });
+  }
+};
+
+export const handleChangePassword = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      res.status(401).json({ success: false, message: "Access denied. No token provided." });
+      return;
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      res.status(401).json({ success: false, message: "Access denied. No token provided." });
+      return;
+    }
+
+    const payload = jwt.verify(token, process.env.JWT_SECRET!) as { id: number };
+
+    
+    const { error } = changePasswordSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({
+        success: false,
+        message: error.details?.[0]?.message || MESSAGES.VALIDATION.FAILED,
+      });
+      return;
+    }
+
+    
+    const { currentPassword, newPassword } = req.body;
+    const result: IAuthResponse = await changePassword(payload.id, currentPassword, newPassword);
+
+    res.status(200).json({ success: true, ...result });
+  } catch (error: unknown) {
+    if (error instanceof jwt.TokenExpiredError) {
+      res.status(401).json({ success: false, message: "Token expired. Please login again." });
+      return;
+    }
+    if (error instanceof jwt.JsonWebTokenError) {
+      res.status(401).json({ success: false, message: "Invalid token." });
+      return;
+    }
+    const message =
+      error instanceof Error ? error.message : "Change password failed";
     res.status(400).json({ success: false, message });
   }
 };
