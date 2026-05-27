@@ -1,6 +1,7 @@
 import Joi from "joi";
 import { MESSAGES } from "../constants/messages";
-import { UserRole, OtpPurpose } from "../enums";
+import { UserRole } from "../enums";
+
 const validRoles = Object.values(UserRole);
 
 const emailSchema = Joi.string().trim().email().required().messages({
@@ -52,6 +53,26 @@ export const loginSchema = Joi.object({
   email: emailSchema,
   password: Joi.string().required().messages({
     "string.empty": MESSAGES.VALIDATION.PASSWORD_REQUIRED,
+    "any.required": MESSAGES.VALIDATION.PASSWORD_REQUIRED,
+  }),
+});
+
+export const forgotPasswordSchema = Joi.object({
+  email: emailSchema,
+});
+
+export const resetPasswordSchema = Joi.object({
+  email: emailSchema,
+  otp: Joi.string().length(6).pattern(/^[0-9]+$/).required().messages({
+    "string.empty": MESSAGES.VALIDATION.OTP_REQUIRED,
+    "string.length": MESSAGES.VALIDATION.OTP_LENGTH,
+    "string.pattern.base": MESSAGES.VALIDATION.OTP_NUMERIC,
+    "any.required": MESSAGES.VALIDATION.OTP_REQUIRED,
+  }),
+  newPassword: Joi.string().min(6).max(30).required().messages({
+    "string.empty": MESSAGES.VALIDATION.PASSWORD_REQUIRED,
+    "string.min": MESSAGES.VALIDATION.PASSWORD_MIN,
+    "string.max": MESSAGES.VALIDATION.PASSWORD_MAX,
     "any.required": MESSAGES.VALIDATION.PASSWORD_REQUIRED,
   }),
 });

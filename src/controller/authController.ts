@@ -4,12 +4,16 @@ import {
   completeRegistration,
   resendRegistrationOtp,
   loginUser,
+  forgotPassword,
+  resetPassword,
 } from "../services/authService";
 import {
   loginSchema,
   registerSchema,
   resendOtpSchema,
   verifyOtpSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
 } from "../validators/authValidator";
 import { MESSAGES } from "../constants/messages";
 import { IAuthResponse } from "../interfaces/authInterface";
@@ -113,6 +117,56 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({ success: true, ...result });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Login failed";
+    res.status(400).json({ success: false, message });
+  }
+};
+
+export const handleForgotPassword = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { error } = forgotPasswordSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({
+        success: false,
+        message: error.details?.[0]?.message || MESSAGES.VALIDATION.FAILED,
+      });
+      return;
+    }
+
+    const { email } = req.body;
+    const result: IAuthResponse = await forgotPassword(email);
+
+    res.status(200).json({ success: true, ...result });
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Forgot password request failed";
+    res.status(400).json({ success: false, message });
+  }
+};
+
+export const handleResetPassword = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { error } = resetPasswordSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({
+        success: false,
+        message: error.details?.[0]?.message || MESSAGES.VALIDATION.FAILED,
+      });
+      return;
+    }
+
+    const { email, otp, newPassword } = req.body;
+    const result: IAuthResponse = await resetPassword(email, otp, newPassword);
+
+    res.status(200).json({ success: true, ...result });
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Password reset failed";
     res.status(400).json({ success: false, message });
   }
 };

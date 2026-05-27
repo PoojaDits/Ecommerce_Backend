@@ -160,3 +160,48 @@ export const loginUser = async (
     token,
   };
 };
+
+export const forgotPassword = async (email: string): Promise<IAuthResponse> => {
+  const user = await userRepo.findOne({ where: { email } });
+
+  if (!user) {
+    logger.warn(`Forgot password requested for non-existent email: ${email}`);
+    throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
+  }
+
+  if (!user.isActive) {
+    logger.warn(`Forgot password requested for unverified account: ${email}`);
+    throw new Error(MESSAGES.AUTH.ACCOUNT_NOT_VERIFIED);
+  }
+
+  await createAndSendOtp(email, OtpPurpose.FORGOT_PASSWORD);
+
+  return { message: MESSAGES.AUTH.FORGOT_PASSWORD_OTP_SENT };
+};
+
+export const resetPassword = async (
+  email: string,
+  otp: string,
+  newPassword: string
+): Promise<IAuthResponse> => {
+  await verifyOtp(email, OtpPurpose.FORGOT_PASSWORD, otp);
+
+  const user = await userRepo.findOne({ where: { email, isActive: true } });
+  if (!user) {
+    logger.warn(`Reset password failed: user not found for ${email}`);
+    throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hashedPassword;
+  await userRepo.save(user);
+
+  try {
+    await consumeOtp(email, OtpPurpose.FORGOT_PASSWORD, otp);
+  } catch (error: unknown) {
+    logger.error(`Failed to consume OTP for password reset: ${email}`);
+    throw error;
+  }
+
+  return { message: MESSAGES.AUTH.RESET_PASSWORD_SUCCESS };
+};
