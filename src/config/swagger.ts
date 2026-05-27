@@ -132,7 +132,7 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
-          ForgotPasswordRequest: {
+        ForgotPasswordRequest: {
           type: "object",
           required: ["email"],
           properties: {
@@ -143,9 +143,9 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
-        ForgotPasswordVerifyOtpRequest: {
+        ResetPasswordRequest: {
           type: "object",
-          required: ["email", "otp"],
+          required: ["email", "otp", "newPassword"],
           properties: {
             email: {
               type: "string",
@@ -155,6 +155,11 @@ const options: swaggerJSDoc.Options = {
             otp: {
               type: "string",
               example: "123456",
+            },
+            newPassword: {
+              type: "string",
+              format: "password",
+              example: "NewSecurePass@123",
             },
           },
         },
@@ -207,7 +212,23 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
-   LogoutResponse: {
+        ChangePasswordRequest: {
+  type: "object",
+  required: ["currentPassword", "newPassword"],
+  properties: {
+    currentPassword: {
+      type: "string",
+      format: "password",
+      example: "OldPass123",
+    },
+    newPassword: {
+      type: "string",
+      format: "password",
+      example: "NewSecurePass@456",
+    },
+  },
+},
+ChangePasswordResponse: {
   type: "object",
   properties: {
     success: {
@@ -216,36 +237,10 @@ const options: swaggerJSDoc.Options = {
     },
     message: {
       type: "string",
-      example: "Logout successful",
+      example: "Password changed successfully.",
     },
   },
 },
-ForgotPasswordResponse: {
-          type: "object",
-          properties: {
-            success: {
-              type: "boolean",
-              example: true,
-            },
-            message: {
-              type: "string",
-              example: "OTP sent to your email for forgot password verification.",
-            },
-          },
-        },
-        ForgotPasswordVerifyOtpResponse: {
-          type: "object",
-          properties: {
-            success: {
-              type: "boolean",
-              example: true,
-            },
-            message: {
-              type: "string",
-              example: "Forgot password OTP verified successfully.",
-            },
-          },
-        },
       },
     },
   },

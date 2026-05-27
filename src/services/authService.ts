@@ -205,3 +205,26 @@ export const resetPassword = async (
 
   return { message: MESSAGES.AUTH.RESET_PASSWORD_SUCCESS };
 };
+
+export const changePassword = async (
+  userId: number,
+  currentPassword: string,
+  newPassword: string
+): Promise<IAuthResponse> => {
+  const user = await userRepo.findOne({ where: { id: userId, isActive: true } });
+
+  if (!user) {
+    logger.warn(`Change password failed: user not found with ID ${userId}`);
+    throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
+  }
+
+  const isMatch = await bcrypt.compare(currentPassword, user.password);
+  if (!isMatch)
+    throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hashedPassword;
+  await userRepo.save(user);
+
+  return { message: MESSAGES.AUTH.CHANGE_PASSWORD_SUCCESS };
+};

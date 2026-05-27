@@ -31,6 +31,9 @@ export const MESSAGES = {
     LOGIN_SUCCESS: "Login successful",
     FORGOT_PASSWORD_OTP_SENT: "OTP sent to your email. Use it to reset your password.",
     RESET_PASSWORD_SUCCESS: "Password reset successful. You can now log in with your new password.",
+      CHANGE_PASSWORD_SUCCESS: "Password changed successfully.",
+      CURRENT_PASSWORD_INCORRECT: "Current password is incorrect.",
+  
   },
   OTP: {
     INVALID: "Invalid OTP",
