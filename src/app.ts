@@ -5,6 +5,7 @@ import { setupSwagger } from "./config/swagger";
 import logger from "./config/logger";
 import requestLogger from "./middleware/logger.Middleware";
 import authRoutes from "./routes/authRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(requestLogger);
 
 setupSwagger(app);
 app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
 
 app.get("/back", (_req: Request, res: Response) => {
   logger.info("Health check endpoint called");

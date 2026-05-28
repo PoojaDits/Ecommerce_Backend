@@ -1,4 +1,3 @@
-import { ILike } from "typeorm";
 import { AppDataSource } from "../config/dataSource";
 import Category from "../entities/Category";
 
@@ -12,7 +11,7 @@ export const createCategory = async (
   const normalizedDescription = description?.trim();
 
   const existingCategory = await categoryRepo.findOne({
-    where: { name: ILike(normalizedName) },
+    where: { name: normalizedName },
   });
 
   if (existingCategory) {
