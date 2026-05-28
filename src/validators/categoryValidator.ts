@@ -13,3 +13,15 @@ export const createCategorySchema = Joi.object({
     "string.max": "Category description must not exceed 255 characters.",
   }),
 });
+export const updateCategorySchema = Joi.object({
+  name: Joi.string().trim().min(2).max(50).optional().messages({
+    "string.empty": "Category name cannot be empty.",
+    "string.min": "Category name must be at least 2 characters.",
+    "string.max": "Category name must not exceed 50 characters.",
+  }),
+  description: Joi.string().trim().allow("").max(255).optional().messages({
+    "string.max": "Category description must not exceed 255 characters.",
+  }),
+}).min(1).messages({
+  "object.min": "At least one field is required to update category.",
+});
