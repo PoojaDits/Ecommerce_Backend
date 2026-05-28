@@ -11,7 +11,7 @@ export default class Category {
     @Column({type:"varchar", unique: true})
     name: string;
     @Column({type:"text", nullable:true})
-    description: string;
+    description: string|null;
 
     @OneToMany(()=>Product,(product)=>product.category)
     products: Product[];
