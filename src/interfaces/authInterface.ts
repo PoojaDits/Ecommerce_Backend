@@ -1,4 +1,5 @@
 import { UserRole } from "../enums";
+import { Request } from "express";
 
 export interface IAuthUser {
   id: number;
@@ -15,3 +16,12 @@ export interface IAuthResponse {
   user?: IAuthUser;
   token?: string;
 }
+
+export interface AuthRequest extends Request {
+  user?: {
+    id: number;
+    email: string;
+    role: string;
+  };
+}
+

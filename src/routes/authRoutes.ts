@@ -8,6 +8,7 @@ import {
   handleResetPassword,
    handleChangePassword
 } from "../controller/authController";
+import authenticateUser from "../middleware/auth.Middleware";
 
 const router = Router();
 
@@ -242,6 +243,6 @@ router.post("/reset-password", handleResetPassword);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/change-password", handleChangePassword)
+router.post("/change-password", authenticateUser, handleChangePassword)
 
 export default router;
