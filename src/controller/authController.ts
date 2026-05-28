@@ -20,7 +20,7 @@ import {
   changePasswordSchema,
 } from "../validators/authValidator";
 import { MESSAGES } from "../constants/messages";
-import { IAuthResponse } from "../interfaces/authInterface";
+import { IAuthResponse, AuthRequest } from "../interfaces/authInterface";
 import jwt from "jsonwebtoken";
 
 export const registerInitiate = async (
@@ -49,7 +49,7 @@ export const registerInitiate = async (
 
     res.status(200).json({ success: true, ...result });
   } catch (error: unknown) {
-    const message =error instanceof Error ? error.message : "Registration failed";
+    const message = error instanceof Error ? error.message : MESSAGES.AUTH.REGISTRATION_FAILED;
     res.status(400).json({ success: false, message });
   }
 };
@@ -74,7 +74,7 @@ export const registerVerifyOtp = async (
     res.status(201).json({ success: true, ...result });
   } catch (error: unknown) {
     const message =
-      error instanceof Error ? error.message : "OTP verification failed";
+      error instanceof Error ? error.message : MESSAGES.AUTH.OTP_VERIFICATION_FAILED;
     res.status(400).json({ success: false, message });
   }
 };
@@ -99,7 +99,7 @@ export const resendOtp = async (
     res.status(200).json({ success: true, ...result });
   } catch (error: unknown) {
     const message =
-      error instanceof Error ? error.message : "Failed to resend OTP";
+      error instanceof Error ? error.message : MESSAGES.AUTH.RESEND_OTP_FAILED;
     res.status(400).json({ success: false, message });
   }
 };
@@ -120,7 +120,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({ success: true, ...result });
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Login failed";
+    const message = error instanceof Error ? error.message : MESSAGES.AUTH.LOGIN_FAILED;
     res.status(400).json({ success: false, message });
   }
 };
@@ -145,7 +145,7 @@ export const handleForgotPassword = async (
     res.status(200).json({ success: true, ...result });
   } catch (error: unknown) {
     const message =
-      error instanceof Error ? error.message : "Forgot password request failed";
+      error instanceof Error ? error.message : MESSAGES.AUTH.FORGOT_PASSWORD_FAILED;
     res.status(400).json({ success: false, message });
   }
 };
@@ -170,32 +170,21 @@ export const handleResetPassword = async (
     res.status(200).json({ success: true, ...result });
   } catch (error: unknown) {
     const message =
-      error instanceof Error ? error.message : "Password reset failed";
+      error instanceof Error ? error.message : MESSAGES.AUTH.RESET_PASSWORD_FAILED;
     res.status(400).json({ success: false, message });
   }
 };
 
 export const handleChangePassword = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
-    
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      res.status(401).json({ success: false, message: "Access denied. No token provided." });
+    if (!req.user) {
+      res.status(401).json({ success: false, message: MESSAGES.AUTH.ACCESS_DENIED_NO_USER });
       return;
     }
 
-    const token = authHeader.split(" ")[1];
-    if (!token) {
-      res.status(401).json({ success: false, message: "Access denied. No token provided." });
-      return;
-    }
-
-    const payload = jwt.verify(token, process.env.JWT_SECRET!) as { id: number };
-
-    
     const { error } = changePasswordSchema.validate(req.body);
     if (error) {
       res.status(400).json({
@@ -205,22 +194,25 @@ export const handleChangePassword = async (
       return;
     }
 
-    
     const { currentPassword, newPassword } = req.body;
-    const result: IAuthResponse = await changePassword(payload.id, currentPassword, newPassword);
+    const result: IAuthResponse = await changePassword(req.user.id, currentPassword, newPassword);
 
     res.status(200).json({ success: true, ...result });
   } catch (error: unknown) {
-    if (error instanceof jwt.TokenExpiredError) {
-      res.status(401).json({ success: false, message: "Token expired. Please login again." });
-      return;
-    }
-    if (error instanceof jwt.JsonWebTokenError) {
-      res.status(401).json({ success: false, message: "Invalid token." });
-      return;
-    }
     const message =
-      error instanceof Error ? error.message : "Change password failed";
+      error instanceof Error ? error.message : MESSAGES.AUTH.CHANGE_PASSWORD_FAILED;
     res.status(400).json({ success: false, message });
   }
 };
+
+// export const handleLogout=(req,res)=>{
+//   try{
+//     res.clearCookie("token" );
+//     res.status(200).json({ success: true, message: MESSAGES.AUTH.LOGOUT_SUCCESS });
+//   }catch{
+//     res.status(400).json({ success: false, message: MESSAGES.AUTH.LOGOUT_FAILED });
+//   }
+// }
+
+
+
