@@ -60,12 +60,15 @@ export const MESSAGES = {
     UPDATE_FAILED: "Failed to update category",
     DELETE_SUCCESS: "Category deleted successfully.",
     DELETE_FAILED: "Failed to delete category",
+    GET_SUCCESS: "Categories retrieved successfully.",
+    GET_FAILED: "Failed to retrieve categories",
+    EXISTS_TRUE: "Category exists.",
+    EXISTS_FALSE: "Category does not exist.",
     ID_REQUIRED: "Valid category id is required.",
     NAME_REQUIRED: "Category name is required.",
     NAME_REQUIRED_URL: "Category name is required in URL.",
     NOT_FOUND: "Category not found.",
     ALREADY_EXISTS: "Category already exists."
-
   },
   OTP: {
     INVALID: "Invalid OTP",

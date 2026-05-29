@@ -1,5 +1,5 @@
 import { AppDataSource } from "../config/dataSource";
-import User from "../entities/User";
+import { User } from "../entities";
 import { MESSAGES } from "../constants/messages";
 
 const userRepo = AppDataSource.getRepository(User);
