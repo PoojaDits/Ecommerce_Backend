@@ -7,6 +7,7 @@ import requestLogger from "./middleware/logger.Middleware";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
+import storeRoutes from "./routes/storeRoutes";
 
 dotenv.config();
 
@@ -17,13 +18,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
 
 setupSwagger(app);
+
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/stores", storeRoutes);       
 
 app.get("/back", (_req: Request, res: Response) => {
   logger.info("Health check endpoint called");
-
   res.json({
     success: true,
     message: "Server is running",
@@ -36,7 +38,6 @@ const startServer = async () => {
     logger.info("Database Connected");
 
     const PORT = process.env.PORT || 3001;
-
     app.listen(PORT, () => {
       logger.info(`Server running on port ${PORT}`);
     });
@@ -46,7 +47,6 @@ const startServer = async () => {
     } else {
       logger.error("Server startup failed");
     }
-
     throw error;
   }
 };

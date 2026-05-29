@@ -31,26 +31,18 @@ const options: swaggerJSDoc.Options = {
       },
 
       schemas: {
-      
+
+        // ─── Category ────────────────────────────────────────────────
         Category: {
           type: "object",
           properties: {
-            id: {
-              type: "integer",
-              example: 1,
-            },
-            name: {
-              type: "string",
-              example: "Electronics",
-            },
+            id: { type: "integer", example: 1 },
+            name: { type: "string", example: "Electronics" },
             description: {
               type: "string",
               example: "Electronic items and gadgets",
             },
-            slug: {
-              type: "string",
-              example: "electronics",
-            },
+            slug: { type: "string", example: "electronics" },
             createdAt: {
               type: "string",
               format: "date-time",
@@ -64,26 +56,18 @@ const options: swaggerJSDoc.Options = {
           },
         },
 
+        // ─── User ────────────────────────────────────────────────────
         User: {
           type: "object",
           properties: {
-            id: {
-              type: "integer",
-              example: 1,
-            },
+            id: { type: "integer", example: 1 },
             uuid: {
               type: "string",
               format: "uuid",
               example: "550e8400-e29b-41d4-a716-446655440000",
             },
-            firstName: {
-              type: "string",
-              example: "Pooja",
-            },
-            lastName: {
-              type: "string",
-              example: "Joshi",
-            },
+            firstName: { type: "string", example: "Pooja" },
+            lastName: { type: "string", example: "Joshi" },
             email: {
               type: "string",
               format: "email",
@@ -94,10 +78,7 @@ const options: swaggerJSDoc.Options = {
               enum: ["admin", "customer", "vendor"],
               example: "customer",
             },
-            isActive: {
-              type: "boolean",
-              example: true,
-            },
+            isActive: { type: "boolean", example: true },
             createdAt: {
               type: "string",
               format: "date-time",
@@ -111,14 +92,11 @@ const options: swaggerJSDoc.Options = {
           },
         },
 
-        
+        // ─── Store ───────────────────────────────────────────────────
         Store: {
           type: "object",
           properties: {
-            id: {
-              type: "integer",
-              example: 1,
-            },
+            id: { type: "integer", example: 1 },
             storeName: {
               type: "string",
               example: "My Electronics Store",
@@ -150,71 +128,17 @@ const options: swaggerJSDoc.Options = {
               format: "date-time",
               example: "2026-05-29T10:30:00Z",
             },
-            user: {
-              $ref: "#/components/schemas/User",
-            },
+            user: { $ref: "#/components/schemas/User" },
           },
         },
 
-        
-        Product: {
-          type: "object",
-          properties: {
-            id: {
-              type: "integer",
-              example: 1,
-            },
-            name: {
-              type: "string",
-              example: "Wireless Headphones",
-            },
-            description: {
-              type: "string",
-              example: "High quality noise-cancelling headphones",
-            },
-            price: {
-              type: "number",
-              format: "float",
-              example: 1999.99,
-            },
-            stock: {
-              type: "integer",
-              example: 50,
-            },
-            isActive: {
-              type: "boolean",
-              example: true,
-            },
-            created_at: {
-              type: "string",
-              format: "date-time",
-              example: "2026-05-29T10:30:00Z",
-            },
-            updated_at: {
-              type: "string",
-              format: "date-time",
-              example: "2026-05-29T10:30:00Z",
-            },
-            store: {
-              $ref: "#/components/schemas/Store",
-            },
-            category: {
-              $ref: "#/components/schemas/Category",
-            },
-          },
-        },
+        // ─── Auth Requests ───────────────────────────────────────────
         RegisterRequest: {
           type: "object",
           required: ["firstName", "lastName", "email", "password"],
           properties: {
-            firstName: {
-              type: "string",
-              example: "Pooja",
-            },
-            lastName: {
-              type: "string",
-              example: "Joshi",
-            },
+            firstName: { type: "string", example: "Pooja" },
+            lastName: { type: "string", example: "Joshi" },
             email: {
               type: "string",
               format: "email",
@@ -243,10 +167,7 @@ const options: swaggerJSDoc.Options = {
               format: "email",
               example: "jspuja@example.com",
             },
-            otp: {
-              type: "string",
-              example: "123456",
-            },
+            otp: { type: "string", example: "123456" },
           },
         },
 
@@ -300,10 +221,7 @@ const options: swaggerJSDoc.Options = {
               format: "email",
               example: "jspuja@example.com",
             },
-            otp: {
-              type: "string",
-              example: "123456",
-            },
+            otp: { type: "string", example: "123456" },
             newPassword: {
               type: "string",
               format: "password",
@@ -328,51 +246,34 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
+
+        // ─── Auth Responses ──────────────────────────────────────────
         AuthResponse: {
           type: "object",
           properties: {
-            success: {
-              type: "boolean",
-              example: true,
-            },
+            success: { type: "boolean", example: true },
             message: {
               type: "string",
               example: "OTP sent successfully.",
             },
-            user: {
-              $ref: "#/components/schemas/User",
-            },
+            user: { $ref: "#/components/schemas/User" },
           },
         },
 
         LoginResponse: {
           type: "object",
           properties: {
-            success: {
-              type: "boolean",
-              example: true,
-            },
-            message: {
-              type: "string",
-              example: "Login successful",
-            },
-            token: {
-              type: "string",
-              example: "jwt_token_here",
-            },
-            user: {
-              $ref: "#/components/schemas/User",
-            },
+            success: { type: "boolean", example: true },
+            message: { type: "string", example: "Login successful" },
+            token: { type: "string", example: "jwt_token_here" },
+            user: { $ref: "#/components/schemas/User" },
           },
         },
 
         ChangePasswordResponse: {
           type: "object",
           properties: {
-            success: {
-              type: "boolean",
-              example: true,
-            },
+            success: { type: "boolean", example: true },
             message: {
               type: "string",
               example: "Password changed successfully.",
@@ -383,10 +284,7 @@ const options: swaggerJSDoc.Options = {
         ErrorResponse: {
           type: "object",
           properties: {
-            success: {
-              type: "boolean",
-              example: false,
-            },
+            success: { type: "boolean", example: false },
             message: {
               type: "string",
               example: "Error explanation message.",
@@ -396,11 +294,7 @@ const options: swaggerJSDoc.Options = {
       },
     },
 
-    security: [
-      {
-        BearerAuth: [],
-      },
-    ],
+    security: [{ BearerAuth: [] }],
   },
 
   apis: ["./src/routes/*.{ts,js}"],
