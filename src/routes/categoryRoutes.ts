@@ -21,20 +21,7 @@ const router = Router();
  *       - Categories
  *     responses:
  *       200:
- *         description: Categories retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 categories:
- *                   type: array
- *                   items:
- *                     type: object
+ *         description: List of all categories
  *       500:
  *         description: Failed to retrieve categories
  */
@@ -78,7 +65,7 @@ router.get("/:id", getCategoryByIdHandler);
  *         schema:
  *           type: string
  *         description: Category name to check
- *         example: "electronics"
+ *         example: electronics
  *     responses:
  *       200:
  *         description: Category existence check result
@@ -89,12 +76,31 @@ router.get("/:id", getCategoryByIdHandler);
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: Category exists.
  *                 exists:
  *                   type: boolean
+ *                   example: true
  *                 category:
- *                   type: object
+ *                   $ref: '#/components/schemas/Category'
+ *             examples:
+ *               exists:
+ *                 value:
+ *                   success: true
+ *                   message: "Category exists."
+ *                   exists: true
+ *                   category:
+ *                     id: 1
+ *                     name: "Electronics"
+ *                     description: "Electronic items and gadgets"
+ *               not_exists:
+ *                 value:
+ *                   success: true
+ *                   message: "Category does not exist."
+ *                   exists: false
+ *                   category: null
  *       400:
  *         description: Category name is required
  */
@@ -114,7 +120,7 @@ router.get("/check/:name", checkCategoryExistsHandler);
  *         schema:
  *           type: string
  *         description: Category name
- *         example: "electronics"
+ *         example: electronics
  *     responses:
  *       200:
  *         description: Category retrieved successfully
@@ -143,10 +149,10 @@ router.get("/name/:name", getCategoryByNameHandler);
  *             properties:
  *               name:
  *                 type: string
- *                 example: "Electronics"
+ *                 example: Electronics
  *               description:
  *                 type: string
- *                 example: "Electronic items and gadgets"
+ *                 example: Electronic items and gadgets
  *     responses:
  *       201:
  *         description: Category created successfully
@@ -178,10 +184,10 @@ router.post("/", createCategoryHandler);
  *             properties:
  *               name:
  *                 type: string
- *                 example: "Updated Electronics"
+ *                 example: Updated Electronics
  *               description:
  *                 type: string
- *                 example: "Updated category description"
+ *                 example: Updated category description
  *     responses:
  *       200:
  *         description: Category updated successfully
@@ -204,7 +210,6 @@ router.put("/:id", updateCategoryHandler);
  *         schema:
  *           type: string
  *         description: Current category name
- *         example: "gadgets"
  *     requestBody:
  *       required: true
  *       content:
@@ -214,10 +219,10 @@ router.put("/:id", updateCategoryHandler);
  *             properties:
  *               name:
  *                 type: string
- *                 example: "new gadgets"
+ *                 example: new gadgets
  *               description:
  *                 type: string
- *                 example: "updated gadgets category"
+ *                 example: updated gadgets category
  *     responses:
  *       200:
  *         description: Category updated successfully
@@ -240,7 +245,6 @@ router.put("/name/:name", updateCategoryByNameHandler);
  *         schema:
  *           type: string
  *         description: Category name
- *         example: "gadgets"
  *     responses:
  *       200:
  *         description: Category deleted successfully

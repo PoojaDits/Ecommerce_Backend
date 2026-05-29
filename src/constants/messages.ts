@@ -50,7 +50,7 @@ export const MESSAGES = {
     FORGOT_PASSWORD_FAILED: "Forgot password request failed",
     RESET_PASSWORD_FAILED: "Password reset failed",
     CHANGE_PASSWORD_FAILED: "Change password failed.",
-    LOGOUT_FAILED: "Interval Server Error. Logout failed.",
+    LOGOUT_FAILED: "Internal Server Error. Logout failed.",
     LOGOUT_SUCCESS: "Logout successful."
   },
   CATEGORY: {
