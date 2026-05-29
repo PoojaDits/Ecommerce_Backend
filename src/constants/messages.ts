@@ -52,6 +52,8 @@ export const MESSAGES = {
     CHANGE_PASSWORD_FAILED: "Change password failed.",
     LOGOUT_FAILED: "Internal Server Error. Logout failed.",
     LOGOUT_SUCCESS: "Logout successful.",
+    USER_NOT_FOUND: "User not found.",
+    INTERNAL_ERROR: "Internal server error.",
   },
   CATEGORY: {
     CREATE_SUCCESS: "Category created successfully.",

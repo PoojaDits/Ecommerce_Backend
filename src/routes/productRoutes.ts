@@ -1,6 +1,5 @@
 import { Router } from "express";
-import {createProductHandler,getAllProductsHandler} from "../controller/product Controller";
-
+import { createProductHandler, getAllProductsHandler } from "../controller/product Controller";
 const router = Router();
 
 /**
@@ -33,7 +32,6 @@ const router = Router();
  */
 router.post("/", createProductHandler);
 
-
 /**
  * @swagger
  * /api/products:
@@ -57,6 +55,5 @@ router.post("/", createProductHandler);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/", getAllProductsHandler);
-
 
 export default router;

@@ -156,7 +156,20 @@ const options: swaggerJSDoc.Options = {
             user: { $ref: "#/components/schemas/User" },
           },
         },
-
+          LogoutRequest: {
+          type: "object",
+          description: "Logout request (body is empty, token is sent in Authorization header)",
+          properties: {},
+          example: {},
+        },
+        LogoutResponse: {
+          type: "object",
+          properties: {
+            success: { type: "boolean", example: true },
+            message: { type: "string", example: "You have been logged out successfully." },
+            timestamp: { type: "string", format: "date-time" },
+          },
+        },
         LoginResponse: {
           type: "object",
           properties: {

@@ -21,7 +21,8 @@ import {
 } from "../validators/authValidator";
 import { MESSAGES } from "../constants/messages";
 import { IAuthResponse, AuthRequest } from "../interfaces/authInterface";
-import jwt from "jsonwebtoken";
+import logger from "../config/logger";
+import { logout as logoutService } from "../services/authService";
 
 export const registerInitiate = async (
   req: Request,
@@ -202,5 +203,37 @@ export const handleChangePassword = async (
     const message =
       error instanceof Error ? error.message : MESSAGES.AUTH.CHANGE_PASSWORD_FAILED;
     res.status(400).json({ success: false, message });
+  }
+};
+
+export const logout = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      res.status(401).json({
+        success: false,
+        message: MESSAGES.AUTH.ACCESS_DENIED_NO_USER,
+        timestamp: new Date().toISOString(),
+      });
+      return;
+    }
+
+    logger.info(`Logout attempt for user ID: ${userId}`);
+
+    const result = await logoutService(userId);
+
+    res.status(200).json(result);
+  } catch (error: unknown) {
+    logger.error(`Logout error: ${error instanceof Error ? error.message : error}`);
+
+    res.status(500).json({
+      success: false,
+      message: MESSAGES.AUTH.INTERNAL_ERROR,
+      timestamp: new Date().toISOString(),
+    });
   }
 };

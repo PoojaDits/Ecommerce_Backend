@@ -24,4 +24,10 @@ export interface AuthRequest extends Request {
     role: string;
   };
 }
+export interface IAuthServiceResponse {
+  success: boolean;
+  message: string;
+  timestamp: string;
+}
+
 
