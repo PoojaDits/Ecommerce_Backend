@@ -1,5 +1,6 @@
 import { AppDataSource } from "../config/dataSource";
 import Category from "../entities/Category";
+import { MESSAGES } from "../constants/messages";
 
 const categoryRepo = AppDataSource.getRepository(Category);
 
@@ -15,7 +16,7 @@ export const createCategory = async (
   });
 
   if (existingCategory) {
-    throw new Error("Category already exists.");
+    throw new Error(MESSAGES.CATEGORY.ALREADY_EXISTS);
   }
 
   const category = categoryRepo.create({
@@ -36,7 +37,7 @@ export const updateCategory = async (
   });
 
   if (!category) {
-    throw new Error("Category not found.");
+    throw new Error(MESSAGES.CATEGORY.NOT_FOUND);
   }
 
   if (name !== undefined) {
@@ -47,7 +48,7 @@ export const updateCategory = async (
     });
 
     if (existingCategory && existingCategory.id !== id) {
-      throw new Error("Category already exists.");
+      throw new Error(MESSAGES.CATEGORY.ALREADY_EXISTS);
     }
 
     category.name = normalizedName;
@@ -73,7 +74,7 @@ export const updateCategoryByName = async (
   });
 
   if (!category) {
-    throw new Error("Category not found.");
+    throw new Error(MESSAGES.CATEGORY.NOT_FOUND);
   }
 
   if (newName !== undefined) {
@@ -84,7 +85,7 @@ export const updateCategoryByName = async (
     });
 
     if (existingCategory && existingCategory.id !== category.id) {
-      throw new Error("Category already exists.");
+      throw new Error(MESSAGES.CATEGORY.ALREADY_EXISTS);
     }
 
     category.name = normalizedNewName;
@@ -107,7 +108,21 @@ export const deleteCategoryByName = async (name: string): Promise<Category> => {
   });
 
   if (!category) {
-    throw new Error("Category not found.");
+    throw new Error(MESSAGES.CATEGORY.NOT_FOUND);
+  }
+
+  await categoryRepo.remove(category);
+
+  return category;
+};
+
+export const deleteCategoryById = async (id: number): Promise<Category> => {
+  const category = await categoryRepo.findOne({
+    where: { id },
+  });
+
+  if (!category) {
+    throw new Error(MESSAGES.CATEGORY.NOT_FOUND);
   }
 
   await categoryRepo.remove(category);

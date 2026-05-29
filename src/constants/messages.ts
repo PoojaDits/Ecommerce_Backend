@@ -17,12 +17,17 @@ export const MESSAGES = {
     FAILED: "Validation failed",
     ALL_FIELDS_REQUIRED: "All fields are required.",
     INVALID_ROLE: (roles: string) => `Invalid role. Must be one of: ${roles}`,
+    CATEGORY_NAME_REQUIRED: "Category name is required.",
+    CATEGORY_NAME_MIN: "Category name must be at least 2 characters.",
+    CATEGORY_NAME_MAX: "Category name must not exceed 50 characters.",
+    CATEGORY_NAME_EMPTY: "Category name cannot be empty.",
+    CATEGORY_DESCRIPTION_MAX: "Category description must not exceed 255 characters.",
+    CATEGORY_UPDATE_REQUIRED: "At least one field is required to update category."
   },
   AUTH: {
     EMAIL_ALREADY_REGISTERED: "Email is already registered.",
     OTP_SENT: "OTP sent to your email. Please verify to complete registration.",
-    REGISTRATION_SESSION_NOT_FOUND:
-      "Registration session not found. Please register again.",
+    REGISTRATION_SESSION_NOT_FOUND: "Registration session not found. Please register again.",
     REGISTRATION_SUCCESS: "Registration successful. You can now log in.",
     NO_PENDING_REGISTRATION: "No pending registration found. Please register first.",
     OTP_RESENT: "OTP resent successfully. Check your email.",
@@ -44,12 +49,35 @@ export const MESSAGES = {
     LOGIN_FAILED: "Login failed",
     FORGOT_PASSWORD_FAILED: "Forgot password request failed",
     RESET_PASSWORD_FAILED: "Password reset failed",
-    CHANGE_PASSWORD_FAILED: "Change password failed",
+    CHANGE_PASSWORD_FAILED: "Change password failed.",
     LOGOUT_FAILED: "Interval Server Error. Logout failed.",
-    LOGOUT_SUCCESS: "Logout successful.",
+    LOGOUT_SUCCESS: "Logout successful."
+  },
+  CATEGORY: {
+    CREATE_SUCCESS: "Category created successfully.",
+    CREATE_FAILED: "Failed to create category",
+    UPDATE_SUCCESS: "Category updated successfully.",
+    UPDATE_FAILED: "Failed to update category",
+    DELETE_SUCCESS: "Category deleted successfully.",
+    DELETE_FAILED: "Failed to delete category",
+    ID_REQUIRED: "Valid category id is required.",
+    NAME_REQUIRED: "Category name is required.",
+    NAME_REQUIRED_URL: "Category name is required in URL.",
+    NOT_FOUND: "Category not found.",
+    ALREADY_EXISTS: "Category already exists."
+
   },
   OTP: {
     INVALID: "Invalid OTP",
-    EXPIRED: "OTP expired",
+    EXPIRED: "OTP expired"
   },
+  USER: {
+    GET_SUCCESS: "Users retrieved successfully.",
+    UPDATE_SUCCESS: "User updated successfully.",
+    DELETE_SUCCESS: "User deleted successfully.",
+    NOT_FOUND: "User not found.",
+    ID_REQUIRED: "Valid user id is required.",
+    UPDATE_FAILED: "Failed to update user.",
+    DELETE_FAILED: "Failed to delete user."
+  }
 };
