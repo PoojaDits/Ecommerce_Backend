@@ -31,6 +31,7 @@ const options: swaggerJSDoc.Options = {
       },
 
       schemas: {
+      
         Category: {
           type: "object",
           properties: {
@@ -110,6 +111,98 @@ const options: swaggerJSDoc.Options = {
           },
         },
 
+        
+        Store: {
+          type: "object",
+          properties: {
+            id: {
+              type: "integer",
+              example: 1,
+            },
+            storeName: {
+              type: "string",
+              example: "My Electronics Store",
+            },
+            storeDescription: {
+              type: "string",
+              example: "Best electronics shop in town",
+            },
+            storeLocation: {
+              type: "string",
+              example: "42 Market Street, Mumbai",
+            },
+            storeContact: {
+              type: "string",
+              example: "+919876543210",
+            },
+            storeEmail: {
+              type: "string",
+              format: "email",
+              example: "mystore@example.com",
+            },
+            created_at: {
+              type: "string",
+              format: "date-time",
+              example: "2026-05-29T10:30:00Z",
+            },
+            updated_at: {
+              type: "string",
+              format: "date-time",
+              example: "2026-05-29T10:30:00Z",
+            },
+            user: {
+              $ref: "#/components/schemas/User",
+            },
+          },
+        },
+
+        
+        Product: {
+          type: "object",
+          properties: {
+            id: {
+              type: "integer",
+              example: 1,
+            },
+            name: {
+              type: "string",
+              example: "Wireless Headphones",
+            },
+            description: {
+              type: "string",
+              example: "High quality noise-cancelling headphones",
+            },
+            price: {
+              type: "number",
+              format: "float",
+              example: 1999.99,
+            },
+            stock: {
+              type: "integer",
+              example: 50,
+            },
+            isActive: {
+              type: "boolean",
+              example: true,
+            },
+            created_at: {
+              type: "string",
+              format: "date-time",
+              example: "2026-05-29T10:30:00Z",
+            },
+            updated_at: {
+              type: "string",
+              format: "date-time",
+              example: "2026-05-29T10:30:00Z",
+            },
+            store: {
+              $ref: "#/components/schemas/Store",
+            },
+            category: {
+              $ref: "#/components/schemas/Category",
+            },
+          },
+        },
         RegisterRequest: {
           type: "object",
           required: ["firstName", "lastName", "email", "password"],
@@ -235,7 +328,6 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
-
         AuthResponse: {
           type: "object",
           properties: {
