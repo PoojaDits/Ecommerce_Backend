@@ -1,12 +1,13 @@
 import { Router } from "express";
 import {
-  registerInitiate,
-  registerVerifyOtp,
-  resendOtp,
-  login,
-  handleForgotPassword,
-  handleResetPassword,
-   handleChangePassword
+ registerInitiate,
+ registerVerifyOtp,
+ resendOtp,
+ login,
+ handleForgotPassword,
+ handleResetPassword,
+ handleChangePassword,
+ logout                                
 } from "../controller/authController";
 import authenticateUser from "../middleware/auth.Middleware";
 
@@ -243,6 +244,40 @@ router.post("/reset-password", handleResetPassword);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/change-password", authenticateUser, handleChangePassword)
+router.post("/change-password", authenticateUser, handleChangePassword);
+
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Logout user
+ *     tags:
+ *       - Authentication
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Logout successful.
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2026-05-29T08:00:00.000Z"
+ *       401:
+ *         description: No token or user not authenticated
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/logout", authenticateUser, logout);
 
 export default router;

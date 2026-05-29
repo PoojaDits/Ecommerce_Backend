@@ -4,9 +4,10 @@ import { UserRole, OtpPurpose } from "../enums";
 import { createAndSendOtp, verifyOtp, consumeOtp } from "./otpService";
 import bcrypt from "bcrypt";
 import { MESSAGES } from "../constants/messages";
-import { IAuthResponse, IAuthUser } from "../interfaces/authInterface";
+
 import jwt from "jsonwebtoken";
 import logger from "../config/logger";
+import { IAuthResponse, IAuthUser, IAuthServiceResponse } from "../interfaces/authInterface";
 
 const userRepo = AppDataSource.getRepository(User);
 
@@ -228,4 +229,39 @@ export const changePassword = async (
   await userRepo.save(user);
 
   return { message: MESSAGES.AUTH.CHANGE_PASSWORD_SUCCESS };
+};
+
+export const logout = async (
+  userId: number
+): Promise<IAuthServiceResponse> => {
+  try {
+    logger.info(`Logout request for user ID: ${userId}`);
+
+    const user = await userRepo.findOne({ where: { id: userId } });
+
+    if (!user) {
+      logger.warn(`User not found for logout: ${userId}`);
+      return {
+        success: false,
+        message: MESSAGES.AUTH.USER_NOT_FOUND,
+        timestamp: new Date().toISOString(),
+      };
+    }
+
+    logger.info(`User logged out successfully: ${user.email}`);
+
+    return {
+      success: true,
+      message: MESSAGES.AUTH.LOGOUT_SUCCESS,
+      timestamp: new Date().toISOString(),
+    };
+  } catch (error) {
+    logger.error(`Logout failed for user ${userId}: ${error instanceof Error ? error.message : error}`);
+
+    return {
+      success: false,
+      message: MESSAGES.AUTH.LOGOUT_FAILED,
+      timestamp: new Date().toISOString(),
+    };
+  }
 };
