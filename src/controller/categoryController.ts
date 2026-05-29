@@ -1,7 +1,18 @@
 import { Request, Response } from "express";
-import { createCategory, updateCategory, updateCategoryByName, deleteCategoryByName, deleteCategoryById , getAllCategories,getCategoryById,getCategoryByName,checkCategoryExists } from "../services/categoryService";
-import { createCategorySchema ,updateCategorySchema} from "../validators/categoryValidator";
+import {
+  createCategory,
+  updateCategory,
+  updateCategoryByName,
+  deleteCategoryByName,
+  getAllCategories,
+  getCategoryById,
+  getCategoryByName,
+  checkCategoryExists,
+} from "../services/categoryService";
+import { createCategorySchema, updateCategorySchema } from "../validators/categoryValidator";
 import { MESSAGES } from "../constants/messages";
+
+// ============ CREATE / UPDATE / DELETE ============
 
 export const createCategoryHandler = async (
   req: Request,
@@ -24,12 +35,12 @@ export const createCategoryHandler = async (
 
     res.status(201).json({
       success: true,
-      message: MESSAGES.CATEGORY.CREATE_SUCCESS,
+      message: "Category created successfully.",
       category,
     });
   } catch (error: unknown) {
     const message =
-      error instanceof Error ? error.message : MESSAGES.CATEGORY.CREATE_FAILED;
+      error instanceof Error ? error.message : "Failed to create category";
 
     res.status(400).json({
       success: false,
@@ -37,7 +48,6 @@ export const createCategoryHandler = async (
     });
   }
 };
-
 
 export const updateCategoryHandler = async (
   req: Request,
@@ -49,7 +59,7 @@ export const updateCategoryHandler = async (
     if (!Number.isInteger(categoryId) || categoryId <= 0) {
       res.status(400).json({
         success: false,
-        message: MESSAGES.CATEGORY.ID_REQUIRED,
+        message: "Valid category id is required.",
       });
       return;
     }
@@ -69,12 +79,12 @@ export const updateCategoryHandler = async (
 
     res.status(200).json({
       success: true,
-      message: MESSAGES.CATEGORY.UPDATE_SUCCESS,
+      message: "Category updated successfully.",
       category,
     });
   } catch (error: unknown) {
     const message =
-      error instanceof Error ? error.message : MESSAGES.CATEGORY.UPDATE_FAILED;
+      error instanceof Error ? error.message : "Failed to update category";
 
     res.status(400).json({
       success: false,
@@ -94,7 +104,7 @@ export const updateCategoryByNameHandler = async (
     if (!currentName) {
       res.status(400).json({
         success: false,
-        message: MESSAGES.CATEGORY.NAME_REQUIRED_URL,
+        message: "Category name is required in URL.",
       });
       return;
     }
@@ -114,12 +124,12 @@ export const updateCategoryByNameHandler = async (
 
     res.status(200).json({
       success: true,
-      message: MESSAGES.CATEGORY.UPDATE_SUCCESS,
+      message: "Category updated successfully.",
       category,
     });
   } catch (error: unknown) {
     const message =
-      error instanceof Error ? error.message : MESSAGES.CATEGORY.UPDATE_FAILED;
+      error instanceof Error ? error.message : "Failed to update category";
 
     res.status(400).json({
       success: false,
@@ -127,8 +137,6 @@ export const updateCategoryByNameHandler = async (
     });
   }
 };
-
-
 
 export const deleteCategoryByNameHandler = async (
   req: Request,
@@ -143,7 +151,7 @@ export const deleteCategoryByNameHandler = async (
     if (!categoryName) {
       res.status(400).json({
         success: false,
-        message: MESSAGES.CATEGORY.NAME_REQUIRED,
+        message: "Category name is required.",
       });
       return;
     }
@@ -152,45 +160,12 @@ export const deleteCategoryByNameHandler = async (
 
     res.status(200).json({
       success: true,
-      message: MESSAGES.CATEGORY.DELETE_SUCCESS,
+      message: "Category deleted successfully.",
       category,
     });
   } catch (error: unknown) {
     const message =
-      error instanceof Error ? error.message : MESSAGES.CATEGORY.DELETE_FAILED;
-
-    res.status(400).json({
-      success: false,
-      message,
-    });
-  }
-};
-
-export const deleteCategoryByIdHandler = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const categoryId = Number(req.params.id);
-
-    if (!Number.isInteger(categoryId) || categoryId <= 0) {
-      res.status(400).json({
-        success: false,
-        message: MESSAGES.CATEGORY.ID_REQUIRED,
-      });
-      return;
-    }
-
-    const category = await deleteCategoryById(categoryId);
-
-    res.status(200).json({
-      success: true,
-      message: MESSAGES.CATEGORY.DELETE_SUCCESS,
-      category,
-    });
-  } catch (error: unknown) {
-    const message =
-      error instanceof Error ? error.message : MESSAGES.CATEGORY.DELETE_FAILED;
+      error instanceof Error ? error.message : "Failed to delete category";
 
     res.status(400).json({
       success: false,
@@ -232,7 +207,7 @@ export const getCategoryByIdHandler = async (
     if (!Number.isInteger(categoryId) || categoryId <= 0) {
       res.status(400).json({
         success: false,
-        message: MESSAGES.CATEGORY.ID_REQUIRED,
+        message: "Valid category id is required.",
       });
       return;
     }
@@ -276,7 +251,7 @@ export const getCategoryByNameHandler = async (
     if (!categoryName) {
       res.status(400).json({
         success: false,
-        message: MESSAGES.CATEGORY.NAME_REQUIRED,
+        message: "Category name is required.",
       });
       return;
     }
@@ -320,7 +295,7 @@ export const checkCategoryExistsHandler = async (
     if (!categoryName) {
       res.status(400).json({
         success: false,
-        message: MESSAGES.CATEGORY.NAME_REQUIRED,
+        message: "Category name is required.",
       });
       return;
     }
@@ -347,4 +322,3 @@ export const checkCategoryExistsHandler = async (
     });
   }
 };
-

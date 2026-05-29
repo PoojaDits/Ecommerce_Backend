@@ -31,6 +31,38 @@ const options: swaggerJSDoc.Options = {
       },
 
       schemas: {
+        Category: {
+          type: "object",
+          properties: {
+            id: {
+              type: "integer",
+              example: 1,
+            },
+            name: {
+              type: "string",
+              example: "Electronics",
+            },
+            description: {
+              type: "string",
+              example: "Electronic items and gadgets",
+            },
+            slug: {
+              type: "string",
+              example: "electronics",
+            },
+            createdAt: {
+              type: "string",
+              format: "date-time",
+              example: "2026-05-27T10:30:00Z",
+            },
+            updatedAt: {
+              type: "string",
+              format: "date-time",
+              example: "2026-05-27T10:30:00Z",
+            },
+          },
+        },
+
         User: {
           type: "object",
           properties: {
@@ -272,7 +304,6 @@ const options: swaggerJSDoc.Options = {
       },
     },
 
-    
     security: [
       {
         BearerAuth: [],

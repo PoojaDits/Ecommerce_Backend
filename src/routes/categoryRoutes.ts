@@ -1,7 +1,129 @@
 import { Router } from "express";
-import { createCategoryHandler, updateCategoryHandler ,updateCategoryByNameHandler,deleteCategoryByNameHandler} from "../controller/categoryController"
+import {
+  createCategoryHandler,
+  updateCategoryHandler,
+  updateCategoryByNameHandler,
+  deleteCategoryByNameHandler,
+  getAllCategoriesHandler,
+  getCategoryByIdHandler,
+  getCategoryByNameHandler,
+  checkCategoryExistsHandler,
+} from "../controller/categoryController";
 
 const router = Router();
+
+/**
+ * @swagger
+ * /api/categories:
+ *   get:
+ *     summary: Get all categories
+ *     tags:
+ *       - Categories
+ *     responses:
+ *       200:
+ *         description: Categories retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 categories:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       500:
+ *         description: Failed to retrieve categories
+ */
+router.get("/", getAllCategoriesHandler);
+
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   get:
+ *     summary: Get a category by ID
+ *     tags:
+ *       - Categories
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Category ID
+ *     responses:
+ *       200:
+ *         description: Category retrieved successfully
+ *       400:
+ *         description: Valid category id is required
+ *       404:
+ *         description: Category not found
+ */
+router.get("/:id", getCategoryByIdHandler);
+
+/**
+ * @swagger
+ * /api/categories/check/{name}:
+ *   get:
+ *     summary: Check if a category exists by name
+ *     tags:
+ *       - Categories
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Category name to check
+ *         example: "electronics"
+ *     responses:
+ *       200:
+ *         description: Category existence check result
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 exists:
+ *                   type: boolean
+ *                 category:
+ *                   type: object
+ *       400:
+ *         description: Category name is required
+ */
+router.get("/check/:name", checkCategoryExistsHandler);
+
+/**
+ * @swagger
+ * /api/categories/name/{name}:
+ *   get:
+ *     summary: Get a category by name
+ *     tags:
+ *       - Categories
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Category name
+ *         example: "electronics"
+ *     responses:
+ *       200:
+ *         description: Category retrieved successfully
+ *       400:
+ *         description: Category name is required
+ *       404:
+ *         description: Category not found
+ */
+router.get("/name/:name", getCategoryByNameHandler);
 
 /**
  * @swagger
@@ -32,7 +154,6 @@ const router = Router();
  *         description: Validation error or category already exists
  */
 router.post("/", createCategoryHandler);
-
 
 /**
  * @swagger
@@ -69,7 +190,6 @@ router.post("/", createCategoryHandler);
  */
 router.put("/:id", updateCategoryHandler);
 
-
 /**
  * @swagger
  * /api/categories/name/{name}:
@@ -105,7 +225,6 @@ router.put("/:id", updateCategoryHandler);
  *         description: Validation error, category not found, or category already exists
  */
 router.put("/name/:name", updateCategoryByNameHandler);
-
 
 /**
  * @swagger
