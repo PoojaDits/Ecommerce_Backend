@@ -204,15 +204,3 @@ export const handleChangePassword = async (
     res.status(400).json({ success: false, message });
   }
 };
-
-// export const handleLogout=(req,res)=>{
-//   try{
-//     res.clearCookie("token" );
-//     res.status(200).json({ success: true, message: MESSAGES.AUTH.LOGOUT_SUCCESS });
-//   }catch{
-//     res.status(400).json({ success: false, message: MESSAGES.AUTH.LOGOUT_FAILED });
-//   }
-// }
-
-
-

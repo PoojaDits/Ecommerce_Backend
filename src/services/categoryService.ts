@@ -2,13 +2,14 @@ import { AppDataSource } from "../config/dataSource";
 import Category from "../entities/Category";
 import { MESSAGES } from "../constants/messages";
 import { ILike } from "typeorm";
+import { ICategory, ICategoryCheck } from "../interfaces/ICategory";
 
 const categoryRepo = AppDataSource.getRepository(Category);
 
 export const createCategory = async (
   name: string,
   description?: string
-): Promise<Category> => {
+): Promise<ICategory> => {
   const normalizedName = name.trim();
   const normalizedDescription = description?.trim();
 
@@ -25,14 +26,14 @@ export const createCategory = async (
     description: normalizedDescription || null,
   });
 
-  return await categoryRepo.save(category);
+  return (await categoryRepo.save(category)) as ICategory;
 };
 
 export const updateCategory = async (
   id: number,
   name?: string,
   description?: string
-): Promise<Category> => {
+): Promise<ICategory> => {
   const category = await categoryRepo.findOne({
     where: { id },
   });
@@ -60,14 +61,14 @@ export const updateCategory = async (
     category.description = normalizedDescription || null;
   }
 
-  return await categoryRepo.save(category);
+  return (await categoryRepo.save(category)) as ICategory;
 };
 
 export const updateCategoryByName = async (
   currentName: string,
   newName?: string,
   description?: string
-): Promise<Category> => {
+): Promise<ICategory> => {
   const normalizedCurrentName = currentName.trim();
 
   const category = await categoryRepo.findOne({
@@ -97,10 +98,10 @@ export const updateCategoryByName = async (
     category.description = normalizedDescription || null;
   }
 
-  return await categoryRepo.save(category);
+  return (await categoryRepo.save(category)) as ICategory;
 };
 
-export const deleteCategoryByName = async (name: string): Promise<Category> => {
+export const deleteCategoryByName = async (name: string): Promise<ICategory> => {
   const normalizedName = name.trim();
 
   const category = await categoryRepo.findOne({
@@ -113,10 +114,10 @@ export const deleteCategoryByName = async (name: string): Promise<Category> => {
 
   await categoryRepo.remove(category);
 
-  return category;
+  return category as ICategory;
 };
 
-export const deleteCategoryById = async (id: number): Promise<Category> => {
+export const deleteCategoryById = async (id: number): Promise<ICategory> => {
   const category = await categoryRepo.findOne({
     where: { id },
   });
@@ -127,16 +128,15 @@ export const deleteCategoryById = async (id: number): Promise<Category> => {
 
   await categoryRepo.remove(category);
 
-  return category;
+  return category as ICategory;
 };
 
-// ============ GET APIs ============
 
-export const getAllCategories = async (): Promise<Category[]> => {
-  return await categoryRepo.find();
+export const getAllCategories = async (): Promise<ICategory[]> => {
+  return (await categoryRepo.find()) as ICategory[];
 };
 
-export const getCategoryById = async (id: number): Promise<Category> => {
+export const getCategoryById = async (id: number): Promise<ICategory> => {
   const category = await categoryRepo.findOne({
     where: { id },
   });
@@ -145,10 +145,10 @@ export const getCategoryById = async (id: number): Promise<Category> => {
     throw new Error(MESSAGES.CATEGORY.NOT_FOUND);
   }
 
-  return category;
+  return category as ICategory;
 };
 
-export const getCategoryByName = async (name: string): Promise<Category> => {
+export const getCategoryByName = async (name: string): Promise<ICategory> => {
   const normalizedName = name.trim();
 
   const category = await categoryRepo.findOne({
@@ -159,12 +159,12 @@ export const getCategoryByName = async (name: string): Promise<Category> => {
     throw new Error(MESSAGES.CATEGORY.NOT_FOUND);
   }
 
-  return category;
+  return category as ICategory;
 };
 
 export const checkCategoryExists = async (
   name: string
-): Promise<{ exists: boolean; category: Category | null }> => {
+): Promise<ICategoryCheck> => {
   const normalizedName = name.trim();
 
   const category = await categoryRepo.findOne({
@@ -173,6 +173,6 @@ export const checkCategoryExists = async (
 
   return {
     exists: !!category,
-    category: category || null,
+    category: category ? (category as ICategory) : null,
   };
 };

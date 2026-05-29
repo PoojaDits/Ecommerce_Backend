@@ -12,13 +12,6 @@ const router = Router();
 
 /**
  * @swagger
- * tags:
- *   name: Stores
- *   description: Store management APIs
- */
-
-/**
- * @swagger
  * /api/stores:
  *   get:
  *     summary: Get all stores
@@ -46,6 +39,84 @@ const router = Router();
  *         description: Failed to retrieve stores
  */
 router.get("/", getAllStoresHandler);
+
+/**
+ * @swagger
+ * /api/stores/user/{userId}:
+ *   get:
+ *     summary: Get all stores belonging to a user
+ *     tags:
+ *       - Stores
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: List of stores for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Stores retrieved successfully.
+ *                 stores:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Store'
+ *       400:
+ *         description: Valid user ID is required
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Failed to retrieve stores
+ */
+router.get("/user/:userId", getStoresByUserHandler);
+
+/**
+ * @swagger
+ * /api/stores/{id}:
+ *   get:
+ *     summary: Get a store by ID
+ *     tags:
+ *       - Stores
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Store ID
+ *     responses:
+ *       200:
+ *         description: Store retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Stores retrieved successfully.
+ *                 store:
+ *                   $ref: '#/components/schemas/Store'
+ *       400:
+ *         description: Valid store ID is required
+ *       404:
+ *         description: Store not found
+ */
+router.get("/:id", getStoreByIdHandler);
 
 /**
  * @swagger
@@ -150,83 +221,6 @@ router.post("/", createStoreHandler);
  *         description: Store not found
  */
 router.put("/:id", updateStoreHandler);
-/**
- * @swagger
- * /api/stores/user/{userId}:
- *   get:
- *     summary: Get all stores belonging to a user
- *     tags:
- *       - Stores
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: integer
- *         description: User ID
- *     responses:
- *       200:
- *         description: List of stores for the user
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Stores retrieved successfully.
- *                 stores:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Store'
- *       400:
- *         description: Valid user ID is required
- *       404:
- *         description: User not found
- *       500:
- *         description: Failed to retrieve stores
- */
-router.get("/user/:userId", getStoresByUserHandler);
-
-/**
- * @swagger
- * /api/stores/{id}:
- *   get:
- *     summary: Get a store by ID
- *     tags:
- *       - Stores
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: Store ID
- *     responses:
- *       200:
- *         description: Store retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Stores retrieved successfully.
- *                 store:
- *                   $ref: '#/components/schemas/Store'
- *       400:
- *         description: Valid store ID is required
- *       404:
- *         description: Store not found
- */
-router.get("/:id", getStoreByIdHandler);
 
 /**
  * @swagger

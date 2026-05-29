@@ -12,7 +12,6 @@ import {
 import { createCategorySchema, updateCategorySchema } from "../validators/categoryValidator";
 import { MESSAGES } from "../constants/messages";
 
-// ============ CREATE / UPDATE / DELETE ============
 
 export const createCategoryHandler = async (
   req: Request,

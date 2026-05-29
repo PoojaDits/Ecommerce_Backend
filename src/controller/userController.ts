@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAllUsers, updateUser, deleteUser } from "../services/userService";
+import { getAllUsers, updateUser, deleteUser, } from "../services/userService";
 import { updateUserSchema } from "../validators/userValidator";
 import { MESSAGES } from "../constants/messages";
 
@@ -46,3 +46,4 @@ export const deleteUserHandler = async (req: Request, res: Response): Promise<vo
     res.status(400).json({ success: false, message: msg });
   }
 };
+

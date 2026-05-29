@@ -20,8 +20,8 @@ app.use(requestLogger);
 setupSwagger(app);
 
 app.use("/api/auth", authRoutes);
-app.use("/api/categories", categoryRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/categories", categoryRoutes);
 app.use("/api/stores", storeRoutes);       
 
 app.get("/back", (_req: Request, res: Response) => {

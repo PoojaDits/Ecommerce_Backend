@@ -22,7 +22,7 @@ export const MESSAGES = {
     CATEGORY_NAME_MAX: "Category name must not exceed 50 characters.",
     CATEGORY_NAME_EMPTY: "Category name cannot be empty.",
     CATEGORY_DESCRIPTION_MAX: "Category description must not exceed 255 characters.",
-    CATEGORY_UPDATE_REQUIRED: "At least one field is required to update category."
+    CATEGORY_UPDATE_REQUIRED: "At least one field is required to update category.",
   },
   AUTH: {
     EMAIL_ALREADY_REGISTERED: "Email is already registered.",
@@ -51,7 +51,7 @@ export const MESSAGES = {
     RESET_PASSWORD_FAILED: "Password reset failed",
     CHANGE_PASSWORD_FAILED: "Change password failed.",
     LOGOUT_FAILED: "Internal Server Error. Logout failed.",
-    LOGOUT_SUCCESS: "Logout successful."
+    LOGOUT_SUCCESS: "Logout successful.",
   },
   CATEGORY: {
     CREATE_SUCCESS: "Category created successfully.",
@@ -68,11 +68,11 @@ export const MESSAGES = {
     NAME_REQUIRED: "Category name is required.",
     NAME_REQUIRED_URL: "Category name is required in URL.",
     NOT_FOUND: "Category not found.",
-    ALREADY_EXISTS: "Category already exists."
+    ALREADY_EXISTS: "Category already exists.",
   },
   OTP: {
     INVALID: "Invalid OTP",
-    EXPIRED: "OTP expired"
+    EXPIRED: "OTP expired",
   },
   USER: {
     GET_SUCCESS: "Users retrieved successfully.",
@@ -81,6 +81,20 @@ export const MESSAGES = {
     NOT_FOUND: "User not found.",
     ID_REQUIRED: "Valid user id is required.",
     UPDATE_FAILED: "Failed to update user.",
-    DELETE_FAILED: "Failed to delete user."
-  }
+    DELETE_FAILED: "Failed to delete user.",
+  },
+  STORE: {
+    CREATE_SUCCESS: "Store created successfully.",
+    CREATE_FAILED: "Failed to create store.",
+    UPDATE_SUCCESS: "Store updated successfully.",
+    UPDATE_FAILED: "Failed to update store.",
+    DELETE_SUCCESS: "Store deleted successfully.",
+    DELETE_FAILED: "Failed to delete store.",
+    GET_SUCCESS: "Stores retrieved successfully.",
+    GET_FAILED: "Failed to retrieve stores.",
+    NOT_FOUND: "Store not found.",
+    ALREADY_EXISTS: "A store with this name already exists for this user.",
+    EMAIL_ALREADY_EXISTS: "A store with this email already exists.",
+    ID_REQUIRED: "Valid store ID is required.",
+  },
 };

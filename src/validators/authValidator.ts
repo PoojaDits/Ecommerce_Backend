@@ -89,17 +89,3 @@ export const changePasswordSchema = Joi.object({
     "any.required": MESSAGES.VALIDATION.PASSWORD_REQUIRED,
   }),
 });
-
-
-// export const updateCategorySchema = Joi.object({
-//   name: Joi.string().trim().min(2).max(50).optional().messages({
-//     "string.empty": "Category name cannot be empty.",
-//     "string.min": "Category name must be at least 2 characters.",
-//     "string.max": "Category name must not exceed 100 characters.",
-//   }),
-//   description: Joi.string().trim().max(255).optional().messages({
-//     "string.max": "Category description must not exceed 255 characters.",
-//   }),
-// }).or("name", "description").messages({
-//   "object.missing": "At least one of 'name' or 'description' is required.",
-// });

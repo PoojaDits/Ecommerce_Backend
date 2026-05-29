@@ -86,10 +86,9 @@ export const sendOtpEmail = async (
   try {
     const { subject, html } = getEmailContent(otp, purpose);
 
-    // ALWAYS log the OTP to the console/logger for local development/testing
+
     logger.info(`[OTP LOG] To: ${toEmail} | Purpose: ${purpose} | Code: [${otp}]`);
 
-    // Only attempt to send actual email if SMTP credentials are configured and not placeholder
     if (process.env.MAIL_USER && process.env.MAIL_USER !== "placeholder") {
       await transporter.sendMail({
         from: process.env.MAIL_FROM,
