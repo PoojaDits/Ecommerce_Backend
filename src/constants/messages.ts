@@ -97,4 +97,17 @@ export const MESSAGES = {
     EMAIL_ALREADY_EXISTS: "A store with this email already exists.",
     ID_REQUIRED: "Valid store ID is required.",
   },
+  PRODUCT: {
+    CREATE_SUCCESS: "Product created successfully.",
+    CREATE_FAILED: "Failed to create product.",
+    UPDATE_SUCCESS: "Product updated successfully.",
+    UPDATE_FAILED: "Failed to update product.",
+    DELETE_SUCCESS: "Product deleted successfully.",
+    DELETE_FAILED: "Failed to delete product.",
+    GET_SUCCESS: "Products retrieved successfully.",
+    GET_FAILED: "Failed to retrieve products.",
+    NOT_FOUND: "Product not found.",
+    ALREADY_EXISTS: "A product with this name already exists in this store.",
+    ID_REQUIRED: "Valid product ID is required.",
+  },
 };

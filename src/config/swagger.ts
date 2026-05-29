@@ -144,7 +144,7 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
-        // ─── Auth Responses ──────────────────────────────────────────
+       
         AuthResponse: {
           type: "object",
           properties: {
@@ -282,11 +282,78 @@ const options: swaggerJSDoc.Options = {
               format: "date-time",
               example: "2026-05-29T10:30:00Z",
             },
-            user: { $ref: "#/components/schemas/User" },
+            user: { $ref: "#/components/schemas/User"
+
+             },
           },
         },
 
-      
+ Product: {
+   type: "object",
+   properties: {
+     id: { type: "integer", example: 1 },
+     name: { type: "string", example: "Wireless Bluetooth Headphones" },
+     description: {
+       type: "string",
+       example: "High-quality wireless headphones with noise cancellation",
+       nullable: true,
+     },
+     price: { type: "number", example: 49.99 },
+     stock: { type: "integer", example: 100 },
+     isActive: { type: "boolean", example: true },
+     created_at: {
+       type: "string",
+       format: "date-time",
+       example: "2026-05-29T10:30:00Z",
+     },
+     updated_at: {
+       type: "string",
+       format: "date-time",
+       example: "2026-05-29T10:30:00Z",
+     },
+     store: { $ref: "#/components/schemas/Store" },
+     category: { $ref: "#/components/schemas/Category" },
+   },
+ },
+
+ CreateProductRequest: {
+   type: "object",
+   required: ["name", "price", "stock", "storeId", "categoryId"],
+   properties: {
+     name: { type: "string", example: "Wireless Bluetooth Headphones" },
+     description: {
+       type: "string",
+       example: "High-quality wireless headphones with noise cancellation",
+     },
+     price: { type: "number", example: 49.99 },
+     stock: { type: "integer", example: 100 },
+     storeId: { type: "integer", example: 1 },
+     categoryId: { type: "integer", example: 1 },
+     isActive: { type: "boolean", example: true 
+
+     },
+   },
+ },
+   ProductResponse: {
+   type: "object",
+   properties: {
+     success: { type: "boolean", example: true },
+     message: { type: "string", example: "Product created successfully." },
+     product: { $ref: "#/components/schemas/Product" },
+   },
+ },
+
+ ProductsListResponse: {
+   type: "object",
+   properties: {
+     success: { type: "boolean", example: true },
+     message: { type: "string", example: "Products retrieved successfully." },
+     products: {
+       type: "array",
+       items: { $ref: "#/components/schemas/Product" },
+     },
+   },
+ },
         
       },
     },
