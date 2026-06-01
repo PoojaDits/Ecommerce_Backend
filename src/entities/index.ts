@@ -1,6 +1,7 @@
 
 export { Address } from './Address';
 export { Cart } from './Cart';
+export { CartItem } from './CartItem';
 export { Order } from './Order';
 export { OrderItem } from './OrderItem';
 export { Otp } from './Otp';

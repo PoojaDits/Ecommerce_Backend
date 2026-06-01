@@ -14,6 +14,10 @@ export const createProductHandler = async (req: Request, res: Response): Promise
       return;
     }
 
+    if (req.file) {
+      value.image = "/uploads/products/" + req.file.filename;
+    }
+
     const product = await createProduct(value);
 
     res.status(201).json({
@@ -69,7 +73,15 @@ export const updateProductHandler = async (req: Request, res: Response): Promise
       return;
     }
 
-    const updatedProduct = await updateProduct(id, req.body);
+    
+    const updateData = { ...req.body };
+
+    
+    if (req.file) {
+      updateData.image = "/uploads/products/" + req.file.filename;
+    }
+
+    const updatedProduct = await updateProduct(id, updateData);
     res.status(200).json({
       success: true,
       message: MESSAGES.PRODUCT.UPDATE_SUCCESS,

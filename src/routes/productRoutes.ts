@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createProductHandler, getAllProductsHandler, getProductByIdHandler, updateProductHandler, deleteProductHandler } from "../controller/product Controller";
+import upload from "../middleware/upload";
 
 const router = Router();
 
@@ -14,9 +15,36 @@ const router = Router();
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/CreateProductRequest'
+ *             type: object
+ *             required: [name, price, stock, storeId, categoryId]
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Sample Product
+ *               description:
+ *                 type: string
+ *                 example: A great product
+ *               price:
+ *                 type: number
+ *                 example: 19.99
+ *               stock:
+ *                 type: integer
+ *                 example: 100
+ *               storeId:
+ *                 type: integer
+ *                 example: 1
+ *               categoryId:
+ *                 type: integer
+ *                 example: 2
+ *               isActive:
+ *                 type: boolean
+ *                 example: true
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Product image file (jpg, jpeg, png, gif, webp)
  *     responses:
  *       201:
  *         description: Product created successfully
@@ -31,7 +59,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/", createProductHandler);
+router.post("/", upload.single("image"), createProductHandler);
 
 /**
  * @swagger
@@ -106,9 +134,32 @@ router.get("/:id", getProductByIdHandler);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/UpdateProductRequest'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Updated Name
+ *               description:
+ *                 type: string
+ *                 example: Updated description
+ *               price:
+ *                 type: number
+ *                 example: 29.99
+ *               stock:
+ *                 type: integer
+ *                 example: 50
+ *               categoryId:
+ *                 type: integer
+ *                 example: 2
+ *               isActive:
+ *                 type: boolean
+ *                 example: true
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: New product image file (jpg, jpeg, png, gif, webp)
  *     responses:
  *       200:
  *         description: Product updated successfully
@@ -123,7 +174,7 @@ router.get("/:id", getProductByIdHandler);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.put("/:id", updateProductHandler);
+router.put("/:id", upload.single("image"), updateProductHandler);
 
 /**
  * @swagger

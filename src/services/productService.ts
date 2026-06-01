@@ -12,7 +12,7 @@ const categoryRepo = AppDataSource.getRepository(Category);
 export const createProduct = async (
   data: ICreateProduct
 ): Promise<IProduct> => {
-  const { name, description, price, stock, storeId, categoryId, isActive } = data;
+  const { name, description, price, stock, storeId, categoryId, isActive, image } = data;
 
   const normalizedName = name.trim();
 
@@ -40,6 +40,7 @@ export const createProduct = async (
   product.description = description?.trim() || "";
   product.price = price;
   product.stock = stock;
+  product.image = image || null; 
   product.isActive = isActive ?? true;
   product.store = store;
   product.category = category;
@@ -92,6 +93,9 @@ export const updateProduct = async (id: number, data: IUpdateProduct): Promise<I
   }
   if (data.stock !== undefined) {
     product.stock = data.stock;
+  }
+  if (data.image !== undefined) {
+    product.image = data.image; // update with the new uploaded image path
   }
   if (data.isActive !== undefined) {
     product.isActive = data.isActive;

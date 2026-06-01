@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import path from "path";
 import dotenv from "dotenv";
 import { AppDataSource } from "./config/dataSource";
 import { setupSwagger } from "./config/swagger";
@@ -9,6 +10,7 @@ import userRoutes from "./routes/userRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
 import storeRoutes from "./routes/storeRoutes";
 import productRoutes from "./routes/productRoutes";
+import cartRoutes from "./routes/cartRoutes";
 
 dotenv.config();
 
@@ -18,9 +20,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
 
+
+app.use(express.static(path.join(__dirname, "..", "public")));
+
 setupSwagger(app);
 
-// Redirect legacy /docs route to the new Swagger UI endpoint
+
 app.get('/docs', (_req, res) => {
   res.redirect('/api-docs');
 });
@@ -30,6 +35,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/stores", storeRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
 
 app.get("/back", (_req: Request, res: Response) => {
   logger.info("Health check endpoint called");

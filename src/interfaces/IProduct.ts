@@ -4,6 +4,7 @@ export interface IProduct {
   description: string | null;
   price: number;
   stock: number;
+  image: string | null;
   isActive: boolean;
   created_at: Date;
   updated_at: Date;
@@ -19,6 +20,7 @@ export interface ICreateProduct {
   storeId: number;
   categoryId: number;
   isActive?: boolean;
+  image?: string; 
 }
 
 export interface IUpdateProduct {
@@ -28,4 +30,5 @@ export interface IUpdateProduct {
   stock?: number;
   categoryId?: number;
   isActive?: boolean;
+  image?: string; 
 }
