@@ -221,7 +221,8 @@ export const changePassword = async (
 
   const isMatch = await bcrypt.compare(currentPassword, user.password);
   if (!isMatch)
-    throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
+    // FIX #7: Use the correct specific error message instead of generic "Invalid Credentials"
+    throw new Error(MESSAGES.AUTH.CURRENT_PASSWORD_INCORRECT);
 
   const hashedPassword = await bcrypt.hash(newPassword, 10);
   user.password = hashedPassword;

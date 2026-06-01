@@ -122,6 +122,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({ success: true, ...result });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : MESSAGES.AUTH.LOGIN_FAILED;
+
+    if (message === MESSAGES.AUTH.ACCOUNT_NOT_VERIFIED) {
+      res.status(401).json({ success: false, message });
+      return;
+    }
+
     res.status(400).json({ success: false, message });
   }
 };

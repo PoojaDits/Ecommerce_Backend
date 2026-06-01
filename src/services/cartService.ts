@@ -56,9 +56,6 @@ export const addItemToCart = async (
   if (!product) {
     throw new Error("Product not found.");
   }
-  if (quantity > product.stock) {
-    throw new Error("Not enough stock available.");
-  }
 
   let existingItem = null;
   for (const item of cart.items) {
@@ -67,12 +64,19 @@ export const addItemToCart = async (
     }
   }
 
+  // ── FIX #6: Always check stock, including when updating existing items ──
   if (existingItem) {
-  
-    existingItem.quantity = existingItem.quantity + quantity;
+    const newTotalQuantity = existingItem.quantity + quantity;
+    if (newTotalQuantity > product.stock) {
+      throw new Error("Not enough stock available.");
+    }
+    existingItem.quantity = newTotalQuantity;
     await cartItemRepo.save(existingItem);
   } else {
-  
+    if (quantity > product.stock) {
+      throw new Error("Not enough stock available.");
+    }
+
     const newItem = new CartItem();
     newItem.cart = cart;
     newItem.product = product;

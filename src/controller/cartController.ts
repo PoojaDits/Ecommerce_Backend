@@ -7,6 +7,7 @@ import {
   removeCartItem,
   clearCart,
 } from "../services/cartService";
+import { addCartItemSchema, updateCartItemSchema } from "../validators/cartValidator";
 import { MESSAGES } from "../constants/messages";
 
 export const getCartHandler = async (req: AuthRequest, res: Response) => {
@@ -31,26 +32,18 @@ export const getCartHandler = async (req: AuthRequest, res: Response) => {
 export const addCartItemHandler = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user!.id;
-    const productId = req.body.productId;
-    const quantity = req.body.quantity;
 
-    if (!productId || !quantity) {
+    // ── FIX #5: Use Joi validator instead of weak manual checks ──
+    const { error, value } = addCartItemSchema.validate(req.body);
+    if (error) {
       res.status(400).json({
         success: false,
-        message: MESSAGES.CART.ITEM_ADD_FAILED,
+        message: error.details?.[0]?.message || MESSAGES.CART.ITEM_ADD_FAILED,
       });
       return;
     }
 
-    if (quantity < 1) {
-      res.status(400).json({
-        success: false,
-        message: MESSAGES.CART.INSUFFICIENT_STOCK,
-      });
-      return;
-    }
-
-    const cart = await addItemToCart(userId, productId, quantity);
+    const cart = await addItemToCart(userId, value.productId, value.quantity);
     res.status(201).json({
       success: true,
       message: MESSAGES.CART.ITEM_ADDED,
@@ -73,17 +66,18 @@ export const updateCartItemHandler = async (
   try {
     const userId = req.user!.id;
     const itemId = Number(req.params.itemId);
-    const quantity = req.body.quantity;
 
-    if (!quantity || quantity < 1) {
+    
+    const { error, value } = updateCartItemSchema.validate(req.body);
+    if (error) {
       res.status(400).json({
         success: false,
-        message: MESSAGES.CART.INSUFFICIENT_STOCK,
+        message: error.details?.[0]?.message || MESSAGES.CART.INSUFFICIENT_STOCK,
       });
       return;
     }
 
-    const cart = await updateCartItem(userId, itemId, quantity);
+    const cart = await updateCartItem(userId, itemId, value.quantity);
     res.status(200).json({
       success: true,
       message: MESSAGES.CART.ITEM_UPDATED,

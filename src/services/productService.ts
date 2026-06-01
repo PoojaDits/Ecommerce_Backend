@@ -83,7 +83,17 @@ export const updateProduct = async (id: number, data: IUpdateProduct): Promise<I
   }
 
   if (data.name !== undefined) {
-    product.name = data.name.trim();
+    const normalizedName = data.name.trim();
+    const existingProduct = await productRepo.findOne({
+      where: { name: normalizedName, store: { id: product.store.id } },
+      relations: ["store"],
+    });
+
+    if (existingProduct && existingProduct.id !== id) {
+      throw new Error(MESSAGES.PRODUCT.ALREADY_EXISTS);
+    }
+
+    product.name = normalizedName;
   }
   if (data.description !== undefined) {
     product.description = data.description;
@@ -95,7 +105,7 @@ export const updateProduct = async (id: number, data: IUpdateProduct): Promise<I
     product.stock = data.stock;
   }
   if (data.image !== undefined) {
-    product.image = data.image; // update with the new uploaded image path
+    product.image = data.image;
   }
   if (data.isActive !== undefined) {
     product.isActive = data.isActive;
