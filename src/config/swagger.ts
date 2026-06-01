@@ -2,386 +2,128 @@ import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { Express } from "express";
 
-const options: swaggerJSDoc.Options = {
-  definition: {
-    openapi: "3.0.0",
 
-    info: {
-      title: "E-commerce API",
-      version: "1.0.0",
-      description: "API documentation",
-    },
-
-    servers: [
-      {
-        url: `http://localhost:${process.env.PORT || 3001}`,
-        description: "Development server",
-      },
-    ],
-
-    components: {
-      securitySchemes: {
-        BearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
-          description:
-            "JWT Authorization header using the Bearer scheme. Example: Bearer eyJhbGciOiJIUzI1NiIs...",
-        },
-      },
-
-      schemas: {
-         RegisterRequest: {
-          type: "object",
-          required: ["firstName", "lastName", "email", "password"],
-          properties: {
-            firstName: { type: "string", example: "Pooja" },
-            lastName: { type: "string", example: "Joshi" },
-            email: {
-              type: "string",
-              format: "email",
-              example: "jspuja@example.com",
-            },
-            password: {
-              type: "string",
-              format: "password",
-              example: "SecurePass123",
-            },
-            role: {
-              type: "string",
-              enum: ["admin", "customer", "vendor"],
-              default: "customer",
-              example: "customer",
-            },
-          },
-        },
-
-        VerifyOtpRequest: {
-          type: "object",
-          required: ["email", "otp"],
-          properties: {
-            email: {
-              type: "string",
-              format: "email",
-              example: "jspuja@example.com",
-            },
-            otp: { type: "string", example: "123456" },
-          },
-        },
-
-        ResendOtpRequest: {
-          type: "object",
-          required: ["email"],
-          properties: {
-            email: {
-              type: "string",
-              format: "email",
-              example: "jspuja@example.com",
-            },
-          },
-        },
-
-        LoginRequest: {
-          type: "object",
-          required: ["email", "password"],
-          properties: {
-            email: {
-              type: "string",
-              format: "email",
-              example: "jspuja02@gmail.com",
-            },
-            password: {
-              type: "string",
-              format: "password",
-              example: "SecurePass123",
-            },
-          },
-        },
-
-        ForgotPasswordRequest: {
-          type: "object",
-          required: ["email"],
-          properties: {
-            email: {
-              type: "string",
-              format: "email",
-              example: "jspuja@example.com",
-            },
-          },
-        },
-
-        ResetPasswordRequest: {
-          type: "object",
-          required: ["email", "otp", "newPassword"],
-          properties: {
-            email: {
-              type: "string",
-              format: "email",
-              example: "jspuja@example.com",
-            },
-            otp: { type: "string", example: "123456" },
-            newPassword: {
-              type: "string",
-              format: "password",
-              example: "NewSecurePass@123",
-            },
-          },
-        },
-
-        ChangePasswordRequest: {
-          type: "object",
-          required: ["currentPassword", "newPassword"],
-          properties: {
-            currentPassword: {
-              type: "string",
-              format: "password",
-              example: "OldPass123",
-            },
-            newPassword: {
-              type: "string",
-              format: "password",
-              example: "NewSecurePass@456",
-            },
-          },
-        },
-       
-        AuthResponse: {
-          type: "object",
-          properties: {
-            success: { type: "boolean", example: true },
-            message: {
-              type: "string",
-              example: "OTP sent successfully.",
-            },
-            user: { $ref: "#/components/schemas/User" },
-          },
-        },
-          LogoutRequest: {
-          type: "object",
-          description: "Logout request (body is empty, token is sent in Authorization header)",
-          properties: {},
-          example: {},
-        },
-        LogoutResponse: {
-          type: "object",
-          properties: {
-            success: { type: "boolean", example: true },
-            message: { type: "string", example: "You have been logged out successfully." },
-            timestamp: { type: "string", format: "date-time" },
-          },
-        },
-        LoginResponse: {
-          type: "object",
-          properties: {
-            success: { type: "boolean", example: true },
-            message: { type: "string", example: "Login successful" },
-            token: { type: "string", example: "jwt_token_here" },
-            user: { $ref: "#/components/schemas/User" },
-          },
-        },
-
-        ChangePasswordResponse: {
-          type: "object",
-          properties: {
-            success: { type: "boolean", example: true },
-            message: {
-              type: "string",
-              example: "Password changed successfully.",
-            },
-          },
-        },
-
-        ErrorResponse: {
-          type: "object",
-          properties: {
-            success: { type: "boolean", example: false },
-            message: {
-              type: "string",
-              example: "Error explanation message.",
-            },
-          },
-        },
-       
-         User: {
-          type: "object",
-          properties: {
-            id: { type: "integer", example: 1 },
-            uuid: {
-              type: "string",
-              format: "uuid",
-              example: "550e8400-e29b-41d4-a716-446655440000",
-            },
-            firstName: { type: "string", example: "Pooja" },
-            lastName: { type: "string", example: "Joshi" },
-            email: {
-              type: "string",
-              format: "email",
-              example: "jspuja@example.com",
-            },
-            role: {
-              type: "string",
-              enum: ["admin", "customer", "vendor"],
-              example: "customer",
-            },
-            isActive: { type: "boolean", example: true },
-            createdAt: {
-              type: "string",
-              format: "date-time",
-              example: "2026-05-27T10:30:00Z",
-            },
-            updatedAt: {
-              type: "string",
-              format: "date-time",
-              example: "2026-05-27T10:30:00Z",
-            },
-          },
-        },
-
-        Category: {
-          type: "object",
-          properties: {
-            id: { type: "integer", example: 1 },
-            name: { type: "string", example: "Electronics" },
-            description: {
-              type: "string",
-              example: "Electronic items and gadgets",
-            },
-            slug: { type: "string", example: "electronics" },
-            createdAt: {
-              type: "string",
-              format: "date-time",
-              example: "2026-05-27T10:30:00Z",
-            },
-            updatedAt: {
-              type: "string",
-              format: "date-time",
-              example: "2026-05-27T10:30:00Z",
-            },
-          },
-        },
-      
-        Store: {
-          type: "object",
-          properties: {
-            id: { type: "integer", example: 1 },
-            storeName: {
-              type: "string",
-              example: "My Electronics Store",
-            },
-            storeDescription: {
-              type: "string",
-              example: "Best electronics shop in town",
-            },
-            storeLocation: {
-              type: "string",
-              example: "42 Market Street, Mumbai",
-            },
-            storeContact: {
-              type: "string",
-              example: "+919876543210",
-            },
-            storeEmail: {
-              type: "string",
-              format: "email",
-              example: "mystore@example.com",
-            },
-            created_at: {
-              type: "string",
-              format: "date-time",
-              example: "2026-05-29T10:30:00Z",
-            },
-            updated_at: {
-              type: "string",
-              format: "date-time",
-              example: "2026-05-29T10:30:00Z",
-            },
-            user: { $ref: "#/components/schemas/User"
-
-             },
-          },
-        },
-
- Product: {
-   type: "object",
-   properties: {
-     id: { type: "integer", example: 1 },
-     name: { type: "string", example: "Wireless Bluetooth Headphones" },
-     description: {
-       type: "string",
-       example: "High-quality wireless headphones with noise cancellation",
-       nullable: true,
-     },
-     price: { type: "number", example: 49.99 },
-     stock: { type: "integer", example: 100 },
-     isActive: { type: "boolean", example: true },
-     created_at: {
-       type: "string",
-       format: "date-time",
-       example: "2026-05-29T10:30:00Z",
-     },
-     updated_at: {
-       type: "string",
-       format: "date-time",
-       example: "2026-05-29T10:30:00Z",
-     },
-     store: { $ref: "#/components/schemas/Store" },
-     category: { $ref: "#/components/schemas/Category" },
-   },
- },
-
- CreateProductRequest: {
-   type: "object",
-   required: ["name", "price", "stock", "storeId", "categoryId"],
-   properties: {
-     name: { type: "string", example: "Wireless Bluetooth Headphones" },
-     description: {
-       type: "string",
-       example: "High-quality wireless headphones with noise cancellation",
-     },
-     price: { type: "number", example: 49.99 },
-     stock: { type: "integer", example: 100 },
-     storeId: { type: "integer", example: 1 },
-     categoryId: { type: "integer", example: 1 },
-     isActive: { type: "boolean", example: true 
-
-     },
-   },
- },
-   ProductResponse: {
-   type: "object",
-   properties: {
-     success: { type: "boolean", example: true },
-     message: { type: "string", example: "Product created successfully." },
-     product: { $ref: "#/components/schemas/Product" },
-   },
- },
-
- ProductsListResponse: {
-   type: "object",
-   properties: {
-     success: { type: "boolean", example: true },
-     message: { type: "string", example: "Products retrieved successfully." },
-     products: {
-       type: "array",
-       items: { $ref: "#/components/schemas/Product" },
-     },
-   },
- },
-        
-      },
-    },
-
-    security: [{ BearerAuth: [] }],
+const swaggerDefinition = {
+  openapi: "3.0.0",
+  info: {
+    title: "E-commerce API",
+    version: "1.0.0",
+    description: "API documentation",
   },
+  servers: [
+    {
+      url: `http://localhost:${process.env.PORT || 3001}`,
+      description: "Development server",
+    },
+  ],
+  components: {
+    securitySchemes: {
+      BearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        description:
+          "JWT Authorization header using the Bearer scheme. Example: Bearer eyJhbGciOiJIUzI1NiIs...",
+      },
+    },
+    schemas: {
 
-  apis: ["./src/routes/*.{ts,js}"],
+      RegisterRequest: {
+        type: "object",
+        required: ["firstName", "lastName", "email", "password"],
+        properties: {
+          firstName: { type: "string", example: "Pooja" },
+          lastName: { type: "string", example: "Joshi" },
+          email: { type: "string", format: "email", example: "jspuja@example.com" },
+          password: { type: "string", format: "password", example: "SecurePass123" },
+          role: { type: "string", enum: ["admin", "customer", "vendor"], default: "customer", example: "customer" },
+        },
+      },
+
+      ProductsListResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean", example: true },
+          message: { type: "string", example: "Products retrieved successfully." },
+          products: { type: "array", items: { $ref: "#/components/schemas/Product" } },
+        },
+      },
+      Product: {
+        type: "object",
+        properties: {
+          id: { type: "integer", example: 1 },
+          name: { type: "string", example: "Sample Product" },
+          description: { type: "string", example: "A great product" },
+          price: { type: "number", example: 19.99 },
+          stock: { type: "integer", example: 100 },
+          isActive: { type: "boolean", example: true },
+          created_at: { type: "string", format: "date-time" },
+          updated_at: { type: "string", format: "date-time" }
+        },
+      },
+      CreateProductRequest: {
+        type: "object",
+        required: ["name", "description", "price", "stock", "categoryId"],
+        properties: {
+          name: { type: "string", example: "Sample Product" },
+          description: { type: "string", example: "A great product" },
+          price: { type: "number", example: 19.99 },
+          stock: { type: "integer", example: 100 },
+          categoryId: { type: "integer", example: 2 },
+          storeId: { type: "integer", example: 1 },
+          isActive: { type: "boolean", example: true }
+        },
+      },
+      ProductResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean", example: true },
+          message: { type: "string", example: "Product retrieved successfully." },
+          product: { $ref: "#/components/schemas/Product" }
+        },
+      },
+      UpdateProductRequest: {
+        type: "object",
+        properties: {
+          name: { type: "string", example: "Updated Name" },
+          description: { type: "string", example: "Updated description" },
+          price: { type: "number", example: 29.99 },
+          stock: { type: "integer", example: 50 },
+          categoryId: { type: "integer", example: 2 },
+          isActive: { type: "boolean", example: true }
+        },
+      },
+      SuccessResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean", example: true },
+          message: { type: "string", example: "Operation successful" }
+        },
+      },
+      ErrorResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean", example: false },
+          message: { type: "string", example: "Error message" }
+        },
+      },
+    },
+  },
+  security: [{ BearerAuth: [] }],
 };
+
+
+const options: swaggerJSDoc.Options = {
+  definition: swaggerDefinition,
+  apis: ["./src/routes/*.ts"],
+};
+
 
 const swaggerSpec = swaggerJSDoc(options);
 
 export const setupSwagger = (app: Express): void => {
   app.use(
-    "/docs",
+    "/api-docs",
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, {
       swaggerOptions: {
