@@ -16,26 +16,35 @@ export const MESSAGES = {
     OTP_REQUIRED: "OTP is required.",
     FAILED: "Validation failed",
     ALL_FIELDS_REQUIRED: "All fields are required.",
-    INVALID_ROLE: (roles: string) => `Invalid role. Must be one of: ${roles}`,
+    INVALID_ROLE: (roles: string) =>
+      `Invalid role. Must be one of: ${roles}`,
     CATEGORY_NAME_REQUIRED: "Category name is required.",
     CATEGORY_NAME_MIN: "Category name must be at least 2 characters.",
     CATEGORY_NAME_MAX: "Category name must not exceed 50 characters.",
     CATEGORY_NAME_EMPTY: "Category name cannot be empty.",
-    CATEGORY_DESCRIPTION_MAX: "Category description must not exceed 255 characters.",
-    CATEGORY_UPDATE_REQUIRED: "At least one field is required to update category.",
+    CATEGORY_DESCRIPTION_MAX:
+      "Category description must not exceed 255 characters.",
+    CATEGORY_UPDATE_REQUIRED:
+      "At least one field is required to update category.",
   },
+
   AUTH: {
     EMAIL_ALREADY_REGISTERED: "Email is already registered.",
-    OTP_SENT: "OTP sent to your email. Please verify to complete registration.",
-    REGISTRATION_SESSION_NOT_FOUND: "Registration session not found. Please register again.",
+    OTP_SENT:
+      "OTP sent to your email. Please verify to complete registration.",
+    REGISTRATION_SESSION_NOT_FOUND:
+      "Registration session not found. Please register again.",
     REGISTRATION_SUCCESS: "Registration successful. You can now log in.",
-    NO_PENDING_REGISTRATION: "No pending registration found. Please register first.",
+    NO_PENDING_REGISTRATION:
+      "No pending registration found. Please register first.",
     OTP_RESENT: "OTP resent successfully. Check your email.",
     INVALID_CREDENTIALS: "Invalid Credentials",
     ACCOUNT_NOT_VERIFIED: "Account not verified",
     LOGIN_SUCCESS: "Login successful",
-    FORGOT_PASSWORD_OTP_SENT: "OTP sent to your email. Use it to reset your password.",
-    RESET_PASSWORD_SUCCESS: "Password reset successful. You can now log in with your new password.",
+    FORGOT_PASSWORD_OTP_SENT:
+      "OTP sent to your email. Use it to reset your password.",
+    RESET_PASSWORD_SUCCESS:
+      "Password reset successful. You can now log in with your new password.",
     CHANGE_PASSWORD_SUCCESS: "Password changed successfully.",
     CURRENT_PASSWORD_INCORRECT: "Current password is incorrect.",
     ACCESS_DENIED_NO_TOKEN: "Access denied. No token provided.",
@@ -55,6 +64,7 @@ export const MESSAGES = {
     USER_NOT_FOUND: "User not found.",
     INTERNAL_ERROR: "Internal server error.",
   },
+
   CATEGORY: {
     CREATE_SUCCESS: "Category created successfully.",
     CREATE_FAILED: "Failed to create category",
@@ -72,10 +82,12 @@ export const MESSAGES = {
     NOT_FOUND: "Category not found.",
     ALREADY_EXISTS: "Category already exists.",
   },
+
   OTP: {
     INVALID: "Invalid OTP",
     EXPIRED: "OTP expired",
   },
+
   USER: {
     GET_SUCCESS: "Users retrieved successfully.",
     UPDATE_SUCCESS: "User updated successfully.",
@@ -85,6 +97,7 @@ export const MESSAGES = {
     UPDATE_FAILED: "Failed to update user.",
     DELETE_FAILED: "Failed to delete user.",
   },
+
   STORE: {
     CREATE_SUCCESS: "Store created successfully.",
     CREATE_FAILED: "Failed to create store.",
@@ -99,6 +112,7 @@ export const MESSAGES = {
     EMAIL_ALREADY_EXISTS: "A store with this email already exists.",
     ID_REQUIRED: "Valid store ID is required.",
   },
+
   CART: {
     GET_SUCCESS: "Cart retrieved successfully.",
     GET_FAILED: "Failed to retrieve cart.",
@@ -115,6 +129,7 @@ export const MESSAGES = {
     INSUFFICIENT_STOCK: "Insufficient stock for the requested quantity.",
     ITEM_ID_REQUIRED: "Valid cart item ID is required.",
   },
+
   PRODUCT: {
     CREATE_SUCCESS: "Product created successfully.",
     CREATE_FAILED: "Failed to create product.",
@@ -125,7 +140,7 @@ export const MESSAGES = {
     GET_SUCCESS: "Products retrieved successfully.",
     GET_FAILED: "Failed to retrieve products.",
     NOT_FOUND: "Product not found.",
-    ALREADY_EXISTS: "A product with this name already exists in this store.",
+    ALREADY_EXISTS: "Product already exists.",
     ID_REQUIRED: "Valid product ID is required.",
   },
 };

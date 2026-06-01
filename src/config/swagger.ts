@@ -56,6 +56,7 @@ const swaggerDefinition = {
           description: { type: "string", example: "A great product" },
           price: { type: "number", example: 19.99 },
           stock: { type: "integer", example: 100 },
+          image: { type: "string", example: "/uploads/products/product-123.jpg" },
           isActive: { type: "boolean", example: true },
           created_at: { type: "string", format: "date-time" },
           updated_at: { type: "string", format: "date-time" }
@@ -91,6 +92,57 @@ const swaggerDefinition = {
           stock: { type: "integer", example: 50 },
           categoryId: { type: "integer", example: 2 },
           isActive: { type: "boolean", example: true }
+        },
+      },
+      CartItem: {
+        type: "object",
+        properties: {
+          id: { type: "integer", example: 5 },
+          quantity: { type: "integer", example: 2 },
+          subtotal: { type: "number", example: 39.98 },
+          product: {
+            type: "object",
+            properties: {
+              id: { type: "integer", example: 1 },
+              name: { type: "string", example: "Sample Product" },
+              price: { type: "number", example: 19.99 },
+              stock: { type: "integer", example: 100 },
+            },
+          },
+          created_at: { type: "string", format: "date-time" },
+          updated_at: { type: "string", format: "date-time" },
+        },
+      },
+      Cart: {
+        type: "object",
+        properties: {
+          id: { type: "integer", example: 1 },
+          items: { type: "array", items: { $ref: "#/components/schemas/CartItem" } },
+          totalItems: { type: "integer", example: 3 },
+          totalAmount: { type: "number", example: 59.97 },
+        },
+      },
+      CartResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean", example: true },
+          message: { type: "string", example: "Cart retrieved successfully." },
+          cart: { $ref: "#/components/schemas/Cart" },
+        },
+      },
+      AddCartItemRequest: {
+        type: "object",
+        required: ["productId", "quantity"],
+        properties: {
+          productId: { type: "integer", example: 1 },
+          quantity: { type: "integer", example: 2 },
+        },
+      },
+      UpdateCartItemRequest: {
+        type: "object",
+        required: ["quantity"],
+        properties: {
+          quantity: { type: "integer", example: 3 },
         },
       },
       SuccessResponse: {

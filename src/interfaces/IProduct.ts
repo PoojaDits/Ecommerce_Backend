@@ -1,15 +1,23 @@
+import Product from "../entities/Product";
+
 export interface IProduct {
   id: number;
   name: string;
-  description: string | null;
+  description: string;
   price: number;
   stock: number;
-  image: string | null;
   isActive: boolean;
+  image: string | null;
   created_at: Date;
   updated_at: Date;
-  store?: { id: number };
-  category?: { id: number };
+  store: {
+    id: number;
+    storeName: string;
+  };
+  category: {
+    id: number;
+    name: string;
+  };
 }
 
 export interface ICreateProduct {
@@ -20,7 +28,7 @@ export interface ICreateProduct {
   storeId: number;
   categoryId: number;
   isActive?: boolean;
-  image?: string; 
+  image?: string | null;
 }
 
 export interface IUpdateProduct {
@@ -30,5 +38,5 @@ export interface IUpdateProduct {
   stock?: number;
   categoryId?: number;
   isActive?: boolean;
-  image?: string; 
+  image?: string | null;
 }

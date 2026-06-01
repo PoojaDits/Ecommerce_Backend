@@ -1,40 +1,54 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Store } from "./Store";
 import Category from "./Category";
 import { OrderItem } from "./OrderItem";
+
 @Entity("products")
 export default class Product {
-    @PrimaryGeneratedColumn("increment")
-    id: number;
+  @PrimaryGeneratedColumn("increment")
+  id: number;
 
-    @Column({ type: "varchar" })
-    name: string;
+  @Column({ type: "varchar" })
+  name: string;
 
-    @Column({ type: "text", nullable: true })
-    description: string;
+  @Column({ type: "text", nullable: true })
+  description: string;
 
-    @Column({ type: "decimal" })
-    price: number;
+  @Column({ type: "decimal" })
+  price: number;
 
-    @Column({ type: "int" })
-    stock: number;
-    @Column({ type: "boolean", default: true })
-    isActive: boolean;
+  @Column({ type: "int" })
+  stock: number;
 
-    @CreateDateColumn({ type: "timestamp" })
-    created_at: Date;
+  @Column({ type: "boolean", default: true })
+  isActive: boolean;
 
-    @UpdateDateColumn({ type: "timestamp" })
-    updated_at: Date;
+  @Column({ type: "varchar", nullable: true })
+  image: string | null;
 
-    @ManyToOne(() => Store, (store) => store.products)
-    @JoinColumn({ name: "store_id" })
-    store: Store;
+  @CreateDateColumn({ type: "timestamp" })
+  created_at: Date;
 
-    @ManyToOne(() => Category, (category) => category.products)
-    @JoinColumn({ name: "category_id" })
-    category: Category;
+  @UpdateDateColumn({ type: "timestamp" })
+  updated_at: Date;
 
-    @OneToMany(() => OrderItem, (orderItems) => orderItems.product)
-    orderItems: OrderItem[];
-}       
+  @ManyToOne(() => Store, (store) => store.products)
+  @JoinColumn({ name: "store_id" })
+  store: Store;
+
+  @ManyToOne(() => Category, (category) => category.products)
+  @JoinColumn({ name: "category_id" })
+  category: Category;
+
+  @OneToMany(() => OrderItem, (orderItems) => orderItems.product)
+  orderItems: OrderItem[];
+}

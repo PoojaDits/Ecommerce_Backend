@@ -1,8 +1,18 @@
 import { Router } from "express";
-import { createProductHandler, getAllProductsHandler, getProductByIdHandler, updateProductHandler, deleteProductHandler } from "../controller/product Controller";
+import {
+  createProductHandler,
+  getAllProductsHandler,
+  getProductByIdHandler,
+  updateProductHandler,
+  deleteProductHandler,
+} from "../controller/productController";
+import authenticateUser from "../middleware/auth.Middleware";
 import upload from "../middleware/upload";
 
 const router = Router();
+
+// All product routes require authentication
+router.use(authenticateUser);
 
 /**
  * @swagger

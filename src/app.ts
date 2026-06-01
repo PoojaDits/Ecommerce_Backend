@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import path from "path";
+import cors from "cors";
 import dotenv from "dotenv";
 import { AppDataSource } from "./config/dataSource";
 import { setupSwagger } from "./config/swagger";
@@ -16,18 +17,16 @@ dotenv.config();
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
-
-
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 setupSwagger(app);
 
-
-app.get('/docs', (_req, res) => {
-  res.redirect('/api-docs');
+app.get("/docs", (_req, res) => {
+  res.redirect("/api-docs");
 });
 
 app.use("/api/auth", authRoutes);
@@ -49,7 +48,6 @@ const startServer = async () => {
   try {
     await AppDataSource.initialize();
     logger.info("Database Connected");
-
     const PORT = process.env.PORT || 3001;
     app.listen(PORT, () => {
       logger.info(`Server running on port ${PORT}`);
