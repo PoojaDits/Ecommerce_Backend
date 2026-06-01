@@ -11,7 +11,6 @@ import upload from "../middleware/upload";
 
 const router = Router();
 
-// All product routes require authentication
 router.use(authenticateUser);
 
 /**

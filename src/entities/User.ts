@@ -40,7 +40,6 @@ export class User {
   @Column({ type: "boolean", default: false })
   isActive: boolean;
 
-
   @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
 

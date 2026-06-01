@@ -1,8 +1,3 @@
-// ============================================================
-//  Cart Routes  (beginner friendly version)
-//  This file connects the URLs to the controller functions.
-// ============================================================
-
 import { Router } from "express";
 import authenticateUser from "../middleware/auth.Middleware";
 import {
@@ -14,8 +9,6 @@ import {
 } from "../controller/cartController";
 
 const router = Router();
-
-// Every cart route needs the user to be logged in.
 router.use(authenticateUser);
 
 /**

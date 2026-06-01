@@ -215,7 +215,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ========== PRODUCT SCHEMAS ==========
+     
 
       ProductsListResponse: {
         type: "object",
@@ -289,7 +289,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ========== CART SCHEMAS ==========
+     
 
       CartItem: {
         type: "object",
@@ -353,7 +353,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ========== CATEGORY SCHEMAS ==========
+    
 
       Category: {
         type: "object",
@@ -389,7 +389,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ========== STORE SCHEMAS ==========
+     
 
       Store: {
         type: "object",
@@ -438,7 +438,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ========== USER SCHEMAS ==========
+      
 
       User: {
         type: "object",
@@ -488,7 +488,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ========== COMMON SCHEMAS ==========
+      
 
       SuccessResponse: {
         type: "object",

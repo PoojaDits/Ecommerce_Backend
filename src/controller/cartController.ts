@@ -33,7 +33,7 @@ export const addCartItemHandler = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user!.id;
 
-    // ── FIX #5: Use Joi validator instead of weak manual checks ──
+   
     const { error, value } = addCartItemSchema.validate(req.body);
     if (error) {
       res.status(400).json({

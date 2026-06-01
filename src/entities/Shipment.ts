@@ -20,7 +20,7 @@ export class Shipment {
 
   @OneToMany(
     () => ShipmentTracking,
-    (tracking) => tracking.shipment // points to the 'shipment' property in ShipmentTracking
+    (tracking) => tracking.shipment 
   )
   shipment_trackings: ShipmentTracking[];
 }
