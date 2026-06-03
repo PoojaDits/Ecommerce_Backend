@@ -1,4 +1,3 @@
-
 import { AppDataSource } from "../config/dataSource";
 import { Cart } from "../entities/Cart";
 import { CartItem } from "../entities/CartItem";
@@ -63,8 +62,6 @@ export const addItemToCart = async (
       existingItem = item;
     }
   }
-
-  // ── FIX #6: Always check stock, including when updating existing items ──
   if (existingItem) {
     const newTotalQuantity = existingItem.quantity + quantity;
     if (newTotalQuantity > product.stock) {

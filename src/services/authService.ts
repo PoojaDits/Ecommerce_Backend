@@ -4,7 +4,7 @@ import { UserRole, OtpPurpose } from "../enums";
 import { createAndSendOtp, verifyOtp, consumeOtp } from "./otpService";
 import bcrypt from "bcrypt";
 import { MESSAGES } from "../constants/messages";
-import { IAuthResponse, IAuthUser, IAuthServiceResponse, AuthRequest } from "../interfaces/authInterface";
+import { IAuthResponse, IAuthUser, IAuthServiceResponse} from "../interfaces/authInterface";
 import jwt from "jsonwebtoken";
 import logger from "../config/logger";
 
@@ -221,7 +221,7 @@ export const changePassword = async (
 
   const isMatch = await bcrypt.compare(currentPassword, user.password);
   if (!isMatch)
-    // FIX #7: Use the correct specific error message instead of generic "Invalid Credentials"
+  
     throw new Error(MESSAGES.AUTH.CURRENT_PASSWORD_INCORRECT);
 
   const hashedPassword = await bcrypt.hash(newPassword, 10);

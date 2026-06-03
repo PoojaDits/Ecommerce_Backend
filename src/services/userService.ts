@@ -26,5 +26,6 @@ export const deleteUser = async (id: number): Promise<User> => {
     throw new Error(MESSAGES.USER.NOT_FOUND);
   }
   await userRepo.remove(user);
+  
   return user;
 };
