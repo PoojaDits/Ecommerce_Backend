@@ -1,17 +1,8 @@
 import { Request, Response } from "express";
-import {
-  createProduct,
-  getAllProducts,
-  getProductById,
-  updateProduct,
-  deleteProduct,
-} from "../services/productService";
-import {
-  createProductSchema,
-  updateProductSchema,
-} from "../validators/productValidator";
+import {createProduct,getAllProducts,getProductById,updateProduct,deleteProduct} from "../services/productService";
+import {createProductSchema,updateProductSchema} from "../validators/productValidator";
 import { MESSAGES } from "../constants/messages";
-
+import { buildFileUrl } from "../utils/fileUrl";
 export const createProductHandler = async (
   req: Request,
   res: Response
@@ -26,11 +17,9 @@ export const createProductHandler = async (
       });
       return;
     }
-
     if (req.file) {
-      value.image = "/uploads/products/" + req.file.filename;
-    }
-
+  value.image = buildFileUrl(req, req.file.filename);
+}
     const product = await createProduct(value);
     res.status(201).json({
       success: true,
@@ -112,7 +101,7 @@ export const updateProductHandler = async (
     }
 
     if (req.file) {
-      value.image = "/uploads/products/" + req.file.filename;
+      value.image = buildFileUrl(req, req.file.filename);
     }
 
     const updatedProduct = await updateProduct(id, value);

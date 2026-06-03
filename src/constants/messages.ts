@@ -143,4 +143,17 @@ export const MESSAGES = {
     ALREADY_EXISTS: "Product already exists.",
     ID_REQUIRED: "Valid product ID is required.",
   },
+
+    ADDRESS: {
+    CREATE_SUCCESS: "Address created successfully.",
+    CREATE_FAILED: "Failed to create address.",
+    UPDATE_SUCCESS: "Address updated successfully.",
+    UPDATE_FAILED: "Failed to update address.",
+    DELETE_SUCCESS: "Address deleted successfully.",
+    DELETE_FAILED: "Failed to delete address.",
+    GET_SUCCESS: "Addresses retrieved successfully.",
+    GET_FAILED: "Failed to retrieve addresses.",
+    NOT_FOUND: "Address not found.",
+    ID_REQUIRED: "Valid address ID is required.",
+  },
 };

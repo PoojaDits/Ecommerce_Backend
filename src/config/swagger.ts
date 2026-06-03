@@ -437,6 +437,50 @@ const swaggerDefinition = {
           },
         },
       },
+            Address: {
+        type: "object",
+        properties: {
+          id: { type: "integer", example: 1 },
+          street: { type: "string", example: "42 Market Street" },
+          city: { type: "string", example: "Mumbai" },
+          state: { type: "string", example: "Maharashtra" },
+          postalCode: { type: "string", example: "400001" },
+          country: { type: "string", example: "India" },
+          user: {
+            type: "object",
+            properties: {
+              id: { type: "integer", example: 1 },
+            },
+          },
+        },
+      },
+
+      AddressResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean", example: true },
+          message: {
+            type: "string",
+            example: "Address retrieved successfully.",
+          },
+          address: { $ref: "#/components/schemas/Address" },
+        },
+      },
+
+      AddressesListResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean", example: true },
+          message: {
+            type: "string",
+            example: "Addresses retrieved successfully.",
+          },
+          addresses: {
+            type: "array",
+            items: { $ref: "#/components/schemas/Address" },
+          },
+        },
+      },
 
       
 
