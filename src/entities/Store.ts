@@ -35,9 +35,8 @@ export class Store {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @OneToMany(() => Product, (product) => product.store)
-  products: Product[];
-
+ @OneToMany(() => Product, (product) => product.store, { cascade: true })
+    products: Product[];
 
 
 }

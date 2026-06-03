@@ -40,46 +40,7 @@ const router = Router();
  */
 router.get("/", getAllStoresHandler);
 
-/**
- * @swagger
- * /api/stores/user/{userId}:
- *   get:
- *     summary: Get all stores belonging to a user
- *     tags:
- *       - Stores
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: integer
- *         description: User ID
- *     responses:
- *       200:
- *         description: List of stores for the user
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Stores retrieved successfully.
- *                 stores:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Store'
- *       400:
- *         description: Valid user ID is required
- *       404:
- *         description: User not found
- *       500:
- *         description: Failed to retrieve stores
- */
-router.get("/user/:userId", getStoresByUserHandler);
+
 
 /**
  * @swagger

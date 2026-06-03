@@ -26,7 +26,7 @@ const swaggerDefinition = {
       },
     },
     schemas: {
-      // ========== AUTH SCHEMAS ==========
+    
 
       AuthResponse: {
         type: "object",

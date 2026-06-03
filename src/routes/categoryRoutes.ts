@@ -2,11 +2,10 @@ import { Router } from "express";
 import {
   createCategoryHandler,
   updateCategoryHandler,
-  updateCategoryByNameHandler,
-  deleteCategoryByNameHandler,
+ 
   getAllCategoriesHandler,
   getCategoryByIdHandler,
-  getCategoryByNameHandler,
+
   checkCategoryExistsHandler,
 } from "../controller/categoryController";
 
@@ -106,30 +105,6 @@ router.get("/:id", getCategoryByIdHandler);
  */
 router.get("/check/:name", checkCategoryExistsHandler);
 
-/**
- * @swagger
- * /api/categories/name/{name}:
- *   get:
- *     summary: Get a category by name
- *     tags:
- *       - Categories
- *     parameters:
- *       - in: path
- *         name: name
- *         required: true
- *         schema:
- *           type: string
- *         description: Category name
- *         example: electronics
- *     responses:
- *       200:
- *         description: Category retrieved successfully
- *       400:
- *         description: Category name is required
- *       404:
- *         description: Category not found
- */
-router.get("/name/:name", getCategoryByNameHandler);
 
 /**
  * @swagger
@@ -196,61 +171,8 @@ router.post("/", createCategoryHandler);
  */
 router.put("/:id", updateCategoryHandler);
 
-/**
- * @swagger
- * /api/categories/name/{name}:
- *   put:
- *     summary: Update a category by current name
- *     tags:
- *       - Categories
- *     parameters:
- *       - in: path
- *         name: name
- *         required: true
- *         schema:
- *           type: string
- *         description: Current category name
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: new gadgets
- *               description:
- *                 type: string
- *                 example: updated gadgets category
- *     responses:
- *       200:
- *         description: Category updated successfully
- *       400:
- *         description: Validation error, category not found, or category already exists
- */
-router.put("/name/:name", updateCategoryByNameHandler);
 
-/**
- * @swagger
- * /api/categories/name/{name}:
- *   delete:
- *     summary: Delete a category by name
- *     tags:
- *       - Categories
- *     parameters:
- *       - in: path
- *         name: name
- *         required: true
- *         schema:
- *           type: string
- *         description: Category name
- *     responses:
- *       200:
- *         description: Category deleted successfully
- *       400:
- *         description: Category name is required or category not found
- */
-router.delete("/name/:name", deleteCategoryByNameHandler);
+
+
 
 export default router;

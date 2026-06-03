@@ -64,58 +64,7 @@ export const updateCategory = async (
   return (await categoryRepo.save(category)) as ICategory;
 };
 
-export const updateCategoryByName = async (
-  currentName: string,
-  newName?: string,
-  description?: string
-): Promise<ICategory> => {
-  const normalizedCurrentName = currentName.trim();
 
-  const category = await categoryRepo.findOne({
-    where: { name: ILike(normalizedCurrentName) },
-  });
-
-  if (!category) {
-    throw new Error(MESSAGES.CATEGORY.NOT_FOUND);
-  }
-
-  if (newName !== undefined) {
-    const normalizedNewName = newName.trim();
-
-    const existingCategory = await categoryRepo.findOne({
-      where: { name: ILike(normalizedNewName) },
-    });
-
-    if (existingCategory && existingCategory.id !== category.id) {
-      throw new Error(MESSAGES.CATEGORY.ALREADY_EXISTS);
-    }
-
-    category.name = normalizedNewName;
-  }
-
-  if (description !== undefined) {
-    const normalizedDescription = description.trim();
-    category.description = normalizedDescription || null;
-  }
-
-  return (await categoryRepo.save(category)) as ICategory;
-};
-
-export const deleteCategoryByName = async (name: string): Promise<ICategory> => {
-  const normalizedName = name.trim();
-
-  const category = await categoryRepo.findOne({
-    where: { name: ILike(normalizedName) },
-  });
-
-  if (!category) {
-    throw new Error(MESSAGES.CATEGORY.NOT_FOUND);
-  }
-
-  await categoryRepo.remove(category);
-
-  return category as ICategory;
-};
 
 export const deleteCategoryById = async (id: number): Promise<ICategory> => {
   const category = await categoryRepo.findOne({
@@ -148,19 +97,6 @@ export const getCategoryById = async (id: number): Promise<ICategory> => {
   return category as ICategory;
 };
 
-export const getCategoryByName = async (name: string): Promise<ICategory> => {
-  const normalizedName = name.trim();
-
-  const category = await categoryRepo.findOne({
-    where: { name: ILike(normalizedName) },
-  });
-
-  if (!category) {
-    throw new Error(MESSAGES.CATEGORY.NOT_FOUND);
-  }
-
-  return category as ICategory;
-};
 
 export const checkCategoryExists = async (
   name: string

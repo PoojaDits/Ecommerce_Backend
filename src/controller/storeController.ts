@@ -5,7 +5,6 @@ import {
   deleteStoreById,
   getAllStores,
   getStoreById,
-  getStoresByUser,
 } from "../services/storeService";
 import { createStoreSchema, updateStoreSchema } from "../validators/storeValidator";
 import { MESSAGES } from "../constants/messages";
@@ -208,38 +207,3 @@ export const getStoreByIdHandler = async (
 };
 
 
-
-export const getStoresByUserHandler = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const userId = Number(req.params.userId);
-
-    if (!Number.isInteger(userId) || userId <= 0) {
-      res.status(400).json({
-        success: false,
-        message: MESSAGES.USER.ID_REQUIRED,
-      });
-      return;
-    }
-
-    const stores = await getStoresByUser(userId);
-
-    res.status(200).json({
-      success: true,
-      message: MESSAGES.STORE.GET_SUCCESS,
-      stores,
-    });
-  } catch (error: unknown) {
-    const message =
-      error instanceof Error ? error.message : MESSAGES.STORE.GET_FAILED;
-
-    const statusCode = message === MESSAGES.USER.NOT_FOUND ? 404 : 500;
-
-    res.status(statusCode).json({
-      success: false,
-      message,
-    });
-  }
-};
