@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {createAddressHandler} from "../controller/addressController";
+import {createAddressHandler,updateAddressHandler} from "../controller/addressController";
 
 const router = Router();
 
@@ -55,3 +55,51 @@ const router = Router();
  *         description: User not found
  */
 router.post("/", createAddressHandler);
+
+/**
+ * @swagger
+ * /api/addresses/{id}:
+ *   put:
+ *     summary: Update an address by ID
+ *     tags:
+ *       - Addresses
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Address ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               street:
+ *                 type: string
+ *                 example: 99 New Road
+ *               city:
+ *                 type: string
+ *                 example: Delhi
+ *               state:
+ *                 type: string
+ *                 example: Delhi
+ *               postalCode:
+ *                 type: string
+ *                 example: "110001"
+ *               country:
+ *                 type: string
+ *                 example: India
+ *     responses:
+ *       200:
+ *         description: Address updated successfully
+ *       400:
+ *         description: Validation error
+ *       404:
+ *         description: Address not found
+
+ */
+router.put("/:id", updateAddressHandler);
+export default router;
