@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import {
   createCategory,
   updateCategory,
-
+  deleteCategoryById,
   getAllCategories,
   getCategoryById,
   checkCategoryExists,
@@ -89,6 +89,48 @@ export const updateCategoryHandler = async (
     });
   }
 };
+
+export const deleteCategoryHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const categoryId = Number(req.params.id);
+
+    if (!Number.isInteger(categoryId) || categoryId <= 0) {
+      res.status(400).json({
+        success: false,
+        message: "Valid category id is required.",
+      });
+      return;
+    }
+
+    const category = await deleteCategoryById(categoryId);
+
+    res.status(200).json({
+      success: true,
+      message: "Category deleted successfully.",
+      category,
+    });
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to delete category";
+
+    if (message === MESSAGES.CATEGORY.NOT_FOUND) {
+      res.status(404).json({
+        success: false,
+        message,
+      });
+      return;
+    }
+
+    res.status(500).json({
+      success: false,
+      message,
+    });
+  }
+};
+
 
 
 

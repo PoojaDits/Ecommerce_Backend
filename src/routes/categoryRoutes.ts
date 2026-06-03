@@ -2,10 +2,9 @@ import { Router } from "express";
 import {
   createCategoryHandler,
   updateCategoryHandler,
- 
+  deleteCategoryHandler,
   getAllCategoriesHandler,
   getCategoryByIdHandler,
-
   checkCategoryExistsHandler,
 } from "../controller/categoryController";
 
@@ -23,32 +22,33 @@ const router = Router();
  *         description: List of all categories
  *       500:
  *         description: Failed to retrieve categories
- */
-router.get("/", getAllCategoriesHandler);
-
-/**
- * @swagger
- * /api/categories/{id}:
- *   get:
- *     summary: Get a category by ID
+ *   post:
+ *     summary: Create a new category
  *     tags:
  *       - Categories
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: Category ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Electronics
+ *               description:
+ *                 type: string
+ *                 example: Electronic items and gadgets
  *     responses:
- *       200:
- *         description: Category retrieved successfully
+ *       201:
+ *         description: Category created successfully
  *       400:
- *         description: Valid category id is required
- *       404:
- *         description: Category not found
+ *         description: Validation error or category already exists
  */
-router.get("/:id", getCategoryByIdHandler);
+router.get("/", getAllCategoriesHandler);
+router.post("/", createCategoryHandler);
 
 /**
  * @swagger
@@ -105,40 +105,27 @@ router.get("/:id", getCategoryByIdHandler);
  */
 router.get("/check/:name", checkCategoryExistsHandler);
 
-
-/**
- * @swagger
- * /api/categories:
- *   post:
- *     summary: Create a new category
- *     tags:
- *       - Categories
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *             properties:
- *               name:
- *                 type: string
- *                 example: Electronics
- *               description:
- *                 type: string
- *                 example: Electronic items and gadgets
- *     responses:
- *       201:
- *         description: Category created successfully
- *       400:
- *         description: Validation error or category already exists
- */
-router.post("/", createCategoryHandler);
-
 /**
  * @swagger
  * /api/categories/{id}:
+ *   get:
+ *     summary: Get a category by ID
+ *     tags:
+ *       - Categories
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Category ID
+ *     responses:
+ *       200:
+ *         description: Category retrieved successfully
+ *       400:
+ *         description: Valid category id is required
+ *       404:
+ *         description: Category not found
  *   put:
  *     summary: Update a category
  *     tags:
@@ -168,11 +155,40 @@ router.post("/", createCategoryHandler);
  *         description: Category updated successfully
  *       400:
  *         description: Validation error, category not found, or category already exists
+ *   delete:
+ *     summary: Delete a category by ID
+ *     tags:
+ *       - Categories
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Category ID
+ *     responses:
+ *       200:
+ *         description: Category deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Category deleted successfully.
+ *                 category:
+ *                   $ref: '#/components/schemas/Category'
+ *       400:
+ *         description: Valid category id is required
+ *       404:
+ *         description: Category not found
  */
+router.get("/:id", getCategoryByIdHandler);
 router.put("/:id", updateCategoryHandler);
-
-
-
-
+router.delete("/:id", deleteCategoryHandler);
 
 export default router;
