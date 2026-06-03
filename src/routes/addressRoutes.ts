@@ -1,5 +1,8 @@
 import { Router } from "express";
-import {createAddressHandler,updateAddressHandler} from "../controller/addressController";
+import {
+  createAddressHandler,
+  updateAddressHandler,
+} from "../controller/addressController";
 
 const router = Router();
 
@@ -95,11 +98,15 @@ router.post("/", createAddressHandler);
  *     responses:
  *       200:
  *         description: Address updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AddressResponse'
  *       400:
  *         description: Validation error
  *       404:
  *         description: Address not found
-
  */
 router.put("/:id", updateAddressHandler);
+
 export default router;

@@ -59,9 +59,6 @@ export const createStoreHandler = async (
     });
   }
 };
-
-
-
 export const updateStoreHandler = async (
   req: Request,
   res: Response
@@ -168,8 +165,6 @@ export const getAllStoresHandler = async (
     });
   }
 };
-
-
 
 export const getStoreByIdHandler = async (
   req: Request,

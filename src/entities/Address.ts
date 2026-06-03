@@ -2,8 +2,6 @@ import { Column, Entity,JoinColumn,ManyToOne,OneToMany,PrimaryGeneratedColumn } 
 import { User } from "./User";
 import { Order } from "./Order";
 
-
-
 @Entity("addresses")
 export class Address {
   @PrimaryGeneratedColumn("increment")

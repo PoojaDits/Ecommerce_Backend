@@ -17,32 +17,23 @@ export const findOrCreateCart = async (userId: number) => {
     where: { user: { id: userId } },
     relations: ["items", "items.product"], 
   });
-
- 
   if (!cart) {
     const user = await userRepo.findOne({ where: { id: userId } });
     if (!user) {
       throw new Error("User not found.");
     }
-
     cart = new Cart();
     cart.user = user;
     cart.items = [];
     await cartRepo.save(cart);
   }
-
   return cart;
 };
-
-
 
 export const getCart = async (userId: number) => {
   const cart = await findOrCreateCart(userId);
   return cart;
 };
-
-
-
 export const addItemToCart = async (
   userId: number,
   productId: number,
@@ -93,8 +84,6 @@ export const updateCartItem = async (
   quantity: number
 ) => {
   const cart = await findOrCreateCart(userId);
-
-
   const item = await cartItemRepo.findOne({
     where: { id: itemId, cart: { id: cart.id } },
     relations: ["product"],

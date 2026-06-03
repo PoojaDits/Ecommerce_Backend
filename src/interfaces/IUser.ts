@@ -37,9 +37,6 @@ export interface IUpdateUser {
   role?: UserRole;
   isActive?: boolean;
 }
-
-
-
 export interface IUserResponse {
   id: number;
   uuid: string;

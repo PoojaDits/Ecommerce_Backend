@@ -98,6 +98,7 @@ export const getCategoryById = async (id: number): Promise<ICategory> => {
 };
 
 
+
 export const checkCategoryExists = async (
   name: string
 ): Promise<ICategoryCheck> => {

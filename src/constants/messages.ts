@@ -144,7 +144,7 @@ export const MESSAGES = {
     ID_REQUIRED: "Valid product ID is required.",
   },
 
-    ADDRESS: {
+  ADDRESS: {
     CREATE_SUCCESS: "Address created successfully.",
     CREATE_FAILED: "Failed to create address.",
     UPDATE_SUCCESS: "Address updated successfully.",

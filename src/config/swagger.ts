@@ -437,7 +437,7 @@ const swaggerDefinition = {
           },
         },
       },
-            Address: {
+      Address: {
         type: "object",
         properties: {
           id: { type: "integer", example: 1 },
