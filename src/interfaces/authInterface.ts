@@ -29,4 +29,3 @@ export interface IAuthServiceResponse {
   message: string;
   timestamp: string;
 }
-

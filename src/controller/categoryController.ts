@@ -131,10 +131,6 @@ export const deleteCategoryHandler = async (
   }
 };
 
-
-
-
-
 export const getAllCategoriesHandler = async (
   _req: Request,
   res: Response
@@ -197,7 +193,6 @@ export const getCategoryByIdHandler = async (
     });
   }
 };
-
 
 export const checkCategoryExistsHandler = async (
   req: Request,
