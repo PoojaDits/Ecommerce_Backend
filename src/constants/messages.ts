@@ -144,6 +144,25 @@ export const MESSAGES = {
     ID_REQUIRED: "Valid product ID is required.",
   },
 
+  ORDER: {
+    CHECKOUT_SUCCESS: "Order placed successfully.",
+    CHECKOUT_FAILED: "Failed to place order.",
+    GET_SUCCESS: "Orders retrieved successfully.",
+    GET_FAILED: "Failed to retrieve orders.",
+    GET_ONE_SUCCESS: "Order retrieved successfully.",
+    GET_ONE_FAILED: "Failed to retrieve order.",
+    NOT_FOUND: "Order not found.",
+    ID_REQUIRED: "Valid order ID is required.",
+    EMPTY_CART: "Cannot checkout with an empty cart.",
+    ADDRESS_REQUIRED: "Shipping address is required.",
+    ADDRESS_NOT_OWNED: "The selected address does not belong to the user.",
+    PRODUCT_UNAVAILABLE: (name: string) =>
+      `Product "${name}" is no longer available.`,
+    INSUFFICIENT_STOCK: (name: string) =>
+      `Insufficient stock for product "${name}".`,
+    NOT_OWNED: "You do not have access to this order.",
+  },
+
   ADDRESS: {
     CREATE_SUCCESS: "Address created successfully.",
     CREATE_FAILED: "Failed to create address.",

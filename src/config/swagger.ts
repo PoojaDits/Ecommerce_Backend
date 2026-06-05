@@ -482,6 +482,77 @@ const swaggerDefinition = {
         },
       },
 
+      OrderItem: {
+        type: "object",
+        properties: {
+          id: { type: "integer", example: 10 },
+          productId: { type: "integer", example: 1, nullable: true },
+          productName: { type: "string", example: "Sample Product" },
+          quantity: { type: "integer", example: 2 },
+          price: {
+            type: "number",
+            example: 19.99,
+            description: "Price snapshot at the time of order",
+          },
+          subtotal: { type: "number", example: 39.98 },
+        },
+      },
+
+      Order: {
+        type: "object",
+        properties: {
+          id: { type: "integer", example: 1 },
+          totalAmount: { type: "number", example: 59.97 },
+          address: { $ref: "#/components/schemas/Address" },
+          orderItems: {
+            type: "array",
+            items: { $ref: "#/components/schemas/OrderItem" },
+          },
+          created_at: { type: "string", format: "date-time" },
+          updated_at: { type: "string", format: "date-time" },
+        },
+      },
+
+      CheckoutRequest: {
+        type: "object",
+        required: ["addressId"],
+        properties: {
+          addressId: {
+            type: "integer",
+            example: 1,
+            description:
+              "ID of an address owned by the authenticated user.",
+          },
+        },
+      },
+
+      OrderResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean", example: true },
+          message: {
+            type: "string",
+            example: "Order placed successfully.",
+          },
+          order: { $ref: "#/components/schemas/Order" },
+        },
+      },
+
+      OrdersListResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean", example: true },
+          message: {
+            type: "string",
+            example: "Orders retrieved successfully.",
+          },
+          orders: {
+            type: "array",
+            items: { $ref: "#/components/schemas/Order" },
+          },
+        },
+      },
+
       
 
       User: {
