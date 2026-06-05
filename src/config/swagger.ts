@@ -495,6 +495,11 @@ const swaggerDefinition = {
             description: "Price snapshot at the time of order",
           },
           subtotal: { type: "number", example: 39.98 },
+          is_active: {
+            type: "boolean",
+            example: true,
+            description: "false means this item has been cancelled",
+          },
         },
       },
 

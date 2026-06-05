@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../interfaces/authInterface";
-import {checkout,getMyOrders,getOrderById,} from "../services/orderService";
+import {checkout,getMyOrders,getOrderById,cancelOrder, cancelOrderItem,} from "../services/orderService";
 import { checkoutSchema } from "../validators/orderValidator";
 import { MESSAGES } from "../constants/messages";
 
@@ -27,6 +27,7 @@ const serializeOrder = (order: any) => {
       quantity: it.quantity,
       price: Number(it.price),
       subtotal: Number(it.price) * it.quantity,
+      is_active: it.is_active !== false,
     })),
   };
 };
@@ -116,6 +117,89 @@ export const getOrderByIdHandler = async (
     let statusCode = 400;
     if (message === MESSAGES.ORDER.NOT_FOUND) statusCode = 404;
     else if (message === MESSAGES.ORDER.NOT_OWNED) statusCode = 403;
+    res.status(statusCode).json({ success: false, message });
+  }
+};
+
+export const cancelOrderHandler = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.user!.id;
+    const orderId = Number(req.params.id);
+
+    if (!Number.isInteger(orderId) || orderId <= 0) {
+      res.status(400).json({
+        success: false,
+        message: MESSAGES.ORDER.ID_REQUIRED,
+      });
+      return;
+    }
+
+    const order = await cancelOrder(userId, orderId);
+    res.status(200).json({
+      success: true,
+      message: MESSAGES.ORDER.CANCEL_SUCCESS,
+      order: serializeOrder(order),
+    });
+  } catch (error: any) {
+    const message = error?.message || MESSAGES.ORDER.CANCEL_FAILED;
+    let statusCode = 400;
+    if (message === MESSAGES.ORDER.NOT_FOUND) statusCode = 404;
+    else if (message === MESSAGES.ORDER.NOT_OWNED) statusCode = 403;
+    else if (message === MESSAGES.ORDER.CANNOT_CANCEL_SHIPPED) statusCode = 409;
+    else if (message === MESSAGES.ORDER.ALREADY_CANCELLED) statusCode = 409;
+    res.status(statusCode).json({ success: false, message });
+  }
+};
+
+export const cancelOrderItemHandler = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.user!.id;
+    const orderId = Number(req.params.id);
+    const itemId = Number(req.params.itemId);
+
+    if (!Number.isInteger(orderId) || orderId <= 0) {
+      res.status(400).json({
+        success: false,
+        message: MESSAGES.ORDER.ID_REQUIRED,
+      });
+      return;
+    }
+    if (!Number.isInteger(itemId) || itemId <= 0) {
+      res.status(400).json({
+        success: false,
+        message: MESSAGES.ORDER.ITEM_ID_REQUIRED,
+      });
+      return;
+    }
+
+    const order = await cancelOrderItem(userId, orderId, itemId);
+    res.status(200).json({
+      success: true,
+      message: MESSAGES.ORDER.ITEM_CANCEL_SUCCESS,
+      order: serializeOrder(order),
+    });
+  } catch (error: any) {
+    const message = error?.message || MESSAGES.ORDER.ITEM_CANCEL_FAILED;
+    let statusCode = 400;
+    if (
+      message === MESSAGES.ORDER.NOT_FOUND ||
+      message === MESSAGES.ORDER.ITEM_NOT_FOUND
+    ) {
+      statusCode = 404;
+    } else if (message === MESSAGES.ORDER.NOT_OWNED) {
+      statusCode = 403;
+    } else if (
+      message === MESSAGES.ORDER.CANNOT_CANCEL_SHIPPED ||
+      message === MESSAGES.ORDER.ITEM_ALREADY_CANCELLED
+    ) {
+      statusCode = 409;
+    }
     res.status(statusCode).json({ success: false, message });
   }
 };

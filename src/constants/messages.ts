@@ -161,6 +161,16 @@ export const MESSAGES = {
     INSUFFICIENT_STOCK: (name: string) =>
       `Insufficient stock for product "${name}".`,
     NOT_OWNED: "You do not have access to this order.",
+    CANCEL_SUCCESS: "Order cancelled successfully.",
+    CANCEL_FAILED: "Failed to cancel order.",
+    ITEM_CANCEL_SUCCESS: "Order item cancelled successfully.",
+    ITEM_CANCEL_FAILED: "Failed to cancel order item.",
+    ITEM_NOT_FOUND: "Order item not found.",
+    ITEM_ID_REQUIRED: "Valid order item ID is required.",
+    ALREADY_CANCELLED: "This order has already been cancelled.",
+    ITEM_ALREADY_CANCELLED: "This order item has already been cancelled.",
+    CANNOT_CANCEL_SHIPPED:
+      "This order can no longer be cancelled because it has already been shipped.",
   },
 
   ADDRESS: {

@@ -39,3 +39,9 @@ export enum OtpPurpose {
   VERIFY_EMAIL = "verify_email",
   FORGOT_PASSWORD = "forgot_password"
 }
+
+export enum AddressType {
+  HOME = "home",
+  WORK = "work",
+  OTHER = "other",
+}

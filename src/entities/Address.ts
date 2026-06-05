@@ -1,7 +1,7 @@
 import { Column, Entity,JoinColumn,ManyToOne,OneToMany,PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
 import { Order } from "./Order";
-
+import { AddressType } from "../enums";
 @Entity("addresses")
 export class Address {
   @PrimaryGeneratedColumn("increment")
@@ -22,6 +22,15 @@ export class Address {
   @Column({type:"varchar"})
   country: string;              
   
+  @Column({
+  type: "enum",
+  enum: AddressType,
+  default: AddressType.HOME,
+})
+type: AddressType;
+
+@Column({ type: "boolean", default: false })
+isDefault: boolean;
 @ManyToOne(()=> User,(user)=>
     user.address)
   @JoinColumn({ name: "user_id" })

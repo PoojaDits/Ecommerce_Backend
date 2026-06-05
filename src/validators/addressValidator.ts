@@ -41,6 +41,15 @@ export const createAddressSchema = Joi.object({
     "number.positive": "User ID must be a positive number.",
     "any.required": "User ID is required.",
   }),
+  type: Joi.string()
+    .valid("home", "work", "other")
+    .default("home")
+    .messages({
+      "any.only": "Address type must be one of: home, work, other.",
+    }),
+  isDefault: Joi.boolean().default(false).messages({
+    "boolean.base": "isDefault must be a boolean.",
+  }),
 });
 
 export const updateAddressSchema = Joi.object({
@@ -72,6 +81,15 @@ export const updateAddressSchema = Joi.object({
     "string.empty": "Country cannot be empty.",
     "string.min": "Country must be at least 2 characters.",
     "string.max": "Country must not exceed 100 characters.",
+  }),
+  type: Joi.string()
+    .valid("home", "work", "other")
+    .optional()
+    .messages({
+      "any.only": "Address type must be one of: home, work, other.",
+    }),
+  isDefault: Joi.boolean().optional().messages({
+    "boolean.base": "isDefault must be a boolean.",
   }),
 })
   .min(1)

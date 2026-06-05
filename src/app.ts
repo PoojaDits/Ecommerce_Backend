@@ -13,7 +13,7 @@ import storeRoutes from "./routes/storeRoutes";
 import productRoutes from "./routes/productRoutes";
 import cartRoutes from "./routes/cartRoutes";
 import addressRoutes from "./routes/addressRoutes";
-
+import orderRoutes from "./routes/orderRoutes";
 dotenv.config();
 
 const app = express();
@@ -37,7 +37,7 @@ app.use("/api/stores", storeRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/addresses", addressRoutes);
-
+app.use("/api/orders", orderRoutes);
 app.get("/back", (_req: Request, res: Response) => {
   logger.info("Health check endpoint called");
   res.json({
