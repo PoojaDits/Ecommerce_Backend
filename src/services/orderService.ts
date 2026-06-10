@@ -10,29 +10,9 @@ import { Shipment } from "../entities/Shipment";
 import { ShipmentTracking } from "../entities/ShipmentTracking";
 import { ReturnStatus } from "../entities/ReturnStatus";
 import { MESSAGES } from "../constants/messages";
-import {
-  ReturnState,
-  OrderLifecycle,
-} from "../enums";
-import {
-  ORDER_LIFECYCLE_STAGES,
-  isCancellationAllowed,
-} from "../utils/orderLifecycle";
+import {ReturnState,OrderLifecycle,} from "../enums";
+import {ORDER_LIFECYCLE_STAGES,isCancellationAllowed,} from "../utils/orderLifecycle";
 
-/**
- * Place an order from the user's current cart.
- * - Validates the user has a non-empty cart.
- * - Validates that the chosen address belongs to the user.
- * - Re-checks stock for each cart item and decrements product stock.
- * - Snapshots productName + price into OrderItem rows.
- * - Creates the Order.
- * - Clears the cart.
- *
- * NOTE: Order lifecycle status is tracked separately via ShipmentTracking,
- * so the Order entity itself does not carry a status column.
- *
- * All operations run in a single DB transaction.
- */
 export const checkout = async (
   userId: number,
   addressId: number
@@ -162,29 +142,19 @@ export const getOrderById = async (
   return order;
 };
 
-// ──────────────────────────────────────────────
-//  Order lifecycle helpers
-// ──────────────────────────────────────────────
 
-/**
- * Derive the overall OrderLifecycle from an order's shipment tracking data.
- *
- * - No shipments                        → PENDING
- * - All shipments still in pre-dispatch  → PACKED  (label_created / packed)
- * - Any shipment has been dispatched     → the most advanced stage found
- */
 export const deriveOrderLifecycle = (order: Order): OrderLifecycle => {
   if (!order.shipments || order.shipments.length === 0) {
     return OrderLifecycle.PENDING;
   }
 
-  let highestStageIndex = 0; // PENDING
+  let highestStageIndex = 0; 
 
   for (const shipment of order.shipments) {
     const trackings = shipment.shipment_trackings;
     if (!trackings || trackings.length === 0) continue;
 
-    // The last tracking entry is the current status of this shipment
+
     const latest = trackings.reduce((a, b) =>
       new Date(a.updated_at) > new Date(b.updated_at) ? a : b
     );
@@ -200,13 +170,7 @@ export const deriveOrderLifecycle = (order: Order): OrderLifecycle => {
   return ORDER_LIFECYCLE_STAGES[highestStageIndex] || OrderLifecycle.PENDING;
 };
 
-/**
- * Cancel an entire order.
- * - Marks every active OrderItem as inactive.
- * - Restores product stock for each cancelled item.
- * - Sets totalAmount to 0.
- * - Allowed only if the order lifecycle is before SHIPPED.
- */
+
 export const cancelOrder = async (
   userId: number,
   orderId: number
@@ -231,10 +195,9 @@ export const cancelOrder = async (
     if (!order.user || order.user.id !== userId)
       throw new Error(MESSAGES.ORDER.NOT_OWNED);
 
-    // Derive the lifecycle and check if cancellation is allowed
+    
     const lifecycle = deriveOrderLifecycle(order);
     if (!isCancellationAllowed(lifecycle)) {
-      // Give a meaningful message based on current stage
       if (lifecycle === OrderLifecycle.SHIPPED || lifecycle === OrderLifecycle.OUT_FOR_DELIVERY) {
         throw new Error(MESSAGES.ORDER.CANNOT_CANCEL_SHIPPED);
       }
@@ -243,15 +206,12 @@ export const cancelOrder = async (
       }
       throw new Error(MESSAGES.ORDER.CANNOT_CANCEL_SHIPPED);
     }
-
-    // If every item is already inactive, order is already cancelled
     const allInactive = order.orderItems.every((item) => !item.is_active);
     if (allInactive) throw new Error(MESSAGES.ORDER.ALREADY_CANCELLED);
 
     for (const item of order.orderItems) {
       if (item.is_active) {
         item.is_active = false;
-        // Restore product stock
         if (item.product) {
           const product = await productRepo.findOne({
             where: { id: item.product.id },
@@ -276,12 +236,6 @@ export const cancelOrder = async (
   });
 };
 
-/**
- * Cancel a single item within an order.
- * - Marks that item as inactive, restores its stock.
- * - Recalculates the order total from remaining active items.
- * - Allowed only if the order lifecycle is before SHIPPED.
- */
 export const cancelOrderItem = async (
   userId: number,
   orderId: number,
@@ -307,7 +261,7 @@ export const cancelOrderItem = async (
     if (!order.user || order.user.id !== userId)
       throw new Error(MESSAGES.ORDER.NOT_OWNED);
 
-    // Derive the lifecycle and check if cancellation is allowed
+  
     const lifecycle = deriveOrderLifecycle(order);
     if (!isCancellationAllowed(lifecycle)) {
       if (lifecycle === OrderLifecycle.SHIPPED || lifecycle === OrderLifecycle.OUT_FOR_DELIVERY) {
@@ -324,7 +278,6 @@ export const cancelOrderItem = async (
     if (!targetItem.is_active)
       throw new Error(MESSAGES.ORDER.ITEM_ALREADY_CANCELLED);
 
-    // Cancel the item and restore stock
     targetItem.is_active = false;
     if (targetItem.product) {
       const product = await productRepo.findOne({
@@ -337,7 +290,6 @@ export const cancelOrderItem = async (
     }
     await orderItemRepo.save(targetItem);
 
-    // Recalculate total from remaining active items
     const newTotal = order.orderItems
       .filter((oi) => oi.is_active)
       .reduce((sum, oi) => sum + Number(oi.price) * oi.quantity, 0);
@@ -352,13 +304,7 @@ export const cancelOrderItem = async (
   });
 };
 
-// ──────────────────────────────────────────────
-//  Shipment & Return helpers (full-flow extras)
-// ──────────────────────────────────────────────
 
-/**
- * Create a shipment for an order (admin/vendor operation).
- */
 export const createShipment = async (
   orderId: number,
   carrier: string,
@@ -381,7 +327,6 @@ export const createShipment = async (
     shipment.order = order;
     const saved = await shipmentRepo.save(shipment);
 
-    // Create initial tracking entry
     const tracking = new ShipmentTracking();
     tracking.status = OrderLifecycle.PACKED;
     tracking.location = "Shipper facility";
@@ -392,9 +337,6 @@ export const createShipment = async (
   });
 };
 
-/**
- * Initiate a return request for an order item.
- */
 export const requestReturn = async (
   userId: number,
   orderId: number,

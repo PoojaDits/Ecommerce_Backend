@@ -1,11 +1,5 @@
 import { Router } from "express";
-import {
-  createProductHandler,
-  getAllProductsHandler,
-  getProductByIdHandler,
-  updateProductHandler,
-  deleteProductHandler,
-} from "../controller/productController";
+import {createProductHandler,getAllProductsHandler,getProductByIdHandler,updateProductHandler,deleteProductHandler,} from "../controller/productController";
 import authenticateUser from "../middleware/auth.Middleware";
 import upload from "../middleware/upload";
 

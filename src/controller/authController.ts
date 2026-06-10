@@ -1,24 +1,6 @@
 import { Request, Response } from "express";
-import {
-  initiateRegistration,
-  completeRegistration,
-  resendRegistrationOtp,
-  loginUser,
-  forgotPassword,
-  resetPassword,
-  changePassword,
-} from "../services/authService";
-
-
-import {
-  loginSchema,
-  registerSchema,
-  resendOtpSchema,
-  verifyOtpSchema,
-  forgotPasswordSchema,
-  resetPasswordSchema,
-  changePasswordSchema,
-} from "../validators/authValidator";
+import {initiateRegistration,completeRegistration,resendRegistrationOtp,loginUser,forgotPassword,resetPassword,changePassword,} from "../services/authService";
+import {loginSchema,registerSchema,resendOtpSchema,verifyOtpSchema,forgotPasswordSchema,resetPasswordSchema,changePasswordSchema,} from "../validators/authValidator";
 import { MESSAGES } from "../constants/messages";
 import { IAuthResponse, AuthRequest } from "../interfaces/authInterface";
 import logger from "../config/logger";

@@ -26,22 +26,9 @@ export const createStoreHandler = async (
       return;
     }
 
-    const {
-      storeName,
-      storeDescription,
-      storeLocation,
-      storeContact,
-      storeEmail,
-      userId,
-    } = value;
+    const {storeName,storeDescription,storeLocation,storeContact,storeEmail,userId,} = value;
 
-    const store = await createStore(
-      storeName,
-      storeLocation,
-      storeEmail,
-      userId,
-      storeDescription,
-      storeContact
+    const store = await createStore(storeName,storeLocation,storeEmail,userId,storeDescription,storeContact
     );
 
     res.status(201).json({
@@ -140,8 +127,6 @@ export const deleteStoreHandler = async (
     });
   }
 };
-
-
 
 export const getAllStoresHandler = async (
   _req: Request,

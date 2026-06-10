@@ -9,8 +9,6 @@ const cartItemRepo = AppDataSource.getRepository(CartItem);
 const userRepo = AppDataSource.getRepository(User);
 const productRepo = AppDataSource.getRepository(Product);
 
-
-
 export const findOrCreateCart = async (userId: number) => {
  
   let cart = await cartRepo.findOne({
@@ -75,8 +73,6 @@ export const addItemToCart = async (
  
   return await findOrCreateCart(userId);
 };
-
-
 
 export const updateCartItem = async (
   userId: number,

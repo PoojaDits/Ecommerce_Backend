@@ -27,7 +27,7 @@ const swaggerDefinition = {
     },
     schemas: {
     
-      // ── Auth ──────────────────────────────────────────────────
+      //Auth
 
       AuthResponse: {
         type: "object",
@@ -216,7 +216,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ── Products ──────────────────────────────────────────────
+      //Products
 
       ProductsListResponse: {
         type: "object",
@@ -290,7 +290,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ── Cart ──────────────────────────────────────────────────
+      //Cart
 
       CartItem: {
         type: "object",
@@ -354,7 +354,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ── Categories ────────────────────────────────────────────
+      //Categories
 
       Category: {
         type: "object",
@@ -390,7 +390,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ── Stores ────────────────────────────────────────────────
+      //Stores
 
       Store: {
         type: "object",
@@ -439,7 +439,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ── Address ───────────────────────────────────────────────
+      //Address
 
       Address: {
         type: "object",
@@ -486,7 +486,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ── Orders ────────────────────────────────────────────────
+      //Orders
 
       OrderItem: {
         type: "object",
@@ -626,7 +626,7 @@ const swaggerDefinition = {
         },
       },
 
-      // ── Users ──────────────────────────────────────────────────
+      //Users
 
       User: {
         type: "object",
@@ -675,8 +675,6 @@ const swaggerDefinition = {
           },
         },
       },
-
-      // ── Shared ─────────────────────────────────────────────────
 
       SuccessResponse: {
         type: "object",

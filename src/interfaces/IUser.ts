@@ -13,9 +13,6 @@ export interface IUser {
   createdAt: Date;
   updatedAt: Date;
 }
-
-
-
 export interface IRegisterUser {
   firstName: string;
   lastName: string;

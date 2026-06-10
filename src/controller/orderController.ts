@@ -1,16 +1,7 @@
 import { isCancellationAllowed } from "../utils/orderLifecycle";
 import { Response } from "express";
 import { AuthRequest } from "../interfaces/authInterface";
-import {
-  checkout,
-  getMyOrders,
-  getOrderById,
-  cancelOrder,
-  cancelOrderItem,
-  createShipment,
-  requestReturn,
-  deriveOrderLifecycle,
-} from "../services/orderService";
+import {checkout,getMyOrders,getOrderById,cancelOrder,cancelOrderItem,createShipment,requestReturn,deriveOrderLifecycle,} from "../services/orderService";
 import { checkoutSchema } from "../validators/orderValidator";
 import { MESSAGES } from "../constants/messages";
 
@@ -170,8 +161,6 @@ export const cancelOrderHandler = async (
   }
 };
 
-// ── Shipment handler (admin/vendor) ────────────────────────────────
-
 export const createShipmentHandler = async (
   req: AuthRequest,
   res: Response
@@ -208,8 +197,6 @@ export const createShipmentHandler = async (
     res.status(statusCode).json({ success: false, message });
   }
 };
-
-// ── Return request handler (customer) ─────────────────────────────
 
 export const requestReturnHandler = async (
   req: AuthRequest,

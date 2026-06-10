@@ -1,12 +1,5 @@
 import { Router } from "express";
-import {
-  createCategoryHandler,
-  updateCategoryHandler,
-  deleteCategoryHandler,
-  getAllCategoriesHandler,
-  getCategoryByIdHandler,
-  checkCategoryExistsHandler,
-} from "../controller/categoryController";
+import { createCategoryHandler, updateCategoryHandler, deleteCategoryHandler, getAllCategoriesHandler, getCategoryByIdHandler, checkCategoryExistsHandler,} from "../controller/categoryController";
 import authenticateUser from "../middleware/auth.Middleware";
 import authorizeRoles from "../middleware/roleGuard";
 

@@ -1,14 +1,5 @@
 import { Router } from "express";
-import {
- registerInitiate,
- registerVerifyOtp,
- resendOtp,
- login,
- handleForgotPassword,
- handleResetPassword,
- handleChangePassword,
- logout                                
-} from "../controller/authController";
+import {registerInitiate,registerVerifyOtp,resendOtp,login,handleForgotPassword,handleResetPassword,handleChangePassword,logout} from "../controller/authController";
 import authenticateUser from "../middleware/auth.Middleware";
 
 const router = Router();

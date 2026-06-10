@@ -1,12 +1,5 @@
 import { Request, Response } from "express";
-import {
-  createCategory,
-  updateCategory,
-  deleteCategoryById,
-  getAllCategories,
-  getCategoryById,
-  checkCategoryExists,
-} from "../services/categoryService";
+import {createCategory,updateCategory,deleteCategoryById,getAllCategories,getCategoryById,checkCategoryExists,} from "../services/categoryService";
 import { createCategorySchema, updateCategorySchema } from "../validators/categoryValidator";
 import { MESSAGES } from "../constants/messages";
 

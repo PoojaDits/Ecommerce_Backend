@@ -1,15 +1,7 @@
 import { Router } from "express";
 import authenticateUser from "../middleware/auth.Middleware";
 import authorizeRoles from "../middleware/roleGuard";
-import {
-  checkoutHandler,
-  getMyOrdersHandler,
-  getOrderByIdHandler,
-  cancelOrderHandler,
-  cancelOrderItemHandler,
-  createShipmentHandler,
-  requestReturnHandler,
-} from "../controller/orderController";
+import {checkoutHandler,getMyOrdersHandler,getOrderByIdHandler,cancelOrderHandler,cancelOrderItemHandler,createShipmentHandler,requestReturnHandler,} from "../controller/orderController";
 
 const router = Router();
 router.use(authenticateUser);

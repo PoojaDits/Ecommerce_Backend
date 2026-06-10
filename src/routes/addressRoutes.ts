@@ -1,21 +1,10 @@
 import { Router } from "express";
-import {
-  createAddressHandler,
-  updateAddressHandler,
-  getAllAddressesHandler,
-  getAddressByIdHandler,
-  deleteAddressHandler,
-} from "../controller/addressController";
+import { createAddressHandler,updateAddressHandler, getAllAddressesHandler, getAddressByIdHandler, deleteAddressHandler,} from "../controller/addressController";
 import authenticateUser from "../middleware/auth.Middleware";
 import authorizeRoles from "../middleware/roleGuard";
 
 const router = Router();
 
-/**
- * All address routes require authentication because addresses are
- * user-bound resources. Admin can see all addresses; regular users
- * will eventually be scoped to their own addresses via controller logic.
- */
 router.use(authenticateUser);
 
 /**

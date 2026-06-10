@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import logger from "../config/logger";
 
-/**
- * Custom application error with an HTTP status code.
- */
 export class AppError extends Error {
   public statusCode: number;
 
@@ -14,11 +11,6 @@ export class AppError extends Error {
   }
 }
 
-/**
- * Global error-handling middleware.
- * Catches all unhandled errors thrown from route handlers and returns
- * a consistent JSON response.
- */
 export const globalErrorHandler = (
   err: Error,
   _req: Request,
@@ -34,7 +26,6 @@ export const globalErrorHandler = (
     return;
   }
 
-  // Multer file-size / file-type errors
   if (err.message?.startsWith("Only image files")) {
     res.status(400).json({
       success: false,
@@ -51,7 +42,6 @@ export const globalErrorHandler = (
     return;
   }
 
-  // Unknown / unexpected errors
   logger.error(`Unhandled error: ${err.message || err}`);
   res.status(500).json({
     success: false,

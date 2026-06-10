@@ -1,12 +1,6 @@
 import { Router } from "express";
 import authenticateUser from "../middleware/auth.Middleware";
-import {
-  getCartHandler,
-  addCartItemHandler,
-  updateCartItemHandler,
-  removeCartItemHandler,
-  clearCartHandler,
-} from "../controller/cartController";
+import {getCartHandler,addCartItemHandler,updateCartItemHandler,removeCartItemHandler,clearCartHandler,} from "../controller/cartController";
 
 const router = Router();
 router.use(authenticateUser);

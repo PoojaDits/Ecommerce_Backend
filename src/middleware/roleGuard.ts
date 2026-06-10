@@ -2,14 +2,7 @@ import { Response, NextFunction } from "express";
 import { AuthRequest } from "../interfaces/authInterface";
 import { MESSAGES } from "../constants/messages";
 
-/**
- * Middleware that checks whether the authenticated user has one of the
- * allowed roles. Must be used AFTER `authenticateUser` so that `req.user`
- * is populated.
- *
- * Usage:
- *   router.delete("/:id", authenticateUser, authorizeRoles("admin"), handler);
- */
+
 export const authorizeRoles = (...allowedRoles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {

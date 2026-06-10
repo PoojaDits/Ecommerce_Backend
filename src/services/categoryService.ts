@@ -64,8 +64,6 @@ export const updateCategory = async (
   return (await categoryRepo.save(category)) as ICategory;
 };
 
-
-
 export const deleteCategoryById = async (id: number): Promise<ICategory> => {
   const category = await categoryRepo.findOne({
     where: { id },

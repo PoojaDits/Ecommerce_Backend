@@ -1,12 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../interfaces/authInterface";
-import {
-  getCart,
-  addItemToCart,
-  updateCartItem,
-  removeCartItem,
-  clearCart,
-} from "../services/cartService";
+import {getCart,addItemToCart,updateCartItem,removeCartItem,clearCart,} from "../services/cartService";
 import { addCartItemSchema, updateCartItemSchema } from "../validators/cartValidator";
 import { MESSAGES } from "../constants/messages";
 
