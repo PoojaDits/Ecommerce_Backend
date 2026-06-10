@@ -1,13 +1,28 @@
+import { isCancellationAllowed } from "../utils/orderLifecycle";
 import { Response } from "express";
 import { AuthRequest } from "../interfaces/authInterface";
-import {checkout,getMyOrders,getOrderById,cancelOrder, cancelOrderItem,} from "../services/orderService";
+import {
+  checkout,
+  getMyOrders,
+  getOrderById,
+  cancelOrder,
+  cancelOrderItem,
+  createShipment,
+  requestReturn,
+  deriveOrderLifecycle,
+} from "../services/orderService";
 import { checkoutSchema } from "../validators/orderValidator";
 import { MESSAGES } from "../constants/messages";
 
 const serializeOrder = (order: any) => {
+  const lifecycle = deriveOrderLifecycle(order);
+  const canCancel = isCancellationAllowed(lifecycle);
+
   return {
     id: order.id,
     totalAmount: Number(order.totalAmount),
+    lifecycle,
+    canCancel,
     created_at: order.created_at,
     updated_at: order.updated_at,
     address: order.address
@@ -149,7 +164,92 @@ export const cancelOrderHandler = async (
     if (message === MESSAGES.ORDER.NOT_FOUND) statusCode = 404;
     else if (message === MESSAGES.ORDER.NOT_OWNED) statusCode = 403;
     else if (message === MESSAGES.ORDER.CANNOT_CANCEL_SHIPPED) statusCode = 409;
+    else if (message === MESSAGES.ORDER.CANNOT_CANCEL_DELIVERED) statusCode = 409;
     else if (message === MESSAGES.ORDER.ALREADY_CANCELLED) statusCode = 409;
+    res.status(statusCode).json({ success: false, message });
+  }
+};
+
+// ── Shipment handler (admin/vendor) ────────────────────────────────
+
+export const createShipmentHandler = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const orderId = Number(req.params.id);
+
+    if (!Number.isInteger(orderId) || orderId <= 0) {
+      res.status(400).json({
+        success: false,
+        message: MESSAGES.ORDER.ID_REQUIRED,
+      });
+      return;
+    }
+
+    const { carrier, trackingNumber } = req.body;
+    if (!carrier || !trackingNumber) {
+      res.status(400).json({
+        success: false,
+        message: "carrier and trackingNumber are required.",
+      });
+      return;
+    }
+
+    const shipment = await createShipment(orderId, carrier, trackingNumber);
+    res.status(201).json({
+      success: true,
+      message: "Shipment created successfully.",
+      shipment,
+    });
+  } catch (error: any) {
+    const message = error?.message || "Failed to create shipment.";
+    const statusCode = message === MESSAGES.ORDER.NOT_FOUND ? 404 : 400;
+    res.status(statusCode).json({ success: false, message });
+  }
+};
+
+// ── Return request handler (customer) ─────────────────────────────
+
+export const requestReturnHandler = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.user!.id;
+    const orderId = Number(req.params.id);
+    const itemId = Number(req.params.itemId);
+
+    if (!Number.isInteger(orderId) || orderId <= 0) {
+      res.status(400).json({
+        success: false,
+        message: MESSAGES.ORDER.ID_REQUIRED,
+      });
+      return;
+    }
+    if (!Number.isInteger(itemId) || itemId <= 0) {
+      res.status(400).json({
+        success: false,
+        message: MESSAGES.ORDER.ITEM_ID_REQUIRED,
+      });
+      return;
+    }
+
+    const note = req.body.note as string | undefined;
+    const returnStatus = await requestReturn(userId, orderId, itemId, note);
+    res.status(201).json({
+      success: true,
+      message: "Return requested successfully.",
+      returnStatus,
+    });
+  } catch (error: any) {
+    const message = error?.message || "Failed to request return.";
+    let statusCode = 400;
+    if (message === MESSAGES.ORDER.NOT_FOUND || message === MESSAGES.ORDER.ITEM_NOT_FOUND) {
+      statusCode = 404;
+    } else if (message === MESSAGES.ORDER.NOT_OWNED) {
+      statusCode = 403;
+    }
     res.status(statusCode).json({ success: false, message });
   }
 };
@@ -196,6 +296,7 @@ export const cancelOrderItemHandler = async (
       statusCode = 403;
     } else if (
       message === MESSAGES.ORDER.CANNOT_CANCEL_SHIPPED ||
+      message === MESSAGES.ORDER.CANNOT_CANCEL_DELIVERED ||
       message === MESSAGES.ORDER.ITEM_ALREADY_CANCELLED
     ) {
       statusCode = 409;

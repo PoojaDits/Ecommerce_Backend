@@ -7,6 +7,8 @@ import {
   getCategoryByIdHandler,
   checkCategoryExistsHandler,
 } from "../controller/categoryController";
+import authenticateUser from "../middleware/auth.Middleware";
+import authorizeRoles from "../middleware/roleGuard";
 
 const router = Router();
 
@@ -14,7 +16,7 @@ const router = Router();
  * @swagger
  * /api/categories:
  *   get:
- *     summary: Get all categories
+ *     summary: Get all categories (public)
  *     tags:
  *       - Categories
  *     responses:
@@ -23,9 +25,11 @@ const router = Router();
  *       500:
  *         description: Failed to retrieve categories
  *   post:
- *     summary: Create a new category
+ *     summary: Create a new category (admin only)
  *     tags:
  *       - Categories
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -48,13 +52,13 @@ const router = Router();
  *         description: Validation error or category already exists
  */
 router.get("/", getAllCategoriesHandler);
-router.post("/", createCategoryHandler);
+router.post("/", authenticateUser, authorizeRoles("admin"), createCategoryHandler);
 
 /**
  * @swagger
  * /api/categories/check/{name}:
  *   get:
- *     summary: Check if a category exists by name
+ *     summary: Check if a category exists by name (public)
  *     tags:
  *       - Categories
  *     parameters:
@@ -68,38 +72,6 @@ router.post("/", createCategoryHandler);
  *     responses:
  *       200:
  *         description: Category existence check result
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Category exists.
- *                 exists:
- *                   type: boolean
- *                   example: true
- *                 category:
- *                   $ref: '#/components/schemas/Category'
- *             examples:
- *               exists:
- *                 value:
- *                   success: true
- *                   message: "Category exists."
- *                   exists: true
- *                   category:
- *                     id: 1
- *                     name: "Electronics"
- *                     description: "Electronic items and gadgets"
- *               not_exists:
- *                 value:
- *                   success: true
- *                   message: "Category does not exist."
- *                   exists: false
- *                   category: null
  *       400:
  *         description: Category name is required
  */
@@ -109,7 +81,7 @@ router.get("/check/:name", checkCategoryExistsHandler);
  * @swagger
  * /api/categories/{id}:
  *   get:
- *     summary: Get a category by ID
+ *     summary: Get a category by ID (public)
  *     tags:
  *       - Categories
  *     parameters:
@@ -127,9 +99,11 @@ router.get("/check/:name", checkCategoryExistsHandler);
  *       404:
  *         description: Category not found
  *   put:
- *     summary: Update a category
+ *     summary: Update a category (admin only)
  *     tags:
  *       - Categories
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -146,19 +120,19 @@ router.get("/check/:name", checkCategoryExistsHandler);
  *             properties:
  *               name:
  *                 type: string
- *                 example: Updated Electronics
  *               description:
  *                 type: string
- *                 example: Updated category description
  *     responses:
  *       200:
  *         description: Category updated successfully
  *       400:
- *         description: Validation error, category not found, or category already exists
+ *         description: Validation error
  *   delete:
- *     summary: Delete a category by ID
+ *     summary: Delete a category by ID (admin only)
  *     tags:
  *       - Categories
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -169,26 +143,13 @@ router.get("/check/:name", checkCategoryExistsHandler);
  *     responses:
  *       200:
  *         description: Category deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Category deleted successfully.
- *                 category:
- *                   $ref: '#/components/schemas/Category'
  *       400:
  *         description: Valid category id is required
  *       404:
  *         description: Category not found
  */
 router.get("/:id", getCategoryByIdHandler);
-router.put("/:id", updateCategoryHandler);
-router.delete("/:id", deleteCategoryHandler);
+router.put("/:id", authenticateUser, authorizeRoles("admin"), updateCategoryHandler);
+router.delete("/:id", authenticateUser, authorizeRoles("admin"), deleteCategoryHandler);
 
 export default router;

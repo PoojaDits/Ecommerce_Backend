@@ -171,6 +171,8 @@ export const MESSAGES = {
     ITEM_ALREADY_CANCELLED: "This order item has already been cancelled.",
     CANNOT_CANCEL_SHIPPED:
       "This order can no longer be cancelled because it has already been shipped.",
+    CANNOT_CANCEL_DELIVERED:
+      "This order has already been delivered and cannot be cancelled.",
   },
 
   ADDRESS: {

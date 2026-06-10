@@ -6,14 +6,23 @@ import {
   getAddressByIdHandler,
   deleteAddressHandler,
 } from "../controller/addressController";
+import authenticateUser from "../middleware/auth.Middleware";
+import authorizeRoles from "../middleware/roleGuard";
 
 const router = Router();
+
+/**
+ * All address routes require authentication because addresses are
+ * user-bound resources. Admin can see all addresses; regular users
+ * will eventually be scoped to their own addresses via controller logic.
+ */
+router.use(authenticateUser);
 
 /**
  * @swagger
  * tags:
  *   - name: Addresses
- *     description: Address management
+ *     description: Address management (authenticated)
  */
 
 /**
@@ -22,27 +31,26 @@ const router = Router();
  *   post:
  *     summary: Create a new address
  *     tags: [Addresses]
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required: [street, city, state, postalCode, country, userId]
+ *             required: [street, city, state, postalCode, country]
  *             properties:
  *               street: { type: string, example: 42 Market Street }
  *               city: { type: string, example: Mumbai }
  *               state: { type: string, example: Maharashtra }
  *               postalCode: { type: string, example: "400001" }
  *               country: { type: string, example: India }
- *               userId: { type: integer, example: 1 }
+ *               type: { type: string, enum: [home, work, other], example: home }
+ *               isDefault: { type: boolean, example: false }
  *     responses:
  *       201:
  *         description: Address created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/AddressResponse'
  *       400:
  *         description: Validation error
  *       404:
@@ -54,17 +62,15 @@ router.post("/", createAddressHandler);
  * @swagger
  * /api/addresses:
  *   get:
- *     summary: Get all addresses
+ *     summary: Get all addresses (admin only)
  *     tags: [Addresses]
+ *     security:
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Addresses retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/AddressesListResponse'
  */
-router.get("/", getAllAddressesHandler);
+router.get("/", authorizeRoles("admin"), getAllAddressesHandler);
 
 /**
  * @swagger
@@ -72,6 +78,8 @@ router.get("/", getAllAddressesHandler);
  *   get:
  *     summary: Get an address by ID
  *     tags: [Addresses]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -81,10 +89,6 @@ router.get("/", getAllAddressesHandler);
  *     responses:
  *       200:
  *         description: Address retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/AddressResponse'
  *       404:
  *         description: Address not found
  */
@@ -96,6 +100,8 @@ router.get("/:id", getAddressByIdHandler);
  *   put:
  *     summary: Update an address by ID
  *     tags: [Addresses]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -114,13 +120,11 @@ router.get("/:id", getAddressByIdHandler);
  *               state: { type: string, example: Delhi }
  *               postalCode: { type: string, example: "110001" }
  *               country: { type: string, example: India }
+ *               type: { type: string, enum: [home, work, other] }
+ *               isDefault: { type: boolean }
  *     responses:
  *       200:
  *         description: Address updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/AddressResponse'
  *       400:
  *         description: Validation error
  *       404:
@@ -134,6 +138,8 @@ router.put("/:id", updateAddressHandler);
  *   delete:
  *     summary: Delete an address by ID
  *     tags: [Addresses]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -143,10 +149,6 @@ router.put("/:id", updateAddressHandler);
  *     responses:
  *       200:
  *         description: Address deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
  *       404:
  *         description: Address not found
  */

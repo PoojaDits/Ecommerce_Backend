@@ -27,6 +27,7 @@ const swaggerDefinition = {
     },
     schemas: {
     
+      // ── Auth ──────────────────────────────────────────────────
 
       AuthResponse: {
         type: "object",
@@ -215,7 +216,7 @@ const swaggerDefinition = {
         },
       },
 
-     
+      // ── Products ──────────────────────────────────────────────
 
       ProductsListResponse: {
         type: "object",
@@ -289,7 +290,7 @@ const swaggerDefinition = {
         },
       },
 
-     
+      // ── Cart ──────────────────────────────────────────────────
 
       CartItem: {
         type: "object",
@@ -353,7 +354,7 @@ const swaggerDefinition = {
         },
       },
 
-    
+      // ── Categories ────────────────────────────────────────────
 
       Category: {
         type: "object",
@@ -389,7 +390,7 @@ const swaggerDefinition = {
         },
       },
 
-     
+      // ── Stores ────────────────────────────────────────────────
 
       Store: {
         type: "object",
@@ -437,6 +438,9 @@ const swaggerDefinition = {
           },
         },
       },
+
+      // ── Address ───────────────────────────────────────────────
+
       Address: {
         type: "object",
         properties: {
@@ -482,6 +486,8 @@ const swaggerDefinition = {
         },
       },
 
+      // ── Orders ────────────────────────────────────────────────
+
       OrderItem: {
         type: "object",
         properties: {
@@ -508,6 +514,17 @@ const swaggerDefinition = {
         properties: {
           id: { type: "integer", example: 1 },
           totalAmount: { type: "number", example: 59.97 },
+          lifecycle: {
+            type: "string",
+            enum: ["pending", "packed", "shipped", "out_for_delivery", "delivered"],
+            example: "pending",
+            description: "Derived order lifecycle from shipment tracking",
+          },
+          canCancel: {
+            type: "boolean",
+            example: true,
+            description: "Whether cancellation is still allowed at this lifecycle stage",
+          },
           address: { $ref: "#/components/schemas/Address" },
           orderItems: {
             type: "array",
@@ -558,7 +575,58 @@ const swaggerDefinition = {
         },
       },
 
-      
+      ShipmentTracking: {
+        type: "object",
+        properties: {
+          id: { type: "integer", example: 1 },
+          status: { type: "string", example: "packed" },
+          location: { type: "string", example: "Shipper facility" },
+          updated_at: { type: "string", format: "date-time" },
+        },
+      },
+
+      Shipment: {
+        type: "object",
+        properties: {
+          id: { type: "integer", example: 1 },
+          carrier: { type: "string", example: "FedEx" },
+          trackingNumber: { type: "string", example: "FX123456789" },
+          shipment_trackings: {
+            type: "array",
+            items: { $ref: "#/components/schemas/ShipmentTracking" },
+          },
+        },
+      },
+
+      CreateShipmentRequest: {
+        type: "object",
+        required: ["carrier", "trackingNumber"],
+        properties: {
+          carrier: { type: "string", example: "FedEx" },
+          trackingNumber: { type: "string", example: "FX123456789" },
+        },
+      },
+
+      ReturnStatus: {
+        type: "object",
+        properties: {
+          id: { type: "integer", example: 1 },
+          status: {
+            type: "string",
+            enum: ["requested", "approved", "rejected", "received", "completed"],
+            example: "requested",
+          },
+          note: {
+            type: "string",
+            example: "Item arrived damaged",
+            nullable: true,
+          },
+          created_at: { type: "string", format: "date-time" },
+          updated_at: { type: "string", format: "date-time" },
+        },
+      },
+
+      // ── Users ──────────────────────────────────────────────────
 
       User: {
         type: "object",
@@ -608,7 +676,7 @@ const swaggerDefinition = {
         },
       },
 
-      
+      // ── Shared ─────────────────────────────────────────────────
 
       SuccessResponse: {
         type: "object",

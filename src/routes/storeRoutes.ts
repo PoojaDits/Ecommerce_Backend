@@ -1,5 +1,7 @@
 import { Router } from "express";
 import {createStoreHandler,updateStoreHandler,deleteStoreHandler,getAllStoresHandler,getStoreByIdHandler} from "../controller/storeController";
+import authenticateUser from "../middleware/auth.Middleware";
+import authorizeRoles from "../middleware/roleGuard";
 
 const router = Router();
 
@@ -7,7 +9,7 @@ const router = Router();
  * @swagger
  * /api/stores:
  *   get:
- *     summary: Get all stores
+ *     summary: Get all stores (public)
  *     tags:
  *       - Stores
  *     responses:
@@ -33,13 +35,11 @@ const router = Router();
  */
 router.get("/", getAllStoresHandler);
 
-
-
 /**
  * @swagger
  * /api/stores/{id}:
  *   get:
- *     summary: Get a store by ID
+ *     summary: Get a store by ID (public)
  *     tags:
  *       - Stores
  *     parameters:
@@ -52,19 +52,6 @@ router.get("/", getAllStoresHandler);
  *     responses:
  *       200:
  *         description: Store retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Stores retrieved successfully.
- *                 store:
- *                   $ref: '#/components/schemas/Store'
  *       400:
  *         description: Valid store ID is required
  *       404:
@@ -76,9 +63,11 @@ router.get("/:id", getStoreByIdHandler);
  * @swagger
  * /api/stores:
  *   post:
- *     summary: Create a new store
+ *     summary: Create a new store (authenticated vendors/admins)
  *     tags:
  *       - Stores
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -89,7 +78,6 @@ router.get("/:id", getStoreByIdHandler);
  *               - storeName
  *               - storeLocation
  *               - storeEmail
- *               - userId
  *             properties:
  *               storeName:
  *                 type: string
@@ -106,37 +94,23 @@ router.get("/:id", getStoreByIdHandler);
  *               storeEmail:
  *                 type: string
  *                 example: mystore@example.com
- *               userId:
- *                 type: integer
- *                 example: 1
  *     responses:
  *       201:
  *         description: Store created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Store created successfully.
- *                 store:
- *                   $ref: '#/components/schemas/Store'
  *       400:
- *         description: Validation error, user not found, or store already exists
+ *         description: Validation error
  */
-router.post("/", createStoreHandler);
+router.post("/", authenticateUser, authorizeRoles("admin", "vendor"), createStoreHandler);
 
 /**
  * @swagger
  * /api/stores/{id}:
  *   put:
- *     summary: Update a store by ID
+ *     summary: Update a store by ID (authenticated vendors/admins)
  *     tags:
  *       - Stores
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -153,36 +127,33 @@ router.post("/", createStoreHandler);
  *             properties:
  *               storeName:
  *                 type: string
- *                 example: Updated Store Name
  *               storeDescription:
  *                 type: string
- *                 example: Updated description
  *               storeLocation:
  *                 type: string
- *                 example: 99 New Road, Delhi
  *               storeContact:
  *                 type: string
- *                 example: "+911234567890"
  *               storeEmail:
  *                 type: string
- *                 example: updated@example.com
  *     responses:
  *       200:
  *         description: Store updated successfully
  *       400:
- *         description: Validation error or store already exists with same name/email
+ *         description: Validation error
  *       404:
  *         description: Store not found
  */
-router.put("/:id", updateStoreHandler);
+router.put("/:id", authenticateUser, authorizeRoles("admin", "vendor"), updateStoreHandler);
 
 /**
  * @swagger
  * /api/stores/{id}:
  *   delete:
- *     summary: Delete a store by ID
+ *     summary: Delete a store by ID (admin only)
  *     tags:
  *       - Stores
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -198,6 +169,6 @@ router.put("/:id", updateStoreHandler);
  *       404:
  *         description: Store not found
  */
-router.delete("/:id", deleteStoreHandler);
+router.delete("/:id", authenticateUser, authorizeRoles("admin"), deleteStoreHandler);
 
 export default router;

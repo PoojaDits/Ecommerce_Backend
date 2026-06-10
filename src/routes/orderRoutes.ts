@@ -1,11 +1,14 @@
 import { Router } from "express";
 import authenticateUser from "../middleware/auth.Middleware";
+import authorizeRoles from "../middleware/roleGuard";
 import {
   checkoutHandler,
   getMyOrdersHandler,
   getOrderByIdHandler,
   cancelOrderHandler,
   cancelOrderItemHandler,
+  createShipmentHandler,
+  requestReturnHandler,
 } from "../controller/orderController";
 
 const router = Router();
@@ -212,5 +215,81 @@ router.patch("/:id/cancel", cancelOrderHandler);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.patch("/:id/items/:itemId/cancel", cancelOrderItemHandler);
+
+/**
+ * @swagger
+ * /api/orders/{id}/shipment:
+ *   post:
+ *     summary: Create a shipment for an order (admin/vendor)
+ *     tags: [Orders]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [carrier, trackingNumber]
+ *             properties:
+ *               carrier: { type: string, example: FedEx }
+ *               trackingNumber: { type: string, example: FX123456789 }
+ *     responses:
+ *       201:
+ *         description: Shipment created successfully
+ *       400:
+ *         description: Validation error
+ *       404:
+ *         description: Order not found
+ */
+router.post("/:id/shipment", authenticateUser, authorizeRoles("admin", "vendor"), createShipmentHandler);
+
+/**
+ * @swagger
+ * /api/orders/{id}/items/{itemId}/return:
+ *   post:
+ *     summary: Request a return for a specific order item (customer)
+ *     tags: [Orders]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Order ID
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Order item ID
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               note:
+ *                 type: string
+ *                 example: "Item arrived damaged"
+ *     responses:
+ *       201:
+ *         description: Return requested successfully
+ *       400:
+ *         description: Validation error
+ *       403:
+ *         description: Order does not belong to user
+ *       404:
+ *         description: Order or item not found
+ */
+router.post("/:id/items/:itemId/return", requestReturnHandler);
 
 export default router;

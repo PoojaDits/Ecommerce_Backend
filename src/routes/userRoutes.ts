@@ -1,11 +1,15 @@
 import { Router } from "express";
 import { getUsersHandler, updateUserHandler, deleteUserHandler } from "../controller/userController";
+import authenticateUser from "../middleware/auth.Middleware";
+import authorizeRoles from "../middleware/roleGuard";
+
 const router = Router();
+
 /**
  * @swagger
  * /api/users:
  *   get:
- *     summary: Retrieve all users
+ *     summary: Retrieve all users (admin only)
  *     tags:
  *       - Users
  *     security:
@@ -31,13 +35,13 @@ const router = Router();
  *       500:
  *         $ref: "#/components/schemas/ErrorResponse"
  */
-router.get("/", getUsersHandler);
+router.get("/", authenticateUser, authorizeRoles("admin"), getUsersHandler);
 
 /**
  * @swagger
  * /api/users/{id}:
  *   put:
- *     summary: Update a user by ID
+ *     summary: Update a user by ID (admin only)
  *     tags:
  *       - Users
  *     security:
@@ -86,13 +90,13 @@ router.get("/", getUsersHandler);
  *       500:
  *         $ref: "#/components/schemas/ErrorResponse"
  */
-router.put("/:id", updateUserHandler);
+router.put("/:id", authenticateUser, authorizeRoles("admin"), updateUserHandler);
 
 /**
  * @swagger
  * /api/users/{id}:
  *   delete:
- *     summary: Delete a user by ID
+ *     summary: Delete a user by ID (admin only)
  *     tags:
  *       - Users
  *     security:
@@ -123,6 +127,6 @@ router.put("/:id", updateUserHandler);
  *       500:
  *         $ref: "#/components/schemas/ErrorResponse"
  */
-router.delete("/:id", deleteUserHandler);
+router.delete("/:id", authenticateUser, authorizeRoles("admin"), deleteUserHandler);
 
 export default router;

@@ -45,3 +45,21 @@ export enum AddressType {
   WORK = "work",
   OTHER = "other",
 }
+
+/**
+ * Order-level lifecycle (derived from shipment tracking).
+ * This is the overall state of the order, not stored on the Order entity
+ * but computed from shipments + shipment_trackings.
+ */
+export enum OrderLifecycle {
+  /** Order placed, no shipment yet — cancellable */
+  PENDING = "pending",
+  /** Shipment label created — still cancellable (pre-dispatch) */
+  PACKED = "packed",
+  /** Physically handed to carrier — no longer cancellable */
+  SHIPPED = "shipped",
+  /** Out for local delivery */
+  OUT_FOR_DELIVERY = "out_for_delivery",
+  /** Delivered to customer */
+  DELIVERED = "delivered",
+}
